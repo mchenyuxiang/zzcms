@@ -82,4 +82,5 @@ cdn/*
 img-min/*
 deploy/*
 *.log
-Application/Runtime/
+App/Runtime/
+App/Common/Conf/db.php
