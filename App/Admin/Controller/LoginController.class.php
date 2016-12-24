@@ -49,6 +49,11 @@ class LoginController extends Controller{
                 'loginip' => get_client_ip(),
             );
         
+        //保存session
+        session('zzcms_adm_username',$userresult['username']);
+        session('zzcms_adm_logintime',$userresult['logintime']);
+        session('zzcms_adm_loginip',$userresult['loginip']);
+        
         $loginRecord = D('Admin')->saveUserInfo($data);
         if($loginRecord == ''){
             return show_tip(0,'数据库出了问题，请与管理员联系');
