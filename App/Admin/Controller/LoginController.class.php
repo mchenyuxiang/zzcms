@@ -43,6 +43,17 @@ class LoginController extends Controller{
             return show_tip(0,'密码错误');
         }
 
+        //更新数据库参数
+        $data = array('id' => $userresult['id'],
+                'logintime' => time(),
+                'loginip' => get_client_ip(),
+            );
+        
+        $loginRecord = D('Admin')->saveUserInfo($data);
+        if($loginRecord == ''){
+            return show_tip(0,'数据库出了问题，请与管理员联系');
+        }
+
         return show_tip(1,'登陆成功',null,U('/index'));
     }
 

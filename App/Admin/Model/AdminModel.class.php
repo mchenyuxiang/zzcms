@@ -23,5 +23,10 @@ class AdminModel extends Model{
         $res = $this->_dbObj->where($condition)->find();
         return $res;
     }
+    
+    public function saveUserInfo($condition){
+        $res = $this->_dbObj->save($condition);
+        return $res;
+    }
 }
 
