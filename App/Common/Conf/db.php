@@ -7,11 +7,11 @@
  */
 return array (
     'DB_TYPE' => 'mysqli',
-    'DB_HOST' => '127.0.0.1',
-    'DB_PORT' => '3306',
-    'DB_USER' => 'root',
-    'DB_PWD' => '',
-    'DB_NAME' => 'diandang',
+    'DB_HOST' => '564222ff17911.sh.cdb.myqcloud.com',
+    'DB_PORT' => '6922',
+    'DB_USER' => 'cdb_outerroot',
+    'DB_PWD' => 'hndct888',
+    'DB_NAME' => 'zzcms',
     'DB_PREFIX' => 'zzcms_',
     'DB_CHARSET' => 'utf8',
 );

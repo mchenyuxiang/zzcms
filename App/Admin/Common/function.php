@@ -7,14 +7,19 @@
  * Description:  通用方法
  */
 
-    function show_tip($status, $message,$data=array()){
+    function show_tip($status, $message,$data=array(),$url=''){
         $result = array(
             'status' => $status,
             'message' => $message,
             'data' => $data,
+            'url' => $url,
         );
 
         exit(json_encode($result));
+    }
+
+    function getMd5Password($password){
+       return md5($password.'chenyuxiang'); 
     }
 ?>
 

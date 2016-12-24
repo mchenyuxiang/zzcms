@@ -16,7 +16,34 @@ class LoginController extends Controller{
 
     //登录验证
     public function login(){
-        print_r($_POST);
+
+        if(!IS_POST){
+            E('页面不存在');
+        }
+
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        if(!trim($username)){
+            print_r($username);
+            return show_tip(0,'用户名不能为空!');
+        }
+        
+        if(!trim($password)){
+            return show_tip(0,'密码不能为空!');
+        }
+
+        $userresult = D('Admin')->getUserByUsername($username);
+
+        if($userresult == ''){
+            return show_tip(0,'用户不存在');
+        }
+
+        if($userresult['password'] != getMd5Password($password)){
+            return show_tip(0,'密码错误');
+        }
+
+        return show_tip(1,'登陆成功',null,U('/index'));
     }
 
     //退出

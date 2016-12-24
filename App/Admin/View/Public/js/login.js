@@ -17,10 +17,16 @@ var login = {
         }
 
         var url = "/admin.php/Login/login";
-        var data = {'usrname':username,'password':password};
+        var data = {'username':username,'password':password};
         // 执行异步请求
         $.post(url,data,function (result) {
+            if(result.status == 0){
+                return dialog.error(result.message);
+            }
+            if(result.status == 1){
+                return dialog.success('成功',result.url);
+            }
 
-        })
+        },'JSON');
     }
 }
