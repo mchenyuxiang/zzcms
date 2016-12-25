@@ -19,6 +19,10 @@ class MenuController extends Controller{
     public function tree1(){
         $this->display();
     }
+    
+    public function add(){
+        $this->display();
+    }
 }
 ?>
 
