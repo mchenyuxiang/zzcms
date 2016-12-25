@@ -124,15 +124,17 @@
             "excel":false,
             "pdf":false,
             "csv":false,
-            "columns":false
+            "columns":false,
+            addfunc:function () {
+                window.location.href = '{:U("Menu/add")}';
+            },
+            editfunc:function (id) {
+//                window.location.href = '{:U("Menu/add")}?id='+s;
+                s = jQuery("#table_list_2").jqGrid('getRowData',id);
+                console.log(s.emp_id);
+            }
         });
         jQuery('#table_list_2').jqGrid('bindKeys');
-        jQuery("#add_table_list_2").click( function() {
-            var s;
-            s = jQuery("#table_list_2").jqGrid('getGridParam','selrow');
-//            alert(s);
-            window.location.href = '/admin.php/login/index?'+s;
-        });
     });
 </script>
 </body>
