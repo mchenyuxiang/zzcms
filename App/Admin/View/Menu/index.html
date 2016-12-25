@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 后台主题UI框架 - jqGird</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+
+    <!-- jqgrid-->
+    <link href="__PUBLIC__/css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
+
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=4.1.0" rel="stylesheet">
+
+    <style>
+        /* Additional style to fix warning dialog position */
+
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>jQuery Grid Plugin – jqGrid</h5>
+                </div>
+                <div class="ibox-content">
+                    <p>
+                        <strong>jqGrid</strong> 是一个用来显示网格数据的jQuery插件，文档比较全面，附带中文版本。访问<a target="_blank"
+                                                                                        href="http://www.trirand.com/blog/">
+                        官网</a>
+                    </p>
+                    <p>jqGrid的主要特点为：</p>
+                    <ol>
+                        <li>基于jquery UI主题，开发者可以根据客户要求更换不同的主题</li>
+                        <li>兼容目前所有流行的web浏览器</li>
+                        <li>Ajax分页，可以控制每页显示的记录数</li>
+                        <li>支持XML，JSON，数组形式的数据源</li>
+                        <li>提供丰富的选项配置及方法事件接口</li>
+                        <li>支持表格排序，支持拖动列、隐藏列</li>
+                        <li>支持滚动加载数据</li>
+                        <li>支持实时编辑保存数据内容</li>
+                        <li>支持子表格及树形表格</li>
+                        <li>支持多语言</li>
+                        <li>免费</li>
+                    </ol>
+                    <hr>
+                    <h4 class="m-t">高级用法</h4>
+
+
+                    <div class="jqGrid_wrapper">
+                        <table id="table_list_2"></table>
+                        <div id="pager_list_2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.4"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="__PUBLIC__/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="__PUBLIC__/js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+<script src="__PUBLIC__/js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+<script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
+<script>
+    $(document).ready(function () {
+        $.jgrid.defaults.styleUI = "Bootstrap";
+        var mydata = [{
+            id: "1",
+            invdate: "2010-05-24",
+            name: "test",
+            note: "note",
+            parenetName: "10.00",
+            level: 0,
+            isLeaf: false,
+            parent: 0,"expanded":true
+
+        }, {
+            id: "2", invdate: "2010-05-25", name: "test2", note: "note2", parenetName: "20.00",
+            isLeaf:false,
+            parent:1,"expanded":true
+        }, {
+            id: "3",
+            invdate: "2007-09-01",
+            name: "test3",
+            note: "note3",
+            parenetName: "30.00",
+            isLeaf: true,
+            parent: 2,"expanded":true
+        }, {
+            id: "4", invdate: "2007-10-04", name: "test", note: "note", parenetName: "10.00",
+            isLeaf:false,
+            parent:0,"expanded":true
+        }, {
+            id: "5",
+            invdate: "2007-10-05",
+            name: "test2",
+            note: "note2",
+            parenetName: "20.00",
+            isLeaf:false,
+            parent:0,"expanded":true
+        }, {
+            id: "6", invdate: "2007-09-06", name: "test3", note: "note3", parenetName: "30.00",
+            isLeaf:false,
+            parent:0,"expanded":true
+        }, {
+            id: "7",
+            invdate: "2007-10-04",
+            name: "test",
+            note: "note",
+            parenetName: "10.00",
+            isLeaf:false,
+            parent:0,"expanded":true
+        }, {
+            id: "8",
+            invdate: "2007-10-03",
+            name: "test2",
+            note: "note2",
+            parenetName: "300.00",
+            isLeaf:false,
+            parent:0,"expanded":true
+        }, {
+            id: "9",
+            invdate: "2007-09-01",
+            name: "test3",
+            note: "note3",
+            parenetName: "400.00",
+            isLeaf:false,
+            parent:0,"expanded":true
+        }];
+        var mydata1 = [{
+            "total":11,
+            "page":1,
+            "records":11,
+            "rows":[
+                {"id":0,"username":"王三1","level":0,"address":"USA","isLeaf":false,"age":20,"expanded":true,"password":"123"},
+                {"id":1,"username":"王三2","level":1,"address":"USA","isLeaf":false,"age":21,"parent":0,"expanded":true,"password":"123"},
+                {"id":2,"username":"王三3","level":2,"address":"USA","isLeaf":true,"age":22,"parent":1,"expanded":true,"password":"123"}
+            ]
+        }];
+        $("#table_list_2").jqGrid({
+            treeGrid: true,
+            treeGridModel: 'adjacency', //treeGrid模式，跟json元數據有關 ,adjacency/nested
+            ExpandColumn : 'username',
+            scroll: "true",
+            url: '/admin.php/menu/tree1',
+            datatype: 'json',
+            colNames:['編號','姓名','密碼','年齡','地址','出生日期'],
+            colModel:[
+                {name:'id',index:'id', width:90,sorttype:"int"},
+                {name:'username',index:'username', width:110,sorttype:"int"},
+                {name:'password',index:'password', width:80},
+                {name:'age',index:'age', width:80},
+                {name:'address',index:'address', width:80},
+                {name:'time',index:'time', width:80,sorttype:"date"}
+            ],
+            pager: "false",
+            sortname: 'id',
+            sortorder: "desc",
+
+            jsonReader: {
+                root: "dataRows",
+                repeatitems : false
+            },
+            treeReader : {
+                level_field: "level",
+                parent_id_field: "parent",
+                leaf_field: "isLeaf",
+                expanded_field: "expanded"
+            },
+            caption: "jqGrid test",
+            mtype: "POST",
+            height: "auto",    // 設为具體數值則會根據實際記錄數出現垂直滾動條
+            rowNum : "-1",     // 顯示全部記錄
+            shrinkToFit:false  // 控制水平滾動條
+        });
+//        $("#table_list_2").setSelection(4, true);
+//        $("#table_list_2").jqGrid("navGrid", "#pager_list_2", {
+//            edit: true,
+//            add: true,
+//            del: true,
+//            search: true
+//        }, {height: 200, reloadAfterSubmit: true});
+//        $(window).bind("resize", function () {
+//            var width = $(".jqGrid_wrapper").width();
+//            $("#table_list_1").setGridWidth(width);
+//            $("#table_list_2").setGridWidth(width)
+//        })
+    });
+</script>
+</body>
+
+</html>
