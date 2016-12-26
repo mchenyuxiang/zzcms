@@ -26,26 +26,8 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>所有表单元素
-                        <small>包括自定义样式的复选和单选按钮</small>
+                    <h5>菜单添加
                     </h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="form_basic.html#">选项1</a>
-                            </li>
-                            <li><a href="form_basic.html#">选项2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
                 </div>
                 <div class="ibox-content">
                     <form method="get" class="form-horizontal">
@@ -53,7 +35,7 @@
                             <label class="col-sm-2 control-label">父级菜单</label>
 
                             <div class="col-sm-10">
-                                <select class="form-control m-b" name="account">
+                                <select class="form-control m-b" id="parentName" name="pid">
                                     <option>选项 1</option>
                                     <option>选项 2</option>
                                     <option>选项 3</option>
@@ -66,7 +48,7 @@
                             <label class="col-sm-2 control-label">菜单名称</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="name">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -74,7 +56,7 @@
                             <label class="col-sm-2 control-label">模块名称</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="module">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -82,7 +64,7 @@
                             <label class="col-sm-2 control-label">方法名称</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="action">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -90,7 +72,7 @@
                             <label class="col-sm-2 control-label">附加参数</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="parameter">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -98,7 +80,7 @@
                             <label class="col-sm-2 control-label">菜单排序</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="sort">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -110,20 +92,20 @@
                             <div class="col-sm-10">
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" checked="" value="option1" id="optionsRadios1"
-                                               name="optionsRadios">显示</label>
+                                        <input type="radio" checked="" value="0" id="optionsRadios1"
+                                               name="status">显示</label>
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" value="option2" id="optionsRadios2" name="optionsRadios">隐藏</label>
+                                        <input type="radio" value="2" id="optionsRadios2" name="status">隐藏</label>
                                 </div>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button class="btn btn-primary" type="submit">保存内容</button>
-                                <button class="btn btn-white" type="submit">取消返回</button>
+                                <button class="btn btn-primary" type="button">保存内容</button>
+                                <button class="btn btn-white" type="button" onclick="">取消返回</button>
                             </div>
                         </div>
                     </form>
@@ -137,6 +119,7 @@
 <script src="__PUBLIC__/js/bootstrap.min.js?v=3.3.6"></script>
 <script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
 <script src="__PUBLIC__/js/plugins/iCheck/icheck.min.js"></script>
+<script src="__PUBLIC__/js/admin/common.js"></script>
 <script>
     $(document).ready(function () {
         $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})

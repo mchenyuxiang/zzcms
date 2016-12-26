@@ -12,20 +12,20 @@ use Think\Model;
 
 class AdminModel extends Model{
 
-    private $_dbObj = '';
+    private $_db = '';
 
     public function __construct(){
-        $this->_dbObj = M('admin');
+        $this->_db = M('admin');
     }
 
     public function getUserByUsername($username){
         $condition = array('username'=>$username);
-        $res = $this->_dbObj->where($condition)->find();
+        $res = $this->_db->where($condition)->find();
         return $res;
     }
     
     public function saveUserInfo($condition){
-        $res = $this->_dbObj->save($condition);
+        $res = $this->_db->save($condition);
         return $res;
     }
 }
