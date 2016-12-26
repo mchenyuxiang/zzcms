@@ -17,6 +17,23 @@ class MenuModel extends Model{
     public function __construct(){
        $this->_db = M('menu');
     }
+    
+    public function getMenuByParentId($parentId){
+        if($parentId == -1){
+            $res = $this->_db->select(); 
+        }else{
+            $condition = array('pid'=>$parentId);
+            $res = $this->_db->where($condition)->select();
+        }
+        return $res;
+    }
+
+    public function insert($data = array()){
+        if(!$data || !is_array($data)){
+            return 0;
+        }
+        return $this->_db->add($data);
+    }
 }
 
 ?>

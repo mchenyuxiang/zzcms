@@ -10,19 +10,48 @@ namespace Admin\Controller;
 
 use Think\Controller;
 
-class MenuController extends Controller{
-    
-    public function index(){
+class MenuController extends Controller
+{
+
+    public function index()
+    {
         $this->display();
     }
 
-    public function tree1(){
+    public function tree1()
+    {
         $this->display();
     }
-    
-    public function add(){
-        $this->display();
+
+    public function add()
+    {
+
+        if ($_POST) {
+            if(!isset($_POST['name']) || !$_POST['name']) {
+                return show_tip(0,'菜单名称不能为空');
+            }
+            if(!isset($_POST['module']) || !$_POST['module']) {
+                return show_tip(0,'模块名不能为空');
+            }
+            if(!isset($_POST['action']) || !$_POST['action']) {
+                return show_tip(0,'方法名不能为空');
+            }
+           
+            $menuId = D("Menu")->insert($_POST);
+            if($menuId) {
+                return show_tip(1,'新增成功',$menuId,U('Menu/index'));
+            }
+            return show_tip(0,'新增失败',$menuId);
+
+
+        } else {
+            $pid = 0;
+            $menuName = D('Menu')->getMenuByParentId($pid);
+            $this->assign('menuName',$menuName);
+            $this->display();
+        }
     }
 }
+
 ?>
 
