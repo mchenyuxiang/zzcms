@@ -34,6 +34,11 @@ class MenuModel extends Model{
         }
         return $this->_db->add($data);
     }
+
+    public function getMenu(){
+        $cate = $this->_db->order('sort,id')->select();
+        return $cate;
+    }
 }
 
 ?>

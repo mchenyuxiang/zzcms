@@ -8,13 +8,25 @@
  */
 namespace Admin\Controller;
 
+use Common\Lib\Category;
 use Think\Controller;
 
 class MenuController extends Controller
 {
 
+    /**
+     *
+     */
     public function index()
     {
+        $cate = D('Menu')->getMenu();
+        if (empty($cate)) {
+            $cate = array();
+        }
+        $cate = \Common\Lib\Category::toLevel($cate, '&nbsp;&nbsp;&nbsp;&nbsp;', 0);
+
+        $this->assign('cate', $cate);
+        $this->assign('type', '菜单列表');
         $this->display();
     }
 

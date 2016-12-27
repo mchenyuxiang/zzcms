@@ -7,135 +7,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title>H+ 后台主题UI框架 - jqGird</title>
+    <title>H+ 后台主题UI框架 - 基础表格</title>
     <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
     <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
 
     <link rel="shortcut icon" href="favicon.ico">
     <link href="__PUBLIC__/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="__PUBLIC__/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-
-    <!-- jqgrid-->
-    <link href="__PUBLIC__/css/plugins/jqgrid/ui.jqgrid.css" rel="stylesheet">
-
+    <link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
     <link href="__PUBLIC__/css/style.min.css?v=4.1.0" rel="stylesheet">
-
-    <style>
-        /* Additional style to fix warning dialog position */
-
-        #alertmod_table_list_2 {
-            top: 900px !important;
-        }
-    </style>
 
 </head>
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content  animated fadeInRight">
+<div class="wrapper wrapper-content animated fadeInRight">
+
     <div class="row">
         <div class="col-sm-12">
-            <div class="ibox ">
+            <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>菜单管理</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="table_basic.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
                 </div>
                 <div class="ibox-content">
-                    <hr>
-                    <div class="jqGrid_wrapper">
-                        <table id="table_list_2"></table>
-                        <div id="pager_list_2"></div>
+                    <div class="row">
+                        <div class="">
+                            <a href="{:U('Menu/add')}" class="btn btn-primary ">新增菜单</a>
+                        </div>
                     </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+
+                                <th></th>
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th>显示</th>
+                                <th>排序</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+
+                            <foreach name='cate' item='v'>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="i-checks" name="input[]">
+                                    </td>
+                                    <td>{$v.id}</td>
+                                    <td class="aleft">{$v.delimiter}
+                                        <if condition="$v['pid'] neq 0">├─</if>
+                                        {$v.name}
+                                    </td>
+                                    <td>
+                                        <if condition="$v['status']"><span class="btn btn-primary btn-sm">是</span>
+                                            <else/>
+                                            <span class="btn btn-default btn-sm">否</span></if>
+                                    </td>
+                                    <td><input type="text" name="sortlist[{$v.id}]" value="{$v.sort}" id="sortlist"
+                                               size="5" class="xyh-form-control"/></td>
+                                    <td>
+                                        <if condition="in_array($v['id'],array(6,7))">
+                                            <a class="btn btn-default btn-rounded">增加子菜单</a>
+                                            <a class="btn btn-default btn-rounded">编辑菜单</a>
+                                            <a class="btn btn-default btn-rounded">删除菜单</a>
+                                            <elseif condition="$v['id'] eq 1"/>
+                                            <a href="{:U('add',array('pid' => $v['id']))}" class="btn btn-primary btn-rounded">增加子菜单</a>
+                                            <a class="btn btn-default btn-rounded">编辑菜单</a>
+                                            <a class="btn btn-default btn-rounded">删除菜单</a>
+                                            <else/>
+                                            <a href="{:U('add',array('pid' => $v['id']))}" class="btn btn-primary btn-rounded">添加子菜单</a>
+                                            <a href="{:U('edit',array('id' => $v['id']))}" class="btn btn-primary btn-rounded">编辑菜单</a>
+                                            <a href="javascript:;"
+                                               onclick="toConfirm('{:U('del', array('id' => $v['id']))}', '确实要删除吗？')"
+                                               class="btn btn-primary btn-rounded">删除菜单
+                                            </a>
+                                        </if>
+                                    </td>
+                                </tr>
+                            </foreach>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
+
     </div>
 </div>
-
 <script src="__PUBLIC__/js/jquery.min.js?v=2.1.4"></script>
 <script src="__PUBLIC__/js/bootstrap.min.js?v=3.3.6"></script>
 <script src="__PUBLIC__/js/plugins/peity/jquery.peity.min.js"></script>
-<script src="__PUBLIC__/js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
-<script src="__PUBLIC__/js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
 <script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
-<script src="__PUBLIC__/js/admin/common.js"></script>
+<script src="__PUBLIC__/js/plugins/iCheck/icheck.min.js"></script>
+<script src="__PUBLIC__/js/demo/peity-demo.min.js"></script>
 <script>
     $(document).ready(function () {
-        $.jgrid.defaults.styleUI = "Bootstrap";
-        $("#table_list_2").jqGrid({
-            "url":"/admin.php/menu/tree1",
-            "datatype":"json",
-            "colModel":[
-                {
-                    "name":"emp_id",
-                    "index":"emp_id",
-                    "sorttype":"int",
-                    "key":true,
-                    "hidden":true,
-                },{
-                    "name":"name",
-                    "index":"name",
-                    "sorttype":"string",
-                    "label":"Employee",
-                    "width":170,
-                    "editable":true
-                },{
-                    "name":"salary",
-                    "index":"salary",
-                    "sorttype":"numeric",
-                    "label":"Salary",
-                    "align":"right",
-                    "width":90,
-                    "editable":true
-                },{
-                    "name":"boss_id",
-                    "hidden":true
-                }
-            ],
-            "width":"980",
-            "hoverrows":false,
-            "viewrecords":false,
-            "gridview":true,
-            "height":"auto",
-            "sortname":"emp_id",
-            "scrollrows":true,
-            "multiselect": true,
-            "treeGrid":true,
-            "ExpandColumn":"name",
-            "treedatatype":"json",
-            "treeGridModel":"adjacency",
-            "loadonce":true,
-            "rowNum":100,
-            "treeReader":{
-                "parent_id_field":"boss_id",
-                "level_field":"level",
-                "leaf_field":"isLeaf",
-                "expanded_field":"expanded",
-                "loaded":"loaded",
-                "icon_field":"icon"
-            },
-            "pager":"#pager_list_2"
-        });
-        $("#table_list_2").jqGrid("navGrid", "#pager_list_2", {
-            "edit":true,
-            "add":true,
-            "del":true,
-            "search":false,
-            "refresh":true,
-            "view":false,
-            "excel":false,
-            "pdf":false,
-            "csv":false,
-            "columns":false,
-            addfunc:function () {
-                window.location.href = '{:U("Menu/add")}';
-            },
-            editfunc:function (id) {
-//                window.location.href = '{:U("Menu/add")}?id='+s;
-                s = jQuery("#table_list_2").jqGrid('getRowData',id);
-                console.log(s.emp_id);
-            }
-        });
-        jQuery('#table_list_2').jqGrid('bindKeys');
+        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
     });
 </script>
 </body>
