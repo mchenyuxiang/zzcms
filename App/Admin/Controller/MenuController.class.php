@@ -9,6 +9,7 @@
 namespace Admin\Controller;
 
 use Common\Lib\Category;
+use Common\Lib\Page;
 use Think\Controller;
 
 class MenuController extends Controller
@@ -19,7 +20,14 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $cate = D('Menu')->getMenu();
+        $data = array();
+        $page = $_REQUEST['p'] ? $_REQUEST['p']:1;
+        $pageSize = $_REQUEST['pageSize']?$_REQUEST['pageSize']:15;
+        $cate = D('Menu')->getMenu($data,$page,$pageSize);
+        $cateCount = D('Menu')->getMenuCount($data);
+
+        $res = new Page($cateCount,$pageSize);
+        $pageRes = $res->show();
         if (empty($cate)) {
             $cate = array();
         }
@@ -27,6 +35,7 @@ class MenuController extends Controller
 
         $this->assign('cate', $cate);
         $this->assign('type', '菜单列表');
+        $this->assign('page',$pageRes);
         $this->display();
     }
 

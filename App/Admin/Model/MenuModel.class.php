@@ -35,9 +35,14 @@ class MenuModel extends Model{
         return $this->_db->add($data);
     }
 
-    public function getMenu(){
-        $cate = $this->_db->order('sort,id')->select();
+    public function getMenu($data,$page,$pageSize=15){
+        $offset = ($page-1) * $pageSize;
+        $cate = $this->_db->where($data)->order('id,sort')->limit($offset,$pageSize)->select();
         return $cate;
+    }
+
+    public function getMenuCount($data=array()){
+        return $this->_db->where($data)->count();
     }
 }
 

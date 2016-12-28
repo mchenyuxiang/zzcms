@@ -17,17 +17,17 @@
     <link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
     <link href="__PUBLIC__/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/admin.css" rel="stylesheet">
 
 </head>
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
-
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>菜单管理</h5>
+                    <h5>{$type}</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -102,6 +102,9 @@
                             </foreach>
                             </tbody>
                         </table>
+                        <div class="text-center">
+                            {$page}
+                        </div>
                     </div>
 
                 </div>

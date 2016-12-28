@@ -1,0 +1,48 @@
+.b-page {
+    background: #fff;
+    box-shadow: 0px 1px 2px 0px #E2E2E2;
+}
+.page {
+    width: 100%;
+    padding: 30px 15px;
+    background: #FFF;
+    text-align: center;
+    overflow: hidden;
+}
+.page .first,
+.page .prev,
+.page .current,
+.page .num,
+.page .current,
+.page .next,
+.page .end {
+    padding: 8px 16px;
+    margin: 0px 5px;
+    display: inline-block;
+    color: #008CBA;
+    border: 1px solid #F2F2F2;
+    border-radius: 5px;
+}
+.page .first:hover,
+.page .prev:hover,
+.page .current:hover,
+.page .num:hover,
+.page .current:hover,
+.page .next:hover,
+.page .end:hover {
+    text-decoration: none;
+    background: #F8F5F5;
+}
+.page .current {
+    background-color: #008CBA;
+    color: #FFF;
+    border-radius: 5px;
+    border: 1px solid #008CBA;
+}
+.page .current:hover {
+    text-decoration: none;
+    background: #008CBA;
+}
+.page .not-allowed {
+    cursor: not-allowed;
+}
