@@ -55,6 +55,8 @@
                                 <th></th>
                                 <th>序号</th>
                                 <th>名称</th>
+                                <th>模块名</th>
+                                <th>方法名</th>
                                 <th>显示</th>
                                 <th>排序</th>
                                 <th>操作</th>
@@ -69,32 +71,39 @@
                                         <!--<input type="checkbox" class="i-checks" name="input[]">-->
                                     </td>
                                     <td>{$v.id}</td>
-                                    <td class="aleft">{$v.delimiter}
+                                    <td>{$v.delimiter}
                                         <if condition="$v['pid'] neq 0">├─</if>
                                         {$v.name}
                                     </td>
+                                    <td>{$v.module}</td>
+                                    <td>{$v.action}</td>
                                     <td>
                                         <if condition="$v['status']"><span class="btn btn-primary btn-sm">是</span>
                                             <else/>
                                             <span class="btn btn-default btn-sm">否</span></if>
                                     </td>
+
                                     <td><input type="text" name="sortlist[{$v.id}]" value="{$v.sort}" id="sortlist"
                                                size="5" class="xyh-form-control"/></td>
                                     <td>
-                                        <if condition="in_array($v['id'],array(6,7))">
+                                        <if condition="in_array($v['id'],array(0))">
                                             <a class="btn btn-default btn-rounded">增加子菜单</a>
                                             <a class="btn btn-default btn-rounded">编辑菜单</a>
                                             <a class="btn btn-default btn-rounded">删除菜单</a>
-                                            <elseif condition="$v['id'] eq 1"/>
-                                            <a href="{:U('add',array('pid' => $v['id']))}" class="btn btn-primary btn-rounded">增加子菜单</a>
+                                            <elseif condition="$v['pid'] eq 0"/>
+                                            <a href="{:U('add',array('pid' => $v['id']))}"
+                                               class="btn btn-primary btn-rounded">增加子菜单</a>
                                             <a class="btn btn-default btn-rounded">编辑菜单</a>
                                             <a class="btn btn-default btn-rounded">删除菜单</a>
                                             <else/>
-                                            <a href="{:U('add',array('pid' => $v['id']))}" class="btn btn-primary btn-rounded">添加子菜单</a>
-                                            <a href="{:U('edit',array('id' => $v['id']))}" class="btn btn-primary btn-rounded">编辑菜单</a>
-                                            <a href="javascript:;"
-                                               onclick="toConfirm('{:U('del', array('id' => $v['id']))}', '确实要删除吗？')"
-                                               class="btn btn-primary btn-rounded">删除菜单
+                                            <a href="{:U('add',array('pid' => $v['id']))}"
+                                               class="btn btn-primary btn-rounded">添加子菜单</a>
+                                            <a href="{:U('edit',array('id' => $v['id']))}"
+                                               class="btn btn-primary btn-rounded">编辑菜单</a>
+                                            <a href="javascript:void(0)"
+                                               attr-message="删除"
+                                               class="btn btn-primary btn-rounded" id="zzcms-delete"
+                                               attr-id="{$v['id']}">删除菜单
                                             </a>
                                         </if>
                                     </td>
@@ -117,12 +126,18 @@
 <script src="__PUBLIC__/js/bootstrap.min.js?v=3.3.6"></script>
 <script src="__PUBLIC__/js/plugins/peity/jquery.peity.min.js"></script>
 <script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
-<script src="__PUBLIC__/js/plugins/iCheck/icheck.min.js"></script>
 <script src="__PUBLIC__/js/demo/peity-demo.min.js"></script>
+<script src="__PUBLIC__/js/plugins/layer/layer.min.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script src="__PUBLIC__/js/common.js"></script>
 <script>
-    $(document).ready(function () {
-        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
-    });
+    var SCOPE = {
+        'add_url': '/admin.php?c=menu&a=add',
+        'edit_url': '/admin.php?c=menu&a=edit',
+        'delete_url': '{:U("Menu/del")}',
+        'listorder_url': '/admin.php?c=menu&a=listorder',
+
+    };
 </script>
 </body>
 

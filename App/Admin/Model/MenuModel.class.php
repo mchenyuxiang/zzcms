@@ -37,7 +37,7 @@ class MenuModel extends Model{
 
     public function getMenu($data,$page,$pageSize=15){
         $offset = ($page-1) * $pageSize;
-        $cate = $this->_db->where($data)->order('id,sort')->limit($offset,$pageSize)->select();
+        $cate = $this->_db->where($data)->order('sort,id')->limit($offset,$pageSize)->select();
         return $cate;
     }
 
