@@ -46,3 +46,23 @@
 .page .not-allowed {
     cursor: not-allowed;
 }
+.btn-1 {
+    background-color: #1ab394;
+    border-color: #1ab394;
+    color: #FFF;
+}
+.btn-2 {
+    background-color: #f8ac59;
+    border-color: #f8ac59;
+    color: #FFF;
+}
+.btn-3 {
+    background-color: #ed5565;
+    border-color: #ed5565;
+    color: #FFF;
+}
+.btn-4 {
+    background-color: #1c84c6;
+    border-color: #1c84c6;
+    color: #FFF;
+}
