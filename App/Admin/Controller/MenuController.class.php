@@ -57,6 +57,7 @@ class MenuController extends Controller
             if (!isset($_POST['action']) || !$_POST['action']) {
                 return show_tip(0, '方法名不能为空');
             }
+            $_POST['topid'] = $_POST['pid'];
 
             $menuId = D("Menu")->insert($_POST);
             if ($menuId) {
