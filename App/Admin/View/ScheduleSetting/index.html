@@ -45,7 +45,7 @@
                 </li>
                 <foreach name="submenu" key="k" item="v">
                     <li>
-                        <a class="J_menuItem">
+                        <a class="J_menuItem" href="{:U($v['module'].'/'.$v['action'])}">
                             <i class="fa fa-magic"></i>
                             <span class="nav-label">{$v.name}</span>
                             <span class="fa arrow"></span>

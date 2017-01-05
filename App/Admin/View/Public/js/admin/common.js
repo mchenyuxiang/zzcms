@@ -7,6 +7,4 @@
  */
 $("#button-add").click(function () {
     var data = $("#submit-menu").serializeArray();
-    console.log(data);
-    console.log("1");
 });

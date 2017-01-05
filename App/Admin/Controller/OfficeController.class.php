@@ -12,7 +12,7 @@ use Think\Controller;
 
 class OfficeController extends Controller{
     
-    public function list(){
+    public function officeList(){
         $this->display();
     }
 }
