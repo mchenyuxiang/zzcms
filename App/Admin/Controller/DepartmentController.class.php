@@ -14,6 +14,7 @@ class DepartmentController extends Controller
 {
     public function departmentList()
     {
+        $this->assign("type","部门管理");
         $this->display();
     }
 
