@@ -53,7 +53,7 @@
         <div class="col-sm-9 animated fadeInRight">
             <!--右侧部分开始-->
             <div class="row J_mainContent" id="content-main">
-                <iframe class="J_iframe" name="iframe0" width="100%" height="800px" src="{:U('/index/info')}"
+                <iframe class="J_iframe" name="iframe0" width="100%" height="800px" src="/admin.php?c=Employee&a=employeeList"
                         frameborder="0"
                         data-id="index_v1.html" seamless></iframe>
             </div>
@@ -67,6 +67,8 @@
 <script src="__PUBLIC__/js/plugins/zTree/jquery.ztree.core.js"></script>
 <script src="__PUBLIC__/js/plugins/zTree/jquery.ztree.excheck.js"></script>
 <script src="__PUBLIC__/js/plugins/zTree/jquery.ztree.exedit.js"></script>
+<script src="__PUBLIC__/js/plugins/layer/layer.min.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
 
 <SCRIPT type="text/javascript">
     var setting = {
@@ -90,20 +92,7 @@
         }
     };
 
-    var zNodes =[
-        { id:1, pId:0, name:"父节点 1", open:true,target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:11, pId:1, name:"叶子节点 1-1",target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:12, pId:1, name:"叶子节点 1-2",target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:13, pId:1, name:"叶子节点 1-3",target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:2, pId:0, name:"父节点 2", open:true,target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:21, pId:2, name:"叶子节点 2-1",target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:22, pId:2, name:"叶子节点 2-2",target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:23, pId:2, name:"叶子节点 2-3",target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:3, pId:0, name:"父节点 3", open:true,target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:31, pId:3, name:"叶子节点 3-1",target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:32, pId:3, name:"叶子节点 3-2",target:"iframe0", url: "http://www.treejs.cn/"},
-        { id:33, pId:3, name:"叶子节点 3-3",target:"iframe0", url: "http://www.treejs.cn/"}
-    ];
+    var zNodes ={$listDepartment};
 
     var log, className = "dark";
     function beforeDrag(treeId, treeNodes) {
@@ -145,17 +134,56 @@
     var newCount = 1;
     function add(e) {
         var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
-                isParent = e.data.isParent,
-                nodes = zTree.getSelectedNodes(),
-                treeNode = nodes[0];
-        isTop = e.data.isTop;
 
-        if (!isTop) {
-            treeNode = zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, isParent:isParent, name:"new node" + (newCount++)});
-        } else {
-            treeNode = zTree.addNodes(null, {id:(100 + newCount), pId:0, isParent:isParent, name:"new node" + (newCount++)});
+                isParent = e.data.isParent,
+                isTop = e.data.isTop;
+        var nodes = zTree.getSelectedNodes();
+        var nodeNum = zTree.transformToArray(zTree.getNodes());
+        var startNum;
+        var maxNum = 0;
+
+        //查询最大的id值，每次在此基础上加1，使得id不重复
+        if(nodeNum.length == 0){
+            startNum = 1;
+        }else{
+
+            for(var i=0; i<nodeNum.length; i++){
+                if(nodeNum[i].id > maxNum ){
+                    maxNum = nodeNum[i].id;
+                }
+            }
+
+            startNum = maxNum + 1;
         }
+        if(isTop){
+            treeNode = 0;
+        }else{
+            treeNode = nodes[0];
+        }
+
         if (treeNode) {
+            var purl = "/admin.php?c=Employee&a=employeeList&cid="+startNum+"&pid="+treeNode.id;
+            treeNode = zTree.addNodes(treeNode, {id:startNum,url:purl, pId:treeNode.id, isParent:isParent, name:"new node" + startNum});
+        } else {
+            var purl = "/admin.php?c=Employee&a=employeeList&cid="+startNum+"&pid="+treeNode.id;
+            treeNode = zTree.addNodes(null, {id:startNum,url:purl,target:"iframe0", pId:0, isParent:isParent, name:"new node" + startNum});
+            zTree.updateNode(treeNode);
+        }
+
+        var url = "/admin.php?c=Department&a=addDepartment";
+        var data = {id:treeNode[0].id,pId:Number(treeNode[0].pId),url:treeNode[0].url,target:treeNode[0].target,name:treeNode[0].name};
+        if (treeNode) {
+            $.post(
+                    url,
+                    data,
+                    function (s) {
+                        if (s.status == 1) {
+                            return dialog.success('成功',s.url);
+                            // 跳转到相关页面
+                        } else {
+                            return dialog.error(s.message);
+                        }
+                    }, "JSON");
             zTree.editName(treeNode[0]);
         } else {
             alert("叶子节点被锁定，无法增加子节点");
