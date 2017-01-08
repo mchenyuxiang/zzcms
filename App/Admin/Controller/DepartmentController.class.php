@@ -37,8 +37,8 @@ class DepartmentController extends Controller
         $data['id'] = I('id', 0);
         $data['pId']= I('pId',0);
         $data['url'] = $_POST['url'];
-        $data['target'] = $_POST('target');
-        $data['name'] = $_POST('name');
+        $data['target'] = $_POST['target'];
+        $data['name'] = $_POST['name'];
 //        print_r($data['url']);
 
         $res = M('department')->add($data);
