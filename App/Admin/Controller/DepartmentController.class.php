@@ -8,6 +8,7 @@
  */
 namespace Admin\Controller;
 
+use Common\Lib\Category;
 use Think\Controller;
 
 class DepartmentController extends Controller
@@ -15,8 +16,42 @@ class DepartmentController extends Controller
     public function departmentList()
     {
         $listDepartment = M('department')->select();
-        $this->assign("listDepartment",json_encode($listDepartment));
-        $this->assign("type","部门管理");
+        $listDepartment = \Common\Lib\Category::toLevel($listDepartment, '&nbsp;&nbsp;&nbsp;&nbsp;', 0);
+//        print_r($listDepartment);
+
+
+
+        $arrList = array();
+        foreach ($listDepartment as $k=>$v) {
+            $id = $v['id'];
+            $pid = $v['pid'];
+            $name = $v['name'];
+            $addurl = U("Menu/add");
+            if($v['level'] == 1){
+                $arrList[$k] = " <tr class='treegrid-{$id}'>
+                                <td>{$name}</td>
+                                <td>Additional info</td>
+                                <td>
+                                    <a href='{$addurl}' class='btn btn-primary btn-rounded'>增加子菜单</a>
+                                    <a class='btn btn-default btn-rounded'>编辑菜单</a>
+                                    <a class='btn btn-default btn-rounded'>删除菜单</a>
+                                </td>
+                            </tr>";
+            }else{
+                $arrList[$k] = " <tr class='treegrid-{$id} treegrid-parent-{$pid}'>
+                                <td>{$name}</td>
+                                <td>Additional info</td>
+                                <td>
+                                    <a href='{$addurl}' class='btn btn-primary btn-rounded'>增加子菜单</a>
+                                    <a class='btn btn-default btn-rounded'>编辑菜单</a>
+                                    <a class='btn btn-default btn-rounded'>删除菜单</a>
+                                </td>
+                            </tr>";
+            }
+        }
+        $this->assign("listDepartment", $listDepartment);
+        $this->assign("arrList",$arrList);
+        $this->assign("type", "部门管理");
         $this->display();
     }
 
@@ -24,8 +59,7 @@ class DepartmentController extends Controller
     {
         $result = array(
             text => "ceshi4",
-            nodes => array(
-            ),
+            nodes => array(),
         );
         exit(json_encode($result));
     }
@@ -35,7 +69,7 @@ class DepartmentController extends Controller
 
         $data = Array();
         $data['id'] = I('id', 0);
-        $data['pId']= I('pId',0);
+        $data['pId'] = I('pId', 0);
         $data['url'] = $_POST['url'];
         $data['target'] = $_POST['target'];
         $data['name'] = $_POST['name'];
@@ -45,9 +79,9 @@ class DepartmentController extends Controller
 
         if ($res) {
 
-            return show_tip(1,'添加成功',null,U('Department/departmentList'));
+            return show_tip(1, '添加成功', null, U('Department/departmentList'));
         } else {
-            return show_tip(0,"添加失败");
+            return show_tip(0, "添加失败");
         }
     }
 
@@ -60,17 +94,18 @@ class DepartmentController extends Controller
         $childCate = M('menu')->where(array('pid' => $id))->select();
         if ($childCate) {
 //            return show_tip(0,"删除失败，请先删除子菜单");
-            return show_tip(0,$id);
+            return show_tip(0, $id);
         }
         if (M('menu')->delete($id)) {
 
-            return show_tip(1,'删除成功',null,U('Menu/index'));
+            return show_tip(1, '删除成功', null, U('Menu/index'));
         } else {
-            return show_tip(0,"删除失败");
+            return show_tip(0, "删除失败");
         }
     }
 
-    public function departmentTest(){
+    public function departmentTest()
+    {
         $this->display();
     }
 }
