@@ -69,6 +69,10 @@ class DepartmentController extends Controller
             return show_tip(0,"删除失败");
         }
     }
+
+    public function departmentTest(){
+        $this->display();
+    }
 }
 
 ?>

@@ -7,265 +7,188 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title>H+ 后台主题UI框架 - 收件箱</title>
+    <title>H+ 后台主题UI框架 - 基础表格</title>
     <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
     <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
 
     <link rel="shortcut icon" href="favicon.ico">
     <link href="__PUBLIC__/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="__PUBLIC__/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
     <link href="__PUBLIC__/css/style.min.css?v=4.1.0" rel="stylesheet">
-    <link href="__PUBLIC__/css/plugins/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/admin.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/plugins/treegrid/jquery.treegrid.css" rel="stylesheet">
 
 </head>
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content">
-
+<div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>{$type}</h5>
-
                     <div class="ibox-tools">
-                        <button id="addParent" class="btn btn-success btn-circle" onclick="return false;" type="button">
-                            <a style="color: white">顶增</a>
-                        </button>
-                        <button id="addLeaf" class="btn btn-info btn-circle" onclick="return false;" type="button"><a
-                                style="color: white">子增</a>
-                        </button>
-                        <button id="remove" onclick="return false;" class="btn btn-danger btn-circle" type="button"><a
-                                style="color: white">删</a>
-                        </button>
-                        <button id="edit" onclick="return false;" class="btn btn-default btn-circle" type="button"><a
-                                style="color: white">改</a>
-                        </button>
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
                         </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="table_basic.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
 
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="">
+                            <a href="{:U('Menu/add')}" class="btn btn-primary ">新增部门</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>部门名称</th>
+                                <th>部门人员</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+
+                            <tr class="treegrid-1">
+                                <td>Root node</td><td>Additional info</td>
+                                <td>
+                                    <if condition="in_array($v['id'],array(0))">
+                                        <a class="btn btn-default btn-rounded">增加子菜单</a>
+                                        <a class="btn btn-default btn-rounded">编辑菜单</a>
+                                        <a class="btn btn-default btn-rounded">删除菜单</a>
+                                        <elseif condition="$v['pid'] eq 0"/>
+                                        <a href="{:U('add',array('pid' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">增加子菜单</a>
+                                        <a class="btn btn-default btn-rounded">编辑菜单</a>
+                                        <a class="btn btn-default btn-rounded">删除菜单</a>
+                                        <else/>
+                                        <a href="{:U('add',array('pid' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">添加子菜单</a>
+                                        <a href="{:U('edit',array('id' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">编辑菜单</a>
+                                        <a href="javascript:void(0)"
+                                           attr-message="删除"
+                                           class="btn btn-primary btn-rounded" id="zzcms-delete"
+                                           attr-id="{$v['id']}">删除菜单
+                                        </a>
+                                    </if>
+                                </td>
+                            </tr>
+                            <tr class="treegrid-2 treegrid-parent-1">
+                                <td>Node 1-1</td><td>Additional info</td>
+                                <td>
+                                    <if condition="in_array($v['id'],array(0))">
+                                        <a class="btn btn-default btn-rounded">增加子菜单</a>
+                                        <a class="btn btn-default btn-rounded">编辑菜单</a>
+                                        <a class="btn btn-default btn-rounded">删除菜单</a>
+                                        <elseif condition="$v['pid'] eq 0"/>
+                                        <a href="{:U('add',array('pid' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">增加子菜单</a>
+                                        <a class="btn btn-default btn-rounded">编辑菜单</a>
+                                        <a class="btn btn-default btn-rounded">删除菜单</a>
+                                        <else/>
+                                        <a href="{:U('add',array('pid' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">添加子菜单</a>
+                                        <a href="{:U('edit',array('id' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">编辑菜单</a>
+                                        <a href="javascript:void(0)"
+                                           attr-message="删除"
+                                           class="btn btn-primary btn-rounded" id="zzcms-delete"
+                                           attr-id="{$v['id']}">删除菜单
+                                        </a>
+                                    </if>
+                                </td>
+                            </tr>
+                            <tr class="treegrid-3 treegrid-parent-1">
+                                <td>Node 1-2</td><td>Additional info</td>
+                                <td>
+                                    <if condition="in_array($v['id'],array(0))">
+                                        <a class="btn btn-default btn-rounded">增加子菜单</a>
+                                        <a class="btn btn-default btn-rounded">编辑菜单</a>
+                                        <a class="btn btn-default btn-rounded">删除菜单</a>
+                                        <elseif condition="$v['pid'] eq 0"/>
+                                        <a href="{:U('add',array('pid' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">增加子菜单</a>
+                                        <a class="btn btn-default btn-rounded">编辑菜单</a>
+                                        <a class="btn btn-default btn-rounded">删除菜单</a>
+                                        <else/>
+                                        <a href="{:U('add',array('pid' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">添加子菜单</a>
+                                        <a href="{:U('edit',array('id' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">编辑菜单</a>
+                                        <a href="javascript:void(0)"
+                                           attr-message="删除"
+                                           class="btn btn-primary btn-rounded" id="zzcms-delete"
+                                           attr-id="{$v['id']}">删除菜单
+                                        </a>
+                                    </if>
+                                </td>
+                            </tr>
+                            <tr class="treegrid-4 treegrid-parent-3">
+                                <td>Node 1-2-1</td><td>Additional info</td>
+                                <td>
+                                    <if condition="in_array($v['id'],array(0))">
+                                        <a class="btn btn-default btn-rounded">增加子菜单</a>
+                                        <a class="btn btn-default btn-rounded">编辑菜单</a>
+                                        <a class="btn btn-default btn-rounded">删除菜单</a>
+                                        <elseif condition="$v['pid'] eq 0"/>
+                                        <a href="{:U('add',array('pid' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">增加子菜单</a>
+                                        <a class="btn btn-default btn-rounded">编辑菜单</a>
+                                        <a class="btn btn-default btn-rounded">删除菜单</a>
+                                        <else/>
+                                        <a href="{:U('add',array('pid' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">添加子菜单</a>
+                                        <a href="{:U('edit',array('id' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">编辑菜单</a>
+                                        <a href="javascript:void(0)"
+                                           attr-message="删除"
+                                           class="btn btn-primary btn-rounded" id="zzcms-delete"
+                                           attr-id="{$v['id']}">删除菜单
+                                        </a>
+                                    </if>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            {$page}
+                        </div>
                     </div>
 
                 </div>
+            </div>
+        </div>
 
-                <div class="ibox-content">
-                    <div id="treeDemo" class="ztree"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-9 animated fadeInRight">
-            <!--右侧部分开始-->
-            <div class="row J_mainContent" id="content-main">
-                <iframe class="J_iframe" name="iframe0" width="100%" height="800px"
-                        src="/admin.php?c=Employee&a=employeeList"
-                        frameborder="0"
-                        data-id="index_v1.html" seamless></iframe>
-            </div>
-            <!--右侧部分结束-->
-        </div>
     </div>
 </div>
 <script src="__PUBLIC__/js/jquery.min.js?v=2.1.4"></script>
 <script src="__PUBLIC__/js/bootstrap.min.js?v=3.3.6"></script>
-<script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
-<script src="__PUBLIC__/js/plugins/zTree/jquery.ztree.core.js"></script>
-<script src="__PUBLIC__/js/plugins/zTree/jquery.ztree.excheck.js"></script>
-<script src="__PUBLIC__/js/plugins/zTree/jquery.ztree.exedit.js"></script>
+<script src="__PUBLIC__/js/plugins/treegrid/jquery.treegrid.js"></script>
 <script src="__PUBLIC__/js/plugins/layer/layer.min.js"></script>
 <script src="__PUBLIC__/js/dialog.js"></script>
+<script src="__PUBLIC__/js/common.js"></script>
+<script>
+    $('.table').treegrid();
+    var SCOPE = {
+        'add_url': '/admin.php?c=menu&a=add',
+        'edit_url': '/admin.php?c=menu&a=edit',
+        'delete_url': '{:U("Menu/del")}',
+        'listorder_url': '/admin.php?c=menu&a=listorder',
 
-<SCRIPT type="text/javascript">
-    var setting = {
-        view: {
-            selectedMulti: false
-        },
-        data: {
-            keep: {
-                parent: true,
-                leaf: false
-            },
-            simpleData: {
-                enable: true,
-                idKey: "id",
-                pIdkey: "pId"
-            }
-        },
-        callback: {
-            beforeDrag: beforeDrag,
-            beforeRemove: beforeRemove,
-            beforeRename: beforeRename,
-            onRemove: onRemove
-        }
     };
-
-    var zNodes = {$listDepartment};
-
-    var log, className = "dark";
-    function beforeDrag(treeId, treeNodes) {
-        return false;
-    }
-    function beforeRemove(treeId, treeNode) {
-        className = (className === "dark" ? "" : "dark");
-        showLog("[ " + getTime() + " beforeRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
-        return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
-    }
-    function onRemove(e, treeId, treeNode) {
-        showLog("[ " + getTime() + " onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
-    }
-    function beforeRename(treeId, treeNode, newName) {
-        if (newName.length == 0) {
-            alert("节点名称不能为空.");
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-            setTimeout(function () {
-                zTree.editName(treeNode)
-            }, 10);
-            return false;
-        }
-        return true;
-    }
-    function showLog(str) {
-        if (!log) log = $("#log");
-        log.append("<li class='" + className + "'>" + str + "</li>");
-        if (log.children("li").length > 8) {
-            log.get(0).removeChild(log.children("li")[0]);
-        }
-    }
-    function getTime() {
-        var now = new Date(),
-                h = now.getHours(),
-                m = now.getMinutes(),
-                s = now.getSeconds(),
-                ms = now.getMilliseconds();
-        return (h + ":" + m + ":" + s + " " + ms);
-    }
-
-    var newCount = 1;
-    function add(e) {
-        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
-
-                isParent = e.data.isParent,
-                isTop = e.data.isTop;
-        var nodes = zTree.getSelectedNodes();
-        console.log(nodes.pId);
-        var nodeNum = zTree.transformToArray(zTree.getNodes());
-        var startNum;
-        var maxNum = 0;
-
-        //查询最大的id值，每次在此基础上加1，使得id不重复
-        if (nodeNum.length == 0) {
-            startNum = 1;
-        } else {
-
-            for (var i = 0; i < nodeNum.length; i++) {
-                if (Number(nodeNum[i].id) > maxNum) {
-                    maxNum = Number(nodeNum[i].id);
-                }
-            }
-
-            startNum = maxNum + 1;
-        }
-        if (isTop) {
-            treeNode = 0;
-        } else {
-            treeNode = nodes[0];
-        }
-
-        if (treeNode) {
-            var purl = "/admin.php?c=Employee&a=employeeList&cid=" + startNum + "&pid=" + treeNode.id;
-            treeNode = zTree.addNodes(treeNode, {
-                id: startNum,
-                url: purl,
-                target: "iframe0",
-                pId: treeNode.id,
-                isParent: isParent,
-                name: "new node" + startNum
-            });
-        } else {
-            var purl = "/admin.php?c=Employee&a=employeeList&cid=" + startNum + "&pid=" + 0;
-            console.log(purl);
-            treeNode = zTree.addNodes(null, {
-                id: startNum,
-                url: purl,
-                target: "iframe0",
-                pId: 0,
-                isParent: isParent,
-                name: "new node" + startNum
-            });
-            zTree.updateNode(treeNode);
-        }
-
-
-        if (treeNode) {
-            var url = "/admin.php?c=Department&a=addDepartment";
-            var data = {
-                id: treeNode[0].id,
-                pId: Number(treeNode[0].pId),
-                url: treeNode[0].url,
-                target: treeNode[0].target,
-                name: treeNode[0].name
-            };
-            $.post(
-                    url,
-                    data,
-                    function (s) {
-                        if (s.status == 1) {
-                            return dialog.success('成功', s.url);
-                            // 跳转到相关页面
-                        } else {
-                            return dialog.error(s.message);
-                        }
-                    }, "JSON");
-            zTree.editName(treeNode[0]);
-        } else {
-            alert("叶子节点被锁定，无法增加子节点");
-        }
-    }
-    ;
-    function edit() {
-        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
-                nodes = zTree.getSelectedNodes(),
-                treeNode = nodes[0];
-        if (nodes.length == 0) {
-            alert("请先选择一个节点");
-            return;
-        }
-        zTree.editName(treeNode);
-    }
-    ;
-    function remove(e) {
-        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
-                nodes = zTree.getSelectedNodes(),
-                treeNode = nodes[0];
-        if (nodes.length == 0) {
-            alert("请先选择一个节点");
-            return;
-        }
-        var callbackFlag = $("#callbackTrigger").attr("checked");
-        zTree.removeNode(treeNode, callbackFlag);
-    }
-    ;
-    function clearChildren(e) {
-        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
-                nodes = zTree.getSelectedNodes(),
-                treeNode = nodes[0];
-        if (nodes.length == 0 || !nodes[0].isParent) {
-            alert("请先选择一个父节点");
-            return;
-        }
-        zTree.removeChildNodes(treeNode);
-    }
-    ;
-
-    $(document).ready(function () {
-        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-        $("#addParent").bind("click", {isParent: true}, add);
-        $("#addLeaf").bind("click", {isParent: false}, add);
-        $("#edit").bind("click", edit);
-        $("#remove").bind("click", remove);
-    });
-</SCRIPT>
+</script>
 </body>
 
 </html>
