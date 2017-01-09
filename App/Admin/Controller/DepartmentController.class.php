@@ -107,6 +107,52 @@ class DepartmentController extends Controller
         }
     }
 
+    public function edit()
+    {
+        if (IS_POST) {
+
+            $this->editPost();
+            exit();
+        } else {
+            $id = I('id', 0, 'intval');
+            $data = M('department')->find($id);
+            if (!$data) {
+                $this->error("记录不存在");
+            }
+            $departmentName = M('department')->select();
+            $departmentName = Category::toLevel($departmentName, '---', 0);
+            $this->assign('data', $data);
+            $this->assign('cate', $departmentName);
+            $this->assign('type', '修改部门');
+            $this->display();
+        }
+
+    }
+
+    public function editPost()
+    {
+        $data = I('post.', '');
+        $id = $data['id'] = intval($data['id']);
+
+        $data['name'] = trim($data['name']);
+        $pid = $data['pid'] = intval($data['pid']);
+
+        //M验证
+        if (empty($data['name'])) {
+            return show_tip(0,"菜单名称不能为空");
+        }
+
+        if ($id == $pid) {
+            return show_tip(0,"不能设置自己为子部门");
+        }
+
+        if (false !== M('department')->save($data)) {
+
+            return show_tip(1,'修改成功',null,U('departmentList'));
+        } else {
+            return show_tip(0,'修改失败');
+        }
+    }
     public function departmentTest()
     {
         $this->display();
