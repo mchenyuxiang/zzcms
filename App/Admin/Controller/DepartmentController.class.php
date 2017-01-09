@@ -26,7 +26,7 @@ class DepartmentController extends Controller
             $id = $v['id'];
             $pid = $v['pid'];
             $name = $v['name'];
-            $addurl = U("Menu/add",array('pid' => $v['id']));
+            $addurl = U("add",array('pid' => $v['id']));
             $editurl = U('edit',array('id' => $v['id']));
             if($v['level'] == 1){
                 $arrList[$k] = " <tr class='treegrid-{$id}'>
@@ -35,7 +35,7 @@ class DepartmentController extends Controller
                                 <td>
                                     <a href='{$addurl}' class='btn btn-primary btn-rounded'>增加下属部门</a>
                                     <a href='{$editurl}' class='btn btn-primary btn-rounded'>编辑部门</a>
-                                    <a class='btn btn-default btn-rounded'>删除部门</a>
+                                    <a href=\"javascript:void(0)\" attr-message=\"删除\" id=\"zzcms-delete\" class='btn btn-primary btn-rounded' attr-id=\"{$v['id']}\">删除部门</a>
                                 </td>
                             </tr>";
             }else{
@@ -65,41 +65,43 @@ class DepartmentController extends Controller
         exit(json_encode($result));
     }
 
-    public function addDepartment()
+    public function add()
     {
 
-        $data = Array();
-        $data['id'] = I('id', 0);
-        $data['pId'] = I('pId', 0);
-        $data['url'] = $_POST['url'];
-        $data['target'] = $_POST['target'];
-        $data['name'] = $_POST['name'];
-//        print_r($data['url']);
+        if($_POST){
 
-        $res = M('department')->add($data);
+            if (!isset($_POST['name']) || !$_POST['name']) {
+                return show_tip(0, '部门名称不能为空');
+            }
 
-        if ($res) {
-
-            return show_tip(1, '添加成功', null, U('Department/departmentList'));
-        } else {
-            return show_tip(0, "添加失败");
+            $menuId = M("Department")->data($_POST)->add();
+            if ($menuId) {
+                return show_tip(1, '新增成功', $menuId, U('departmentList'));
+            }
+            return show_tip(0, '新增失败', $menuId);
+        }
+        else{
+            $departmentName = M('department')->select();
+            $departmentName = Category::toLevel($departmentName, '---', 0);
+            $this->assign('cate', $departmentName);
+            $this->display();
         }
     }
 
-    public function delDepartment()
+    public function del()
     {
 
         $id = I('id', 0, 'intval');
 
         //查询是否有子类
-        $childCate = M('menu')->where(array('pid' => $id))->select();
+        $childCate = M('department')->where(array('pid' => $id))->select();
         if ($childCate) {
 //            return show_tip(0,"删除失败，请先删除子菜单");
             return show_tip(0, $id);
         }
-        if (M('menu')->delete($id)) {
+        if (M('department')->delete($id)) {
 
-            return show_tip(1, '删除成功', null, U('Menu/index'));
+            return show_tip(1, '删除成功', null, U('departmentList'));
         } else {
             return show_tip(0, "删除失败");
         }
