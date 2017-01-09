@@ -26,15 +26,16 @@ class DepartmentController extends Controller
             $id = $v['id'];
             $pid = $v['pid'];
             $name = $v['name'];
-            $addurl = U("Menu/add");
+            $addurl = U("Menu/add",array('pid' => $v['id']));
+            $editurl = U('edit',array('id' => $v['id']));
             if($v['level'] == 1){
                 $arrList[$k] = " <tr class='treegrid-{$id}'>
                                 <td>{$name}</td>
                                 <td>Additional info</td>
                                 <td>
-                                    <a href='{$addurl}' class='btn btn-primary btn-rounded'>增加子菜单</a>
-                                    <a class='btn btn-default btn-rounded'>编辑菜单</a>
-                                    <a class='btn btn-default btn-rounded'>删除菜单</a>
+                                    <a href='{$addurl}' class='btn btn-primary btn-rounded'>增加下属部门</a>
+                                    <a href='{$editurl}' class='btn btn-primary btn-rounded'>编辑部门</a>
+                                    <a class='btn btn-default btn-rounded'>删除部门</a>
                                 </td>
                             </tr>";
             }else{
@@ -42,9 +43,9 @@ class DepartmentController extends Controller
                                 <td>{$name}</td>
                                 <td>Additional info</td>
                                 <td>
-                                    <a href='{$addurl}' class='btn btn-primary btn-rounded'>增加子菜单</a>
-                                    <a class='btn btn-default btn-rounded'>编辑菜单</a>
-                                    <a class='btn btn-default btn-rounded'>删除菜单</a>
+                                    <a href='{$addurl}' class='btn btn-primary btn-rounded'>增加下属部门</a>
+                                    <a href='{$editurl}' class='btn btn-primary btn-rounded'>编辑部门</a>
+                                    <a href=\"javascript:void(0)\" attr-message=\"删除\" id=\"zzcms-delete\" class='btn btn-primary btn-rounded' attr-id=\"{$v['id']}\">删除部门</a>
                                 </td>
                             </tr>";
             }

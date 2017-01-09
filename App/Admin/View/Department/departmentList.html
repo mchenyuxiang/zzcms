@@ -62,37 +62,7 @@
                                 {$v}
                             </foreach>
 
-
-
                             </tbody>
-                            <!--<foreach name="listDepartment" item="v">-->
-                            <!--<tr class="treegrid-{$v.id} treegrid-parent-{$v.pid}">-->
-                            <!--<td>{$v.name}</td>-->
-                            <!--<td>Additional info</td>-->
-                            <!--<td>-->
-                            <!--<if condition="in_array($v['id'],array(0))">-->
-                            <!--<a class="btn btn-default btn-rounded">增加子菜单</a>-->
-                            <!--<a class="btn btn-default btn-rounded">编辑菜单</a>-->
-                            <!--<a class="btn btn-default btn-rounded">删除菜单</a>-->
-                            <!--<elseif condition="$v['pid'] eq 0"/>-->
-                            <!--<a href="{:U('add',array('pid' => $v['id']))}"-->
-                            <!--class="btn btn-primary btn-rounded">增加子菜单</a>-->
-                            <!--<a class="btn btn-default btn-rounded">编辑菜单</a>-->
-                            <!--<a class="btn btn-default btn-rounded">删除菜单</a>-->
-                            <!--<else/>-->
-                            <!--<a href="{:U('add',array('pid' => $v['id']))}"-->
-                            <!--class="btn btn-primary btn-rounded">添加子菜单</a>-->
-                            <!--<a href="{:U('edit',array('id' => $v['id']))}"-->
-                            <!--class="btn btn-primary btn-rounded">编辑菜单</a>-->
-                            <!--<a href="javascript:void(0)"-->
-                            <!--attr-message="删除"-->
-                            <!--class="btn btn-primary btn-rounded" id="zzcms-delete"-->
-                            <!--attr-id="{$v['id']}">删除菜单-->
-                            <!--</a>-->
-                            <!--</if>-->
-                            <!--</td>-->
-                            <!--</tr>-->
-                            <!--</foreach>-->
                         </table>
                         <div class="text-center">
                             {$page}
