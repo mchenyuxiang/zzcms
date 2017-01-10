@@ -45,15 +45,15 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="">
-                            <a href="{:U('add')}" class="btn btn-primary ">新增部门</a>
+                            <a href="{:U('add')}" class="btn btn-primary ">新增职位</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>部门名称</th>
-                                <th>部门详情</th>
+                                <th>职位名称</th>
+                                <th>工作详情</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -64,9 +64,6 @@
 
                             </tbody>
                         </table>
-                        <div class="text-center">
-                            {$page}
-                        </div>
                     </div>
 
                 </div>
@@ -88,10 +85,7 @@
         });
     });
     var SCOPE = {
-        'add_url': '/admin.php?c=menu&a=add',
-        'edit_url': '/admin.php?c=menu&a=edit',
         'delete_url': '{:U("del")}',
-        'listorder_url': '/admin.php?c=menu&a=listorder',
 
     };
 </script>

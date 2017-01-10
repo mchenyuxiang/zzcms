@@ -8,6 +8,7 @@
  */
 namespace Admin\Controller;
 
+use Common\Lib\Category;
 use Think\Controller;
 
 class OfficeController extends Controller
@@ -34,7 +35,7 @@ class OfficeController extends Controller
                                 <td>
                                     <a href='{$addurl}' class='btn btn-primary btn-rounded'>增加下属职位</a>
                                     <a href='{$editurl}' class='btn btn-primary btn-rounded'>编辑职位</a>
-                                    <a href=\"javascript:void(0)\" attr-message=\"删除\" id=\"zzcms-delete\" class='btn btn-primary btn-rounded' attr-id=\"{$v['id']}\">删除部门</a>
+                                    <a href=\"javascript:void(0)\" attr-message=\"删除\" id=\"zzcms-delete\" class='btn btn-primary btn-rounded' attr-id=\"{$v['id']}\">删除职位</a>
                                 </td>
                             </tr>";
             } else {
@@ -44,7 +45,7 @@ class OfficeController extends Controller
                                 <td>
                                     <a href='{$addurl}' class='btn btn-primary btn-rounded'>增加下属职位</a>
                                     <a href='{$editurl}' class='btn btn-primary btn-rounded'>编辑职位</a>
-                                    <a href=\"javascript:void(0)\" attr-message=\"删除\" id=\"zzcms-delete\" class='btn btn-primary btn-rounded' attr-id=\"{$v['id']}\">删除部门</a>
+                                    <a href=\"javascript:void(0)\" attr-message=\"删除\" id=\"zzcms-delete\" class='btn btn-primary btn-rounded' attr-id=\"{$v['id']}\">删除职位</a>
                                 </td>
                             </tr>";
             }
