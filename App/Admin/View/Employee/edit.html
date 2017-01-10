@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 后台主题UI框架 - 基本表单</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{$type}
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="submit-menu">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">父级菜单</label>
+
+                            <div class="col-sm-10">
+                                <select class="form-control m-b" id="parentName" name="pid">
+                                    <option value="0">顶级菜单</option>
+                                    <foreach name="cate" item="v">
+                                        <option value="{$v.id}" <if condition="$data['pid'] eq $v['id']">selected="selected"</if>>{$v.delimiter}{$v.name}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">菜单名称</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="name" value="{$data.name}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">模块名称</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="module" value="{$data.module}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">方法名称</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="action" value="{$data.action}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">附加参数</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="parameter" value="{$data.parameter}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">菜单排序</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="sort" value="{$data.sort}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">是否显示
+                            </label>
+
+                            <div class="col-sm-10">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" value="1" id="optionsRadios1"
+                                               name="status" <if condition="$data.status eq 1">checked="checked"</if>>显示</label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" value="0" id="optionsRadios2" name="status" <if condition="$data.status eq 0">checked="checked"</if>>隐藏</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <input name="id" type="hidden" value="{$data.id}"/>
+                                <button class="btn btn-primary" type="button" id="button-add">修改内容</button>
+                                <button class="btn btn-white" type="button" id="button-cancal">取消返回</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.4"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
+<script src="__PUBLIC__/js/plugins/iCheck/icheck.min.js"></script>
+<!--<script src="__PUBLIC__/js/admin/common.js"></script>-->
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script src="__PUBLIC__/js/plugins/layer/layer.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
+    });
+    $("#button-add").click(function () {
+        var data = $("#submit-menu").serializeArray();
+        postData = {};
+
+        $(data).each(function (i) {
+            postData[this.name] = this.value;
+        })
+        console.log(postData);
+        //将获取到德数据post给服务器
+        url = '{:U("Menu/edit")}';
+        $.post(url, postData, function (result) {
+            if (result.status == 1) {
+                //成功
+                return dialog.success(result.message, result.url);
+            } else if (result.status == 0) {
+                //失败
+                return dialog.error(result.message);
+            }
+        }, "JSON");
+    });
+    $("#button-cancal").click(function () {
+        window.location.href = '{:U("Menu/index")}'
+    })
+</script>
+</body>
+
+</html>
