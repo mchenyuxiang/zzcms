@@ -44,7 +44,7 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="">
-                            <a href="{:U('Menu/add')}" class="btn btn-primary ">新增菜单</a>
+                            <a href="{:U('add')}" class="btn btn-primary ">新增菜单</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -107,10 +107,7 @@
 <script src="__PUBLIC__/js/common.js"></script>
 <script>
     var SCOPE = {
-        'add_url': '/admin.php?c=menu&a=add',
-        'edit_url': '/admin.php?c=menu&a=edit',
-        'delete_url': '{:U("Menu/del")}',
-        'listorder_url': '/admin.php?c=menu&a=listorder',
+        'delete_url': '{:U("del")}',
 
     };
 </script>

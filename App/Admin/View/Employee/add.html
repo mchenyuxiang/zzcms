@@ -32,73 +32,36 @@
                 <div class="ibox-content">
                     <form class="form-horizontal" id="submit-menu">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">父级菜单</label>
+                            <label class="col-sm-2 control-label">部门</label>
 
                             <div class="col-sm-10">
-                                <select class="form-control m-b" id="parentName" name="pid">
-                                    <option value="0">顶级菜单</option>
-                                    <foreach name="cate" item="v">
-                                        <option value="{$v.id}" <if condition="$pid eq $v['id']">selected="selected"</if>>{$v.delimiter}{$v.name}</option>
+                                <select class="form-control m-b" id="parentName" name="departmentId">
+                                    <option value="0">请选择</option>
+                                    <foreach name="departmentName" item="v">
+                                        <option value="{$v.id}">{$v.delimiter}{$v.name}</option>
                                     </foreach>
                                 </select>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">菜单名称</label>
+                            <label class="col-sm-2 control-label">职位</label>
+
+                            <div class="col-sm-10">
+                                <select class="form-control m-b" id="parentName1" name="officeId">
+                                    <option value="0">请选择</option>
+                                    <foreach name="officeName" item="v">
+                                        <option value="{$v.id}">{$v.delimiter}{$v.name}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">人员名称</label>
 
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name">
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">模块名称</label>
-
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="module">
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">方法名称</label>
-
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="action">
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">附加参数</label>
-
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="parameter">
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">菜单排序</label>
-
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="sort">
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">是否显示
-                            </label>
-
-                            <div class="col-sm-10">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" checked="" value="1" id="optionsRadios1"
-                                               name="status">显示</label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" value="0" id="optionsRadios2" name="status">隐藏</label>
-                                </div>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -135,7 +98,7 @@
         })
         console.log(postData);
         //将获取到德数据post给服务器
-        url = '{:U("Menu/add")}';
+        url = '{:U("add")}';
         $.post(url,postData,function (result) {
             if(result.status == 1){
                 //成功
@@ -147,7 +110,7 @@
         },"JSON");
     });
     $("#button-cancal").click(function () {
-       window.location.href = '{:U("Menu/index")}'
+       window.location.href = '{:U("employeeList")}'
     })
 </script>
 </body>
