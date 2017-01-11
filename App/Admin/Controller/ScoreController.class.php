@@ -8,6 +8,7 @@
  */
 namespace Admin\Controller;
 
+use Common\Lib\Category;
 use Think\Controller;
 
 class ScoreController extends Controller
@@ -89,6 +90,30 @@ class ScoreController extends Controller
             return show_tip(1, '删除成功', null, U('scoreList'));
         } else {
             return show_tip(0, "删除失败");
+        }
+    }
+    
+    public function add()
+    {
+
+        if($_POST){
+
+            if (!isset($_POST['name']) || !$_POST['name']) {
+                return show_tip(0, '部门名称不能为空');
+            }
+
+            $menuId = M("score")->data($_POST)->add();
+            if ($menuId) {
+                return show_tip(1, '新增成功', $menuId, U('scoreList'));
+            }
+            return show_tip(0, '新增失败', $menuId);
+        }
+        else{
+            $scoreName = M('score')->select();
+            $scoreName = Category::toLevel($scoreName, '---', 0);
+            $this->assign('cate', $scoreName);
+            $this->assign("type", "分数增加");
+            $this->display();
         }
     }
 }
