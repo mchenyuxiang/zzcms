@@ -116,6 +116,53 @@ class ScoreController extends Controller
             $this->display();
         }
     }
+    
+    public function edit()
+    {
+        if (IS_POST) {
+
+            $this->editPost();
+            exit();
+        } else {
+            $id = I('id', 0, 'intval');
+            $data = M('score')->find($id);
+            if (!$data) {
+                $this->error("记录不存在");
+            }
+            $scoreName = M('score')->select();
+            $scoreName = Category::toLevel($scoreName, '---', 0);
+            $this->assign('data', $data);
+            $this->assign('cate', $scoreName);
+            $this->assign('type', '修改分数');
+            $this->display();
+        }
+
+    }
+
+    public function editPost()
+    {
+        $data = I('post.', '');
+        $id = $data['id'] = intval($data['id']);
+
+        $data['name'] = trim($data['name']);
+        $pid = $data['pid'] = intval($data['pid']);
+
+        //M验证
+        if (empty($data['name'])) {
+            return show_tip(0,"名称不能为空");
+        }
+
+        if ($id == $pid) {
+            return show_tip(0,"不能设置自己为子类");
+        }
+
+        if (false !== M('score')->save($data)) {
+
+            return show_tip(1,'修改成功',null,U('scoreList'));
+        } else {
+            return show_tip(0,'修改失败');
+        }
+    }
 }
 
 ?>
