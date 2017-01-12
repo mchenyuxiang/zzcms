@@ -91,12 +91,12 @@
                                             <a class="btn btn-default btn-rounded">编辑菜单</a>
                                             <a class="btn btn-default btn-rounded">删除菜单</a>
                                             <elseif condition="$v['pid'] eq 0"/>
-                                            <a href="{:U('add',array('pid' => $v['id']))}"
+                                            <a href="{:U('add',array('pid' => $v['id'],'topid'=>$v['topid']))}"
                                                class="btn btn-primary btn-rounded">增加子菜单</a>
                                             <a class="btn btn-default btn-rounded">编辑菜单</a>
                                             <a class="btn btn-default btn-rounded">删除菜单</a>
                                             <else/>
-                                            <a href="{:U('add',array('pid' => $v['id']))}"
+                                            <a href="{:U('add',array('pid' => $v['id'],'topid'=>$v['topid']))}"
                                                class="btn btn-primary btn-rounded">添加子菜单</a>
                                             <a href="{:U('edit',array('id' => $v['id']))}"
                                                class="btn btn-primary btn-rounded">编辑菜单</a>

@@ -57,7 +57,7 @@ class MenuController extends Controller
             if (!isset($_POST['action']) || !$_POST['action']) {
                 return show_tip(0, '方法名不能为空');
             }
-            $_POST['topid'] = $_POST['pid'];
+            $_POST['topid'] = $_POST['topid'];
 
             $menuId = D("Menu")->insert($_POST);
             if ($menuId) {
@@ -68,10 +68,12 @@ class MenuController extends Controller
 
         } else {
             $pid = I('pid', 0, 'intval');
+            $topid = I('topid');
             $menuName = M('menu')->order('sort')->select();
             $menuName = Category::toLevel($menuName, '---', 0);
             $this->assign('cate', $menuName);
             $this->assign('pid', $pid);
+            $this->assign('topid', $topid);
             $this->assign('type', '菜单添加');
             $this->display();
         }
