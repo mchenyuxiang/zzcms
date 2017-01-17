@@ -68,6 +68,18 @@ class PlanController extends Controller{
     public function edit(){
         $this->display();
     }
+    
+    public function del()
+    {
+
+        $id = I('id', 0, 'intval');
+        if (M('plan')->delete($id)) {
+
+            return show_tip(1, '删除成功', null, U('planList'));
+        } else {
+            return show_tip(0, "删除失败");
+        }
+    }
 }
 ?>
 
