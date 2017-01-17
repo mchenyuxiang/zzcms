@@ -21,7 +21,9 @@ class PlanController extends Controller{
         $offset = ($page - 1) * $pageSize;
         $today = date("Y-m-d");
         $data['endDay'] = array('egt',$today);
-        $cate = M('plan')
+        $cate = M()
+            ->table('zzcms_plan as a')
+            ->join('RIGHT JOIN zzcms_employee as b on b.id=a.employeeid')
             ->where($data)->limit($offset, $pageSize)->select();
         $cateCount = M('employee')->where($data)->count();
 
