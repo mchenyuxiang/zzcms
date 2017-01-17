@@ -36,7 +36,17 @@ class PlanController extends Controller{
     }
     
     public function add(){
-        $this->display();
+
+        if($_POST){
+
+        }else{
+            $employeeName=M('employee')->select();
+            $className=M('class')->select();
+            $this->assign('employeeName',$employeeName);
+            $this->assign('className',$className);
+            $this->assign('tpye','增加排班');
+            $this->display();
+        }
     }
     
     public function edit(){
