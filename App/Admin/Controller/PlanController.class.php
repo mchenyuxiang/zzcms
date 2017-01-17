@@ -38,6 +38,22 @@ class PlanController extends Controller{
     public function add(){
 
         if($_POST){
+            if($_POST['employeeid']==0){
+                return show_tip(0,'请选择员工');
+            }
+            if (!isset($_POST['startDay']) || !$_POST['startDay']) {
+                return show_tip(0, '请输入开始时间');
+            }
+            if (!isset($_POST['endDay']) || !$_POST['endDay']) {
+                return show_tip(0, '清输入结束时间');
+            }
+            
+            $planId = M('plan')->data($_POST)->add();
+            if($planId){
+                return show_tip(1,'新增成功',$planId,U('planList'));
+            }else{
+                return show_tip(0,'新增失败',$planId);
+            }
 
         }else{
             $employeeName=M('employee')->select();
