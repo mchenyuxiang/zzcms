@@ -131,18 +131,11 @@ class EmployeeController extends Controller
     {
 
         $id = I('id', 0, 'intval');
-
-//        //查询是否有子类
-//        $childCate = M('employee')->where(array('pid' => $id))->select();
-//        if ($childCate) {
-////            return show_tip(0,"删除失败，请先删除子菜单");
-//            return show_tip(0, "有子类不能删除");
-//        }
         if (M('employee')->delete($id)) {
 
             return show_tip(1, '删除成功', null, U('employeeList'));
         } else {
-            return show_tip(0, "删除失败"+$id);
+            return show_tip(0, "删除失败");
         }
     }
 }
