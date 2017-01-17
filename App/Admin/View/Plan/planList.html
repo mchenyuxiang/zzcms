@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 后台主题UI框架 - 基础表格</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/admin.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{$type}</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="">
+                            <a href="{:U('add')}" class="btn btn-primary ">新增排班</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+
+                                <th></th>
+                                <th>序号</th>
+                                <th>姓名</th>
+                                <th>开始日期</th>
+                                <th>结束日期</th>
+                                <th>周一</th>
+                                <th>周二</th>
+                                <th>周三</th>
+                                <th>周四</th>
+                                <th>周五</th>
+                                <th>周六</th>
+                                <th>周日</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+
+                            <foreach name='cate' item='v'>
+                                <tr>
+                                    <td>
+                                        <!--<input type="checkbox" class="i-checks" name="input[]">-->
+                                    </td>
+                                    <td>{$v.id}</td>
+                                    <td>
+                                        {$v.name}
+                                    </td>
+                                    <td>{$v.startday}</td>
+                                    <td>{$v.endday}</td>
+                                    <td>{$v.mon}</td>
+                                    <td>{$v.tues}</td>
+                                    <td>{$v.wed}</td>
+                                    <td>{$v.thur}</td>
+                                    <td>{$v.fri}</td>
+                                    <td>{$v.sat}</td>
+                                    <td>{$v.sun}</td>
+                                    <td>
+                                        <a href="{:U('edit',array('id' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">编辑</a>
+                                        <a href="javascript:void(0)"
+                                           attr-message="删除"
+                                           class="btn btn-primary btn-rounded" id="zzcms-delete"
+                                           attr-id="{$v['id']}">删除
+                                    </td>
+                                </tr>
+                            </foreach>
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            {$page}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.4"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="__PUBLIC__/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
+<script src="__PUBLIC__/js/demo/peity-demo.min.js"></script>
+<script src="__PUBLIC__/js/plugins/layer/layer.min.js"></script>
+<script src="__PUBLIC__/js/dialog.js"></script>
+<script src="__PUBLIC__/js/common.js"></script>
+<script>
+    var SCOPE = {
+        'delete_url': '{:U("del")}',
+
+    };
+</script>
+</body>
+
+</html>
