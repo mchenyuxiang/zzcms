@@ -24,7 +24,8 @@ class PlanController extends Controller{
         $cate = M()
             ->table('zzcms_plan as a')
             ->join('RIGHT JOIN zzcms_employee as b on b.id=a.employeeid')
-            ->where($data)->limit($offset, $pageSize)->select();
+            ->field('a.id as id,startDay,endDay,b.name as name,a.mon as mon,a.tues as tues,a.wed as wed,a.thur as thur,a.fri as fri,a.sat as sat,a.sun as sun')
+            ->where($data)->order('id asc')->limit($offset, $pageSize)->select();
         $cateCount = M('employee')->where($data)->count();
 
         $res = new Page($cateCount, $pageSize);
@@ -66,7 +67,62 @@ class PlanController extends Controller{
     }
     
     public function edit(){
-        $this->display();
+        if (IS_POST) {
+
+            $this->editPost();
+            exit();
+        } else {
+            $id = I('id', 0, 'intval');
+
+            $condition = array();
+            $condition['a.id'] = array('eq',$id);
+            $data = M()
+                ->table('zzcms_plan as a')
+                ->join('RIGHT JOIN zzcms_employee as b on b.id=a.employeeid')
+                ->field('a.id as id,startDay,endDay,b.name as name,a.mon as mon,a.tues as tues,a.wed as wed,a.thur as thur,a.fri as fri,a.sat as sat,a.sun as sun')
+                ->where($condition)->find();
+            $className=M('class')->select();
+            $this->assign('data', $data);
+            $this->assign('className',$className);
+            $this->assign('type','编辑排班');
+            $this->display();
+        }
+    }
+
+    public function editPost()
+    {
+        $data = I('post.', '');
+        $data['id'] = intval($data['id']);
+        $data['name'] = trim($data['name']);
+        $data['startDay'] = trim($data['startDay']);
+        $data['endDay'] = trim($data['endDay']);
+        $data['mon'] = trim($data['mon']);
+        $data['tues'] = trim($data['tues']);
+        $data['wed'] = trim($data['wed']);
+        $data['thur'] = trim($data['thur']);
+        $data['fri'] = trim($data['fri']);
+        $data['sat'] = trim($data['sat']);
+        $data['sun'] = trim($data['sun']);
+
+
+        //M验证
+//        if($data['departmentId'] == 0 || empty($data['departmentId'])){
+//            return show_tip(0,"请选择部门");
+//        }
+//        if($data['officeId'] == 0 || empty($data['officeId'])){
+//            return show_tip(0,"请选择职位");
+//        }
+//        if (empty($data['name'])) {
+//            return show_tip(0,"名称不能为空");
+//        }
+
+
+        if (false !== M('plan')->save($data)) {
+
+            return show_tip(1,'修改成功',null,U('planList'));
+        } else {
+            return show_tip(0,'修改失败');
+        }
     }
     
     public function del()
