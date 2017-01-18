@@ -29,7 +29,7 @@ class ScoreController extends Controller
                 $score = $scoreTemp[0]['score'] * $number;
                 $res = M('score')->where('id=%d', $id)->setField('score', $score);
                 if ($res) {
-                    $listScore[sizeof($listScore)-$k-1]['score'] = $score;
+                    $listScore[sizeof($listScore) - $k - 1]['score'] = $score;
                 }
             }
         }
@@ -47,6 +47,7 @@ class ScoreController extends Controller
             if ($v['level'] == 1) {
                 $arrList[$k] = " <tr class='treegrid-{$id}'>
                                 <td>{$name}</td>
+                                <td>{$id}</td>
                                 <td>{$number}</td>
                                 <td>{$score}</td>
                                 <td>
@@ -58,6 +59,7 @@ class ScoreController extends Controller
             } else {
                 $arrList[$k] = " <tr class='treegrid-{$id} treegrid-parent-{$pid}'>
                                 <td>{$name}</td>
+                                <td>{$id}</td>
                                 <td>{$number}</td>
                                 <td>{$score}</td>
                                 <td>
@@ -73,7 +75,7 @@ class ScoreController extends Controller
         $this->assign("type", "分数管理");
         $this->display();
     }
-    
+
     public function del()
     {
 
@@ -92,11 +94,11 @@ class ScoreController extends Controller
             return show_tip(0, "删除失败");
         }
     }
-    
+
     public function add()
     {
 
-        if($_POST){
+        if ($_POST) {
 
             if (!isset($_POST['name']) || !$_POST['name']) {
                 return show_tip(0, '部门名称不能为空');
@@ -107,8 +109,7 @@ class ScoreController extends Controller
                 return show_tip(1, '新增成功', $menuId, U('scoreList'));
             }
             return show_tip(0, '新增失败', $menuId);
-        }
-        else{
+        } else {
             $scoreName = M('score')->select();
             $scoreName = Category::toLevel($scoreName, '---', 0);
             $this->assign('cate', $scoreName);
@@ -116,7 +117,7 @@ class ScoreController extends Controller
             $this->display();
         }
     }
-    
+
     public function edit()
     {
         if (IS_POST) {
@@ -149,18 +150,18 @@ class ScoreController extends Controller
 
         //M验证
         if (empty($data['name'])) {
-            return show_tip(0,"名称不能为空");
+            return show_tip(0, "名称不能为空");
         }
 
         if ($id == $pid) {
-            return show_tip(0,"不能设置自己为子类");
+            return show_tip(0, "不能设置自己为子类");
         }
 
         if (false !== M('score')->save($data)) {
 
-            return show_tip(1,'修改成功',null,U('scoreList'));
+            return show_tip(1, '修改成功', null, U('scoreList'));
         } else {
-            return show_tip(0,'修改失败');
+            return show_tip(0, '修改失败');
         }
     }
 }
