@@ -23,7 +23,8 @@ class MenuController extends Controller
         $data = array();
         $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
         $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 15;
-        $cate = D('Menu')->getMenu($data, $page, $pageSize);
+        $offset = ($page-1) * $pageSize;
+        $cate = M('Menu')->order('sort,id')->limit($offset,$pageSize)->select();
         $cateCount = D('Menu')->getMenuCount($data);
 
         $res = new Page($cateCount, $pageSize);
@@ -35,6 +36,7 @@ class MenuController extends Controller
 
         $this->assign('cate', $cate);
         $this->assign('type', '菜单列表');
+        print_r($cate);
         $this->assign('page', $pageRes);
         $this->display();
     }
