@@ -42,10 +42,38 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <div class="row">
-                        <div class="">
-                            <a href="{:U('add')}" class="btn btn-primary ">新增</a>
-                        </div>
+                    <div class="ibox-content">
+                        <form role="form" class="form-inline" id="submit-menu">
+                            <div class="form-group">
+                                <label class="col-sm-8 control-label">检查人员</label>
+
+                                <div class="col-sm-10">
+                                    <select class="form-control m-b" id="employee" name="employeeId">
+                                        <option value="0">请选择</option>
+                                        <foreach name="employeeName" item="v">
+                                            <option value="{$v.id}">{$v.name}</option>
+                                        </foreach>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-8 control-label">查询月份</label>
+
+                                <div class="col-sm-10">
+                                    <select class="form-control m-b" id="parentName" name="month">
+                                        <option value="0">请选择</option>
+                                        <foreach name="month" item="v">
+                                            <option value="{$v.month}">{$v.month}</option>
+                                        </foreach>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-primary" type="button" id="button-add">查询</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -53,10 +81,15 @@
                             <tr>
 
                                 <th></th>
-                                <th>序号</th>
-                                <th>名称</th>
-                                <th>分数范围</th>
-                                <th>操作</th>
+                                <th>日期</th>
+                                <th>姓名</th>
+                                <th>区域</th>
+                                <th>项目数</th>
+                                <th>项目分</th>
+                                <th>扣分项</th>
+                                <th>扣分数</th>
+                                <th>最后得分</th>
+                                <th>评价</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -114,6 +147,29 @@
         'listorder_url': '/admin.php?c=menu&a=listorder',
 
     };
+    $("#button-add").click(function () {
+        var data = $("#submit-menu").serializeArray();
+        postData = {};
+
+        $(data).each(function (i) {
+            postData[this.name] = this.value;
+        })
+        console.log(postData);
+        //将获取到德数据post给服务器
+        url = '{:U("personalDetail")}';
+        $.post(url,postData,function (result) {
+            if(result.status == 1){
+                //成功
+                return dialog.success(result.message,result.url);
+            }else if(result.status == 0){
+                //失败
+                return dialog.error(result.message);
+            }
+        },"JSON");
+    });
+    $("#button-cancal").click(function () {
+        window.location.href = '{:U("levelList")}'
+    })
 </script>
 </body>
 
