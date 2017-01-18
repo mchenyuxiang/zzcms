@@ -25,7 +25,10 @@ class ClassSettingController extends Controller
         $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 15;
 
         $offset = ($page - 1) * $pageSize;
-        $cate = M('class')
+        $cate = M()
+            ->table('zzcms_class as a')
+            ->join('LEFT JOIN zzcms_score as b on a.scoreId = b.id')
+            ->field('a.id as id,a.name as name,a.starttime as starttime,a.endtime as endtime,b.name as scoreName')
             ->where($data)->limit($offset, $pageSize)->select();
         $cateCount = M('class')->where($data)->count();
 
