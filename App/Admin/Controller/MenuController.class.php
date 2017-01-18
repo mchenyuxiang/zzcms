@@ -71,6 +71,9 @@ class MenuController extends Controller
             $topid = I('topid');
             $menuName = M('menu')->order('sort')->select();
             $menuName = Category::toLevel($menuName, '---', 0);
+            if($pid != 0 && $topid == 0){
+                $topid = $pid;
+            }
             $this->assign('cate', $menuName);
             $this->assign('pid', $pid);
             $this->assign('topid', $topid);
