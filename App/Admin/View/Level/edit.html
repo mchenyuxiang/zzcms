@@ -35,7 +35,7 @@
                             <label class="col-sm-2 control-label">名称</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="name">
+                                <input type="text" class="form-control" name="name" value="{$data.name}">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -43,7 +43,7 @@
                             <label class="col-sm-2 control-label">最低分</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="startscore">
+                                <input type="text" class="form-control" name="startscore" value="{$data.startscore}">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -51,12 +51,13 @@
                             <label class="col-sm-2 control-label">最高分</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="endscore">
+                                <input type="text" class="form-control" name="endscore" value="{$data.endscore}">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
+                                <input name="id" type="hidden" value="{$data.id}"/>
                                 <button class="btn btn-primary" type="button" id="button-add">保存内容</button>
                                 <button class="btn btn-white" type="button" id="button-cancal">取消返回</button>
                             </div>
@@ -88,7 +89,7 @@
         })
         console.log(postData);
         //将获取到德数据post给服务器
-        url = '{:U("add")}';
+        url = '{:U("edit")}';
         $.post(url,postData,function (result) {
             if(result.status == 1){
                 //成功

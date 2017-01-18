@@ -75,6 +75,49 @@ class LevelController extends Controller
             $this->display();
         }
     }
+    
+    public function edit(){
+        if(IS_POST){
+            $this->editPost();
+            exit();
+        }else{
+            $id = I('id',0,'intval');
+            $data = M('level')->find($id);
+            if(!$data){
+                $this->error("记录不存在");
+            }
+            $this->assign('data',$data);
+            $this->assign('type', '修改等级');
+            $this->display();
+        }
+    }
+    public function editPost()
+    {
+        $data = I('post.', '');
+
+        $data['name'] = trim($data['name']);
+        $data['startscore'] = intval($data['startscore']);
+        $data['endscore'] = intval($data['endscore']);
+
+        //M验证
+        if (!isset($_POST['name']) || !$_POST['name']) {
+            return show_tip(0, '名称不能为空');
+        }
+        if (!isset($_POST['startscore']) || !$_POST['startscore']) {
+            return show_tip(0, "最高分不能为空");
+        }
+        if (!isset($_POST['endscore']) || !$_POST['endscore']) {
+            return show_tip(0, "最低分不能为空");
+        }
+
+
+        if (false !== M('level')->save($data)) {
+
+            return show_tip(1, '修改成功', null, U('levelList'));
+        } else {
+            return show_tip(0, '修改失败');
+        }
+    }
 }
 
 ?>
