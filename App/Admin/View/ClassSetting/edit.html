@@ -64,6 +64,18 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">区域管理</label>
+
+                            <div class="col-sm-10">
+                                <select class="form-control m-b"  name="scoreId">
+                                    <foreach name="scoreName" item="v">
+                                        <option value="{$v.id}" <if condition="$data['id'] eq $v['id']">selected="selected"</if>>{$v.name}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <input name="id" type="hidden" value="{$data.id}"/>
                                 <button class="btn btn-primary" type="button" id="button-add">保存内容</button>

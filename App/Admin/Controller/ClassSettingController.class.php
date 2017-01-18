@@ -73,6 +73,9 @@ class ClassSettingController extends Controller
             if ($_POST['endtime'] == 0) {
                 return show_tip(0, '请选择下班时间');
             }
+            if ($_POST['scoreId'] == 0) {
+                return show_tip(0, '请选择管理区域');
+            }
 
             $classId = M("class")->data($_POST)->add();
             if ($classId) {
@@ -84,7 +87,9 @@ class ClassSettingController extends Controller
             for ($a = 1; $a <= 24; $a++) {
                 $time[$a]['time'] = $a . ':00';
             }
+            $scoreName = M('score')->where('pid=0')->select();
             $this->assign('time', $time);
+            $this->assign('scoreName',$scoreName);
             $this->assign('type', '班次添加');
             $this->display();
         }
@@ -106,10 +111,11 @@ class ClassSettingController extends Controller
             for ($a = 1; $a <= 24; $a++) {
                 $time[$a]['time'] = $a . ':00';
             }
+            $scoreName = M('score')->where('pid=0')->select();
+            $this->assign('scoreName',$scoreName);
             $this->assign('data', $data);
             $this->assign('time', $time);
             $this->assign('type', '修改班次');
-            print_r($data);
             $this->display();
         }
     }
@@ -121,6 +127,7 @@ class ClassSettingController extends Controller
         $data['name'] = trim($data['name']);
         $data['starttime'] = trim($data['starttime']);
         $data['endtime'] = trim($data['endtime']);
+        $data['scoreId'] = intval($data['scoreId']);
 
         //M验证
         if (!isset($_POST['name']) || !$_POST['name']) {
