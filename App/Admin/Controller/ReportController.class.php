@@ -142,7 +142,7 @@ where a.finalScore between b.startscore
 
             $this->assign('cate', $checkTopidRes);
             $this->assign('total',$total);
-            $this->assign('type', '个人明细报表');
+            $this->assign('type', '个人概况');
             $month = array();
             for ($i = 1; $i < 13; $i++) {
                 if ($i < 10) {
@@ -169,7 +169,7 @@ where a.finalScore between b.startscore
             $employeeName = M('employee')->select();
             $this->assign('employeeName', $employeeName);
             $this->assign('month', $month);
-            $this->assign('type', '检查合计');
+            $this->assign('type', '个人概况');
             $this->display();
         }
     }
