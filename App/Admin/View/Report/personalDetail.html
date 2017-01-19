@@ -43,7 +43,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="ibox-content">
-                        <form role="form" class="form-inline" id="submit-menu">
+                        <form role="form" class="form-inline" id="submit-menu" action="{:U('personalDetail')}" method="get">
                             <div class="form-group">
                                 <label class="col-sm-8 control-label">检查人员</label>
 
@@ -70,7 +70,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">
-                                    <button class="btn btn-primary" type="button" id="button-add">查询</button>
+                                    <button class="btn btn-primary" type="submit" id="button-add">查询</button>
                                 </div>
                             </div>
                         </form>
@@ -100,29 +100,20 @@
                                     <td>
                                         <!--<input type="checkbox" class="i-checks" name="input[]">-->
                                     </td>
-                                    <td>{$v.id}</td>
-                                    <td>{$v.name}</td>
-                                    <if condition="$v['startscore'] eq $v['endscore']">
-                                        <td>{$v.startscore}</td>
-                                        <else />
-                                        <td>{$v.startscore}--{$v.endscore}</td>
-                                    </if>
-                                    <td>
-                                        <a href="{:U('edit',array('id' => $v['id']))}"
-                                           class="btn btn-primary btn-rounded">编辑班次</a>
-                                        <a href="javascript:void(0)"
-                                           attr-message="删除"
-                                           class="btn btn-primary btn-rounded" id="zzcms-delete"
-                                           attr-id="{$v['id']}">删除删除
-                                        </a>
-                                    </td>
+                                    <td>{$v.checkday}</td>
+                                    <td>{$v.employeename}</td>
+                                    <td>{$v.scorename}</td>
+                                    <td>{$v.pronum}</td>
+                                    <td>{$v.total}</td>
+                                    <td>{$v.checknum}</td>
+                                    <td>{$v.checkscore}</td>
+                                    <td>{$v.finalscore}</td>
+                                    <td>{$v.evl}</td>
                                 </tr>
                             </foreach>
                             </tbody>
                         </table>
-                        <div class="text-center">
-                            {$page}
-                        </div>
+
                     </div>
 
                 </div>
@@ -139,38 +130,7 @@
 <script src="__PUBLIC__/js/plugins/layer/layer.min.js"></script>
 <script src="__PUBLIC__/js/dialog.js"></script>
 <script src="__PUBLIC__/js/common.js"></script>
-<script>
-    var SCOPE = {
-        'add_url': '/admin.php?c=menu&a=add',
-        'edit_url': '/admin.php?c=menu&a=edit',
-        'delete_url': '{:U("del")}',
-        'listorder_url': '/admin.php?c=menu&a=listorder',
 
-    };
-    $("#button-add").click(function () {
-        var data = $("#submit-menu").serializeArray();
-        postData = {};
-
-        $(data).each(function (i) {
-            postData[this.name] = this.value;
-        })
-        console.log(postData);
-        //将获取到德数据post给服务器
-        url = '{:U("personalDetail")}';
-        $.post(url,postData,function (result) {
-            if(result.status == 1){
-                //成功
-                return dialog.success(result.message,result.url);
-            }else if(result.status == 0){
-                //失败
-                return dialog.error(result.message);
-            }
-        },"JSON");
-    });
-    $("#button-cancal").click(function () {
-        window.location.href = '{:U("levelList")}'
-    })
-</script>
 </body>
 
 </html>
