@@ -14,6 +14,7 @@ class ReportController extends Controller
 {
     public function index()
     {
+
         $this->display();
     }
 
@@ -21,16 +22,36 @@ class ReportController extends Controller
     {
         if ($_POST) {
 
+            if ($_POST['employeeid'] == 0) {
+                return show_tip(0, '请选择员工');
+            }
+            if ($_POST['month'] == 0) {
+                return show_tip(0, '请选择月份');
+            }
+
+            $month = $_POST['month'];
+            $condition['checkDay'] = array('LIKE',$month);
+            $deduct = M('deduct')->where($condition)->select();
+            $countNum = M('deduct')->where($condition)->count();
+            $personalDetail = Array();
+            for($i=0;$i<sizeof($deduct);$i++){
+            }
+
         } else {
 
-            $month=array();
-            for($i=1;$i<13;$i++){
-                $month[$i]['month']=$i;
+            $month = array();
+            for ($i = 1; $i < 13; $i++) {
+                if ($i < 10) {
+                    $month[$i]['month'] = '0' . $i;
+                } else {
+
+                    $month[$i]['month'] = $i;
+                }
             }
-            $employeeName=M('employee')->select();
-            $this->assign('employeeName',$employeeName);
-            $this->assign('month',$month);
-            $this->assign('type','个人明细报表');
+            $employeeName = M('employee')->select();
+            $this->assign('employeeName', $employeeName);
+            $this->assign('month', $month);
+            $this->assign('type', '个人明细报表');
             $this->display();
         }
     }

@@ -61,7 +61,7 @@ class PlanController extends Controller{
             $className=M('class')->select();
             $this->assign('employeeName',$employeeName);
             $this->assign('className',$className);
-            $this->assign('tpye','增加排班');
+            $this->assign('type','增加排班');
             $this->display();
         }
     }
