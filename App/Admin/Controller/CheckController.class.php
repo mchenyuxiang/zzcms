@@ -26,7 +26,12 @@ class CheckController extends Controller{
             $checkTopidRes = M()->query($checksql);
             $checkTopid = $checkTopidRes[0]['id'];
             $data['checkTopid'] = $checkTopid;
-            $employIdsql = "SELECT 
+            $checkTimeArr = explode(':',$data['checkTime']);
+            $checkTime = $checkTimeArr[0];
+            $classNamesql = "SELECT NAME FROM zzcms_class WHERE (CONVERT(SUBSTRING_INDEX(starttime,':',1),SIGNED)<='".$checkTime."' AND CONVERT(SUBSTRING_INDEX(endtime,':',1),SIGNED)>'".$checkTime."') AND scoreId = ".$checkTopid;
+            $classNameRes = M()->query($classNamesql);
+            $className = $classNameRes[0]['name'];
+            $employIdsql = "SELECT * FROM (SELECT 
       id,employeeid,
       SUBSTRING_INDEX(
         SUBSTRING_INDEX(
@@ -35,13 +40,31 @@ class CheckController extends Controller{
     FROM
       zzcms_plan 
 where '".$data['checkDay']."' between startDay and endDay
-    GROUP BY id";
+    GROUP BY id) AS a WHERE a.banci= '".$className."'";
             $employeeIdRes = M()->query($employIdsql);
             $employeeId = $employeeIdRes[0]['employeeid'];
             $data['employeeid'] = $employeeId;
+
+            $projectNumsql = "select 
+        count(*) as cnt 
+      from
+        zzcms_score as a 
+        left join 
+          (select 
+            * 
+          from
+            zzcms_score 
+          where FIND_IN_SET(id, getChildList (1))) as b 
+          on a.id = b.pid 
+      where b.id is null";
+            $projectNumRes = M()->query($projectNumsql);
+            $projectNumber = $projectNumRes[0]['cnt'];
+            $data['projectNumber'] = $projectNumber;
+
             $deductId = M("deduct")->data($data)->add();
             if($deductId){
-                return show_tip(1,'成功',$deductId,U('checkProject'));
+//                return show_tip(1,'成功',$deductId,U('checkProject'));
+                return show_tip(1,'成功',$checkTimeArr,U('checkProject'));
             }
             return show_tip(0,'新增失败',$deductId);
         }else{

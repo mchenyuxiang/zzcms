@@ -43,7 +43,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="ibox-content">
-                        <form role="form" class="form-inline" id="submit-menu" action="{:U('personalDetail')}" method="get">
+                        <form role="form" class="form-inline" id="submit-menu" action="{:U('personalBasic')}" method="get">
                             <div class="form-group">
                                 <label class="col-sm-8 control-label">检查人员</label>
 
@@ -81,15 +81,10 @@
                             <tr>
 
                                 <th></th>
-                                <th>日期</th>
+                                <th>检查次数</th>
                                 <th>姓名</th>
-                                <th>区域</th>
-                                <th>项目数</th>
-                                <th>项目分</th>
-                                <th>扣分项</th>
-                                <th>扣分数</th>
-                                <th>最后得分</th>
                                 <th>评价</th>
+                                <th>次数</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -100,15 +95,10 @@
                                     <td>
                                         <!--<input type="checkbox" class="i-checks" name="input[]">-->
                                     </td>
-                                    <td>{$v.checkday}</td>
+                                    <td>{$total}</td>
                                     <td>{$v.employeename}</td>
-                                    <td>{$v.scorename}</td>
-                                    <td>{$v.projectnumber}</td>
-                                    <td>{$v.total}</td>
-                                    <td>{$v.checknum}</td>
-                                    <td>{$v.checkscore}</td>
-                                    <td>{$v.finalscore}</td>
                                     <td>{$v.evl}</td>
+                                    <td>{$v.checktimes}</td>
                                 </tr>
                             </foreach>
                             </tbody>
