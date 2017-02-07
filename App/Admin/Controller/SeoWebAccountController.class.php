@@ -9,12 +9,13 @@ namespace Admin\Controller;
 
 use Think\Controller;
 
-class SeoWebAccount extends Controller {
+class SeoWebAccountController extends Controller {
 
     /**
      * 账户资料
      */
     public function update(){
+        $this->assign("type","账户资料");
         $this->display();
     }
 
@@ -25,3 +26,5 @@ class SeoWebAccount extends Controller {
         $this->display();
     }
 }
+
+?>
