@@ -44,7 +44,7 @@
                             <label class="col-sm-2 control-label">邮箱</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="module">
+                                <input type="text" value="{$email}" class="form-control" name="email">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -52,7 +52,15 @@
                             <label class="col-sm-2 control-label">公司名称</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="action">
+                                <input type="text" value="{$companyname}" class="form-control" name="companyname">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">公司联系电话</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" value="{$phone}" class="form-control" name="phone">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -60,13 +68,13 @@
                             <label class="col-sm-2 control-label">公司联系QQ</label>
 
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="parameter">
+                                <input type="text" value="{$companyqq}" class="form-control" name="companyqq">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <input type="hidden" value="{$topid}" name="topid">
+                                <input type="hidden" value="{$id}" name="id">
                                 <button class="btn btn-primary" type="button" id="button-add">保存内容</button>
                                 <button class="btn btn-white" type="button" id="button-cancal">取消返回</button>
                             </div>
@@ -98,7 +106,7 @@
         })
         console.log(postData);
         //将获取到德数据post给服务器
-        url = '{:U("add")}';
+        url = '{:U("update")}';
         $.post(url,postData,function (result) {
             if(result.status == 1){
                 //成功
@@ -110,7 +118,7 @@
         },"JSON");
     });
     $("#button-cancal").click(function () {
-       window.location.href = '{:U("index")}'
+       window.location.href = '{:U("update")}'
     })
 </script>
 </body>
