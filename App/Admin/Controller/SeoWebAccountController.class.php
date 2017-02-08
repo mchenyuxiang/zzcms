@@ -18,6 +18,11 @@ class SeoWebAccountController extends CommonController {
      * 账户资料
      */
     public function update(){
+        $userid = session('zzcms_adm_userid');
+        $condition = array('id'=>$userid);
+        $usernameRes = M('admin')->where($condition)->select();
+        $username = $usernameRes[0]['username'];
+        $this->assign("username",$username);
         $this->assign("type","账户资料");
         $this->display();
     }
