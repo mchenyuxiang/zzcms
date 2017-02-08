@@ -18,7 +18,33 @@ class SeoWebAdminController extends CommonController  {
      * 网站添加
      */
     public function add(){
-        $this->display();
+        if($_POST){
+
+            if (!isset($_POST['websitename']) || !$_POST['websitename']) {
+                return show_tip(0, '网站名称不能为空');
+            }
+            if (!isset($_POST['websiteurl']) || !$_POST['websiteurl']) {
+                return show_tip(0, '网站域名不能为空');
+            }
+
+            if(!validateURL($_POST['websiteurl'])){
+                return show_tip(0,'请输入合法域名');
+            }
+
+            $_POST['createtime'] = date('Y-m-d H:i:s',time());
+            $webId = M("seo_web")->data($_POST)->add();
+            if ($webId) {
+                return show_tip(1, '新增成功', $webId, U('add'));
+            }
+            return show_tip(0, '新增失败', $webId);
+        }else{
+            $userid = session('zzcms_adm_userid');
+            $platforminfo = M('seo_platform')->select();
+            $this->assign("platform",$platforminfo);
+            $this->assign("id",$userid);
+            $this->assign("type","添加网站");
+            $this->display();
+        }
     }
 
     /**
