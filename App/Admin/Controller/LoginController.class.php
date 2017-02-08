@@ -51,6 +51,7 @@ class LoginController extends Controller{
         
         //保存session
         session('zzcms_adm_username',$userresult['username']);
+        session('zzmcs_adm_userid',$userresult['userid']);
         session('zzcms_adm_logintime',$userresult['logintime']);
         session('zzcms_adm_loginip',$userresult['loginip']);
         
