@@ -45,23 +45,44 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="">
-                            <a href="{:U('add')}" class="btn btn-primary ">新增职位</a>
+                            <a href="{:U('add')}" class="btn btn-primary ">新增网站</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>职位名称</th>
-                                <th>工作详情</th>
+                                <th>网站名称</th>
+                                <th>网站域名</th>
+                                <th>关键词数</th>
+                                <th>搜索引擎</th>
+                                <th>余额</th>
+                                <th>创建日期</th>
+                                <!--<th>状态</th>-->
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <foreach name="arrList" item="v">
-                                {$v}
+                            <foreach name='listinfo' item='v'>
+                                <tr>
+                                    <td>{$v.websitename}</td>
+                                    <td>
+                                        {$v.websiteurl}
+                                    </td>
+                                    <td>{$v.keywordnumber}</td>
+                                    <td>{$v.platformname}</td>
+                                    <td>{$v.blance}</td>
+                                    <td>{$v.createtime}</td>
+                                    <td>
+                                        <a href="{:U('edit',array('id' => $v['id']))}"
+                                           class="btn btn-primary btn-rounded">修改</a>
+                                        <a href="javascript:void(0)"
+                                           attr-message="删除"
+                                           class="btn btn-primary btn-rounded" id="zzcms-delete"
+                                           attr-id="{$v['id']}">删除人员</a>
+                                    </td>
+                                </tr>
                             </foreach>
-
                             </tbody>
                         </table>
                     </div>
