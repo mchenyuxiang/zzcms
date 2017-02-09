@@ -95,8 +95,25 @@ WHERE a.`userid`=" . $userid;
     {
         if (IS_POST) {
 
-            $this->editPost();
-            exit();
+            $data = I('post.', '');
+            $data['createtime'] = date('Y-m-d H:i:s', time());
+
+            //M验证
+            if (!isset($_POST['websitename']) || !$_POST['websitename']) {
+                return show_tip(0, '网站名称不能为空');
+            }
+            if (!isset($_POST['websiteurl']) || !$_POST['websiteurl']) {
+                return show_tip(0, '网站域名不能为空');
+            }
+
+            if (!validateURL($_POST['websiteurl'])) {
+                return show_tip(0, '请输入合法域名');
+            }
+            if (false !== M('seo_web')->save($data)) {
+                return show_tip(1, '修改成功', null, U('ListInfo'));
+            } else {
+                return show_tip(0, '修改失败');
+            }
         } else {
             $userid = session('zzcms_adm_userid');
             $platforminfo = M('seo_platform')->select();
