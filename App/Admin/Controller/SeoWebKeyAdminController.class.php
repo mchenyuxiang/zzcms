@@ -18,6 +18,10 @@ class SeoWebKeyAdminController extends CommonController  {
      * 添加关键词
      */
     public function add(){
+        $userid=session('zzcms_adm_userid');
+        $condition['userid'] = $userid;
+        $websitearray = M('seo_web')->where($condition)->select();
+        $this->assign('websitearray',$websitearray);
         $this->display();
     }
 
