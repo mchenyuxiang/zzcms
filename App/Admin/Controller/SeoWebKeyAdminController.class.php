@@ -84,6 +84,8 @@ class SeoWebKeyAdminController extends CommonController
             $this->assign('type', '添加关键词');
             $this->display();
         } elseif ($_POST) {
+            $data = I('post.','');
+
 
         } else {
             $userid = session('zzcms_adm_userid');
