@@ -38,7 +38,7 @@
                                 <select class="form-control m-b" id="webid" name="webid">
                                     <option value="0">请选择</option>
                                     <foreach name="websitearray" item="v">
-                                        <option value="{$v.id}">{$v.websiteurl}</option>
+                                        <option value="{$v.id}" <if condition="$webid eq $v['id']">selected="selected"</if>>{$v.websiteurl}</option>
                                     </foreach>
                                 </select>
                             </div>
@@ -49,10 +49,10 @@
 
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" name="websitename">
+                                    <input type="text" class="form-control" name="keyword" value="{$keyword}">
                                 </div>
                                 <div class="col-sm-1">
-                                    <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>查询价格</strong>
+                                    <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button" id="button-search"><strong>查询价格</strong>
                                     </button>
                                 </div>
                             </div>
@@ -79,10 +79,10 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="baidu1" value="{$baiduprice/1}">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="baidu2" value="{$baiduprice/2}">
                                     </div>
                                 </div>
                             </div>
@@ -93,10 +93,10 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="sou3601" value="{$sou360 / 1}">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="sou3602" value="{$sou360 / 2}">
                                     </div>
                                 </div>
                             </div>
@@ -107,10 +107,10 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="google1" value="{$baiduprice/1}">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="google2" value="{$baiduprice/2}">
                                     </div>
                                 </div>
                             </div>
@@ -121,10 +121,10 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="sougou1" value="{$sougou / 1}">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="sougou2" value="{$sougou / 2}">
                                     </div>
                                 </div>
                             </div>
@@ -135,10 +135,10 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="baidumobile1" value="{$baidumobileprice/1}">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="baidumobile2" value="{$baidumobileprice/2}">
                                     </div>
                                 </div>
                             </div>
@@ -149,10 +149,10 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="shenma1" value="{$shenma / 1}">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="shenma2" value="{$shenma / 2}">
                                     </div>
                                 </div>
                             </div>
@@ -163,10 +163,10 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="biying1" value="{$biying /1}">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control">
+                                        <input type="text"  class="form-control" name="biying2" value="{$biying / 2}">
                                     </div>
                                 </div>
                             </div>
@@ -196,6 +196,34 @@
 <script>
     $(document).ready(function () {
         $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
+    });
+    $("#button-search").click(function () {
+        //获取登录页面中的用户名和密码
+        var keyword = $('input[name = "keyword"]').val();
+        var webid=$("#webid").val();
+
+        if(webid==0){
+            dialog.error('请选择站点');
+            return;
+        }
+
+        if(!keyword){
+            dialog.error('请填写要查询关键词');
+            return;
+        }
+
+        var url = '{:U("seachprice")}';
+        var data = {'keyword':keyword,'webid':webid};
+        // 执行异步请求
+        $.post(url,data,function (result) {
+            if(result.status == 0){
+                return dialog.error(result.message);
+            }
+            if(result.status == 1){
+                return dialog.success('查询成功',result.url);
+            }
+
+        },'JSON');
     });
     $("#button-add").click(function () {
         var data = $("#submit-menu").serializeArray();

@@ -23,9 +23,64 @@ class SeoWebKeyAdminController extends CommonController
         if ($_GET) {
             $data = I('get.', '');
 
-            $baidu = $data['baiduindex'];
-//            print_r($baidu);
+            $baiduindex = $data['baiduindex'];
+            $baidumobileindex = $data['baidumobileindex'];
+            $keyword = $data['keyword'];
+            $webid=$data['webid'];
+            $websitearray = M('seo_web')->where(array('id'=>$webid))->select();
+            $this->assign('websitearray', $websitearray);
+//            print_r($baiduindex);
 
+            $baiduprice = $baiduindex/6;
+            $baidumobileprice = $baidumobileindex/5;
+
+            if($baiduprice <=5){
+                $baiduprice=5;
+            }elseif($baiduprice >=50){
+                $baiduprice=50;
+            }
+
+            if($baidumobileprice <=5 ){
+                $baidumobileprice=5;
+            }elseif($baidumobileprice>=60){
+                $baidumobileprice=60;
+            }
+
+            $sou360 = round($baidumobileprice/3,2);
+            if($sou360 <= 3){
+                $sou360 = 3;
+            }elseif ($sou360 >= 30){
+                $sou360 = 30;
+            }
+
+            $sougou = round($baiduprice/6,2);
+            if($sougou <= 1.5){
+                $sougou = 1.5;
+            }elseif ($sougou >= 20){
+                $sougou=20;
+            }
+
+            $shenma = round($baiduprice/7,2);
+            if($shenma <= 1){
+                $shenma = 1;
+            }elseif ($shenma >= 15){
+                $shenma = 15;
+            }
+            $biying = round($baiduprice/7,2);
+            if($biying <= 1){
+                $biying = 1;
+            }elseif ($biying >= 15){
+                $biying = 15;
+            }
+            $this->assign('baiduprice',number_format($baiduprice,2));
+            $this->assign('baidumobileprice',number_format($baidumobileprice,2));
+            $this->assign('sou360',$sou360);
+            $this->assign('sougou',$sougou);
+            $this->assign('google',number_format($baiduprice,2));
+            $this->assign('shenma',$shenma);
+            $this->assign('biying',$biying);
+            $this->assign('keyword',$keyword);
+            $this->assign('webid',$webid);
             $this->assign('type', '添加关键词');
             $this->display();
         } elseif ($_POST) {
