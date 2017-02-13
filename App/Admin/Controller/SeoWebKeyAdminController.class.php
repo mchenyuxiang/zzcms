@@ -7,6 +7,7 @@
  */
 namespace Admin\Controller;
 
+use Common\Lib\Page;
 
 class SeoWebKeyAdminController extends CommonController
 {
@@ -186,6 +187,31 @@ class SeoWebKeyAdminController extends CommonController
      */
     public function ListInfo()
     {
+        $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
+        $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 20;
+
+        $offset = ($page - 1) * $pageSize;
+        $userid = session('zzcms_adm_userid');
+        $listinfo = M()
+            ->table('zzcms_seo_costdetail as a')
+            ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
+            ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
+            ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
+            ->field('a.keywordid,b.platformname,a.rank,c.name,SUM(c.`priceone`) AS totalprice,d.`websiteurl` ,c.priceone,d.websitename')
+            ->where(array('a.userid'=>$userid))->group('c.name,platformname')->limit($offset, $pageSize)->select();
+        $cateCount= M()
+            ->table('zzcms_seo_costdetail as a')
+            ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
+            ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
+            ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
+            ->field('a.keywordid,b.platformname,a.rank,c.name,SUM(c.`priceone`) AS totalprice,d.`websiteurl` ,c.priceone,d.websitename')
+            ->where(array('a.userid'=>$userid))->group('c.name,platformname')->count();
+
+        $res = new Page($cateCount, $pageSize);
+        $pageRes = $res->show();
+        $this->assign('page', $pageRes);
+        $this->assign('listinfo', $listinfo);
+        $this->assign('type', '管理关键词');
         $this->display();
     }
 
@@ -194,6 +220,67 @@ class SeoWebKeyAdminController extends CommonController
      */
     public function CostDetail()
     {
+        $data = array();
+        $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
+        $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 20;
+
+        $offset = ($page - 1) * $pageSize;
+        $userid = session('zzcms_adm_userid');
+        $listinfo = M()
+            ->table('zzcms_seo_costdetail as a')
+            ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
+            ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
+            ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
+            ->field('a.id,b.platformname,a.rank,c.name,c.`priceone`,DATE_FORMAT( a.`createtime`, \'%Y-%m-%d\') AS createtime,d.`websiteurl`')
+            ->where(array('a.userid'=>$userid))->order('createtime DESC,b.id ASC')->limit($offset, $pageSize)->select();
+        $cateCount= M()
+            ->table('zzcms_seo_costdetail as a')
+            ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
+            ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
+            ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
+            ->field('a.id,b.platformname,a.rank,c.name,c.`priceone`,a.`createtime`,d.`websiteurl`')
+            ->where(array('a.userid'=>$userid))->count();
+
+        $res = new Page($cateCount, $pageSize);
+        $pageRes = $res->show();
+        $this->assign('page', $pageRes);
+        $this->assign('listinfo', $listinfo);
+        $this->assign('type', '扣费详细记录');
+        $this->display();
+    }
+
+    /**
+     * 排名详情
+     */
+    public function listrank(){
+        $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
+        $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 20;
+
+        $data = I('get.','');
+        $keywordid = $data['keywordid'];
+        $platformname = $data['platformname'];
+        $offset = ($page - 1) * $pageSize;
+        $userid = session('zzcms_adm_userid');
+        $listinfo = M()
+            ->table('zzcms_seo_costdetail as a')
+            ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
+            ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
+            ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
+            ->field('a.id,b.platformname,a.rank,c.name,c.`priceone`,DATE_FORMAT( a.`createtime`, \'%Y-%m-%d\') AS createtime,d.`websiteurl`')
+            ->where(array('a.userid'=>$userid,'a.keywordid'=>$keywordid,'b.platformname'=>$platformname))->order('createtime DESC,b.id ASC')->limit($offset, $pageSize)->select();
+        $cateCount= M()
+            ->table('zzcms_seo_costdetail as a')
+            ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
+            ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
+            ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
+            ->field('a.id,b.platformname,a.rank,c.name,c.`priceone`,a.`createtime`,d.`websiteurl`')
+            ->where(array('a.userid'=>$userid,'a.keywordid'=>$keywordid,'b.platformname'=>$platformname))->count();
+
+        $res = new Page($cateCount, $pageSize);
+        $pageRes = $res->show();
+        $this->assign('page', $pageRes);
+        $this->assign('listinfo', $listinfo);
+        $this->assign('type', '扣费详细记录');
         $this->display();
     }
 }
