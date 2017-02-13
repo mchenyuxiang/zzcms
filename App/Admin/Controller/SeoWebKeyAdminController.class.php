@@ -26,72 +26,127 @@ class SeoWebKeyAdminController extends CommonController
             $baiduindex = $data['baiduindex'];
             $baidumobileindex = $data['baidumobileindex'];
             $keyword = $data['keyword'];
-            $webid=$data['webid'];
-            $websitearray = M('seo_web')->where(array('id'=>$webid))->select();
+            $webid = $data['webid'];
+            $websitearray = M('seo_web')->where(array('id' => $webid))->select();
             $this->assign('websitearray', $websitearray);
 //            print_r($baiduindex);
 
-            $baiduprice = $baiduindex/6;
-            $baidumobileprice = $baidumobileindex/5;
+            $baiduprice = $baiduindex / 6;
+            $baidumobileprice = $baidumobileindex / 5;
 
-            if($baiduprice <=5){
-                $baiduprice=5;
-            }elseif($baiduprice >=50){
-                $baiduprice=50;
+            if ($baiduprice <= 5) {
+                $baiduprice = 5;
+            } elseif ($baiduprice >= 50) {
+                $baiduprice = 50;
             }
 
-            if($baidumobileprice <=5 ){
-                $baidumobileprice=5;
-            }elseif($baidumobileprice>=60){
-                $baidumobileprice=60;
+            if ($baidumobileprice <= 5) {
+                $baidumobileprice = 5;
+            } elseif ($baidumobileprice >= 60) {
+                $baidumobileprice = 60;
             }
 
-            $sou360 = round($baidumobileprice/3,2);
-            if($sou360 <= 3){
+            $sou360 = round($baidumobileprice / 3, 2);
+            if ($sou360 <= 3) {
                 $sou360 = 3;
-            }elseif ($sou360 >= 30){
+            } elseif ($sou360 >= 30) {
                 $sou360 = 30;
             }
 
-            $sougou = round($baiduprice/6,2);
-            if($sougou <= 1.5){
+            $sougou = round($baiduprice / 6, 2);
+            if ($sougou <= 1.5) {
                 $sougou = 1.5;
-            }elseif ($sougou >= 20){
-                $sougou=20;
+            } elseif ($sougou >= 20) {
+                $sougou = 20;
             }
 
-            $shenma = round($baiduprice/7,2);
-            if($shenma <= 1){
+            $shenma = round($baiduprice / 7, 2);
+            if ($shenma <= 1) {
                 $shenma = 1;
-            }elseif ($shenma >= 15){
+            } elseif ($shenma >= 15) {
                 $shenma = 15;
             }
-            $biying = round($baiduprice/7,2);
-            if($biying <= 1){
+            $biying = round($baiduprice / 7, 2);
+            if ($biying <= 1) {
                 $biying = 1;
-            }elseif ($biying >= 15){
+            } elseif ($biying >= 15) {
                 $biying = 15;
             }
-            $this->assign('baiduprice',number_format($baiduprice,2));
-            $this->assign('baidumobileprice',number_format($baidumobileprice,2));
-            $this->assign('sou360',$sou360);
-            $this->assign('sougou',$sougou);
-            $this->assign('google',number_format($baiduprice,2));
-            $this->assign('shenma',$shenma);
-            $this->assign('biying',$biying);
-            $this->assign('keyword',$keyword);
-            $this->assign('webid',$webid);
+            $this->assign('baiduprice', number_format($baiduprice, 2));
+            $this->assign('baidumobileprice', number_format($baidumobileprice, 2));
+            $this->assign('sou360', $sou360);
+            $this->assign('sougou', $sougou);
+            $this->assign('google', number_format($baiduprice, 2));
+            $this->assign('shenma', $shenma);
+            $this->assign('biying', $biying);
+            $this->assign('keyword', $keyword);
+            $this->assign('webid', $webid);
             $this->assign('type', '添加关键词');
             $this->display();
         } elseif ($_POST) {
-            $data = I('post.','');
+            $data = I('post.', '');
+            $userid = session('zzcms_adm_userid');
+            $webid = $data['webid'];
+            $platformArray = M('seo_web')->where(array('id' => $webid))->select();
+            $platformidArr = $platformArray[0]['platformid'];
+            $arr = explode(",", $platformidArr);
+            $countkeyword = 0;
+            $beforesearch = M('seo_keyword')->data(array('name' => $data['keyword'], 'webid' => $webid
+            , 'userid' => $userid))->count();
+            if($beforesearch > 0){
+                return show_tip(0, '该用户已经有关键词，无需重复添加', $beforesearch);
+            }
+            foreach ($arr as $u) {
+                $insertdata = array();
+                $insertdata['name'] = $data['keyword'];
+                $insertdata['webid'] = $webid;
+                $insertdata['userid'] = $userid;
+                $insertdata['platformid'] = $u;
+                if ($u == '1') {
+                    $insertdata['priceone'] = $data['baidu1'];
+                    $insertdata['pricetwo'] = $data['baidu2'];
+                } elseif ($u == '2') {
+                    $insertdata['priceone'] = $data['sou3601'];
+                    $insertdata['pricetwo'] = $data['sou3602'];
 
+                } elseif ($u == '3') {
+                    $insertdata['priceone'] = $data['sougou1'];
+                    $insertdata['pricetwo'] = $data['sougou2'];
+
+                } elseif ($u == '4') {
+                    $insertdata['priceone'] = $data['google1'];
+                    $insertdata['pricetwo'] = $data['google2'];
+
+                } elseif ($u == '5') {
+                    $insertdata['priceone'] = $data['baidumobile1'];
+                    $insertdata['pricetwo'] = $data['baidumobile2'];
+
+                } elseif ($u == '6') {
+                    $insertdata['priceone'] = $data['shenma1'];
+                    $insertdata['pricetwo'] = $data['shenma2'];
+
+                } elseif ($u == '7') {
+                    $insertdata['priceone'] = $data['biying1'];
+                    $insertdata['pricetwo'] = $data['biying2'];
+                }
+                $keywordid = M('seo_keyword')->data($insertdata)->add();
+                if ($keywordid) {
+                    $countkeyword = $countkeyword + 1;
+                } else {
+                    return show_tip(0, '新增失败', $keywordid);
+                }
+            }
+            if ($countkeyword == count($arr)) {
+                return show_tip(1, '新增成功', $countkeyword, U('add'));
+            }
+            return show_tip(0, '新增失败', $countkeyword);
 
         } else {
             $userid = session('zzcms_adm_userid');
             $condition['userid'] = $userid;
             $websitearray = M('seo_web')->where($condition)->select();
             $this->assign('websitearray', $websitearray);
+            $this->assign('userid', $userid);
             $this->assign('type', '添加关键词');
             $this->display();
         }
@@ -109,7 +164,7 @@ class SeoWebKeyAdminController extends CommonController
         $this_header = array(
             "content-type: application/x-www-form-urlencoded; charset=UTF-8"
         );
-        curl_setopt($ch,CURLOPT_HTTPHEADER,$this_header);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this_header);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 获取数据返回
         curl_setopt($ch, CURLOPT_BINARYTRANSFER, true); // 在启用 CURLOPT_RETURNTRANSFER 时候将获取数据返回
