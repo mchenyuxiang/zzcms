@@ -60,7 +60,7 @@ class SeoWebAdminController extends CommonController
   websitename,
   websiteurl,
   platformname,
-  DATE_FORMAT(createtime,'%Y-%m-%d') as createtime,
+  DATE_FORMAT(a.createtime,'%Y-%m-%d') as createtime,
   COUNT(DISTINCT(e.name)) AS keywordnumber
 FROM
   zzcms_seo_web AS a 
@@ -83,7 +83,11 @@ FROM
   ON a.id= e.webid
 WHERE a.`userid`=" . $userid;
         $listinfo = M()->query($sql);
+        $b_sql = "SELECT (balance - SUM(priceone)) AS balance FROM zzcms_seo_costdetail a LEFT JOIN zzcms_admin b ON a.userid=b.id WHERE a.userid = ".$userid;
+        $balanceArr = M()->query($b_sql);
+        $balance = $balanceArr[0]['balance'];
         $this->assign("listinfo", $listinfo);
+        $this->assign("balance", $balance);
         $this->assign("type", "管理网站");
         $this->display();
     }

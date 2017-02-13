@@ -78,7 +78,8 @@
                                     <td>{$v.priceone}</td>
                                     <td>{$v.totalprice}</td>
                                     <td>
-                                        <a href="{:U('edit',array('id' => $v['id']))}"
+                                        <input type="hidden" value="{$pricetwo}" name="pricetwo">
+                                        <a href="{:U('edit',array('keywordid' => $v['keywordid'],'priceone'=>$v['priceone'],'pricetwo'=>$v['pricetwo'],'platformname'=>$v['platformname'],'keyword'=>$v['name'],'websiteurl'=>$v['websiteurl']))}"
                                            class="btn btn-primary btn-rounded">修改</a>
                                     </td>
                                 </tr>

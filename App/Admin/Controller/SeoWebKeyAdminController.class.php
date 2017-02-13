@@ -94,7 +94,7 @@ class SeoWebKeyAdminController extends CommonController
             $countkeyword = 0;
             $beforesearch = M('seo_keyword')->where(array('name' => $data['keyword'], 'webid' => $webid
             , 'userid' => $userid))->count();
-            if($beforesearch > 0){
+            if ($beforesearch > 0) {
                 return show_tip(0, '该用户已经有关键词，无需重复添加', $beforesearch);
             }
             foreach ($arr as $u) {
@@ -103,6 +103,7 @@ class SeoWebKeyAdminController extends CommonController
                 $insertdata['webid'] = $webid;
                 $insertdata['userid'] = $userid;
                 $insertdata['platformid'] = $u;
+                $insertdata['createtime'] = date('Y-m-d H:i:s', time());
                 if ($u == '1') {
                     $insertdata['priceone'] = $data['baidu1'];
                     $insertdata['pricetwo'] = $data['baidu2'];
@@ -197,15 +198,15 @@ class SeoWebKeyAdminController extends CommonController
             ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
             ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
             ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
-            ->field('a.keywordid,b.platformname,a.rank,c.name,SUM(c.`priceone`) AS totalprice,d.`websiteurl` ,c.priceone,d.websitename')
-            ->where(array('a.userid'=>$userid))->group('c.name,platformname')->limit($offset, $pageSize)->select();
-        $cateCount= M()
+            ->field('a.keywordid,b.platformname,a.rank,c.name,SUM(a.`priceone`) AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
+            ->where(array('a.userid' => $userid))->group('c.name,platformname')->limit($offset, $pageSize)->select();
+        $cateCount = M()
             ->table('zzcms_seo_costdetail as a')
             ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
             ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
             ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
-            ->field('a.keywordid,b.platformname,a.rank,c.name,SUM(c.`priceone`) AS totalprice,d.`websiteurl` ,c.priceone,d.websitename')
-            ->where(array('a.userid'=>$userid))->group('c.name,platformname')->count();
+            ->field('a.keywordid,b.platformname,a.rank,c.name,SUM(a.`priceone`) AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
+            ->where(array('a.userid' => $userid))->group('c.name,platformname')->count();
 
         $res = new Page($cateCount, $pageSize);
         $pageRes = $res->show();
@@ -231,15 +232,15 @@ class SeoWebKeyAdminController extends CommonController
             ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
             ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
             ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
-            ->field('a.id,b.platformname,a.rank,c.name,c.`priceone`,DATE_FORMAT( a.`createtime`, \'%Y-%m-%d\') AS createtime,d.`websiteurl`')
-            ->where(array('a.userid'=>$userid))->order('createtime DESC,b.id ASC')->limit($offset, $pageSize)->select();
-        $cateCount= M()
+            ->field('a.id,b.platformname,a.rank,c.name,a.`priceone`,DATE_FORMAT( a.`createtime`, \'%Y-%m-%d\') AS createtime,d.`websiteurl`')
+            ->where(array('a.userid' => $userid))->order('createtime DESC,b.id ASC')->limit($offset, $pageSize)->select();
+        $cateCount = M()
             ->table('zzcms_seo_costdetail as a')
             ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
             ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
             ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
-            ->field('a.id,b.platformname,a.rank,c.name,c.`priceone`,a.`createtime`,d.`websiteurl`')
-            ->where(array('a.userid'=>$userid))->count();
+            ->field('a.id,b.platformname,a.rank,c.name,a.`priceone`,a.`createtime`,d.`websiteurl`')
+            ->where(array('a.userid' => $userid))->count();
 
         $res = new Page($cateCount, $pageSize);
         $pageRes = $res->show();
@@ -252,11 +253,12 @@ class SeoWebKeyAdminController extends CommonController
     /**
      * 排名详情
      */
-    public function listrank(){
+    public function listrank()
+    {
         $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
         $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 20;
 
-        $data = I('get.','');
+        $data = I('get.', '');
         $keywordid = $data['keywordid'];
         $platformname = $data['platformname'];
         $offset = ($page - 1) * $pageSize;
@@ -267,14 +269,14 @@ class SeoWebKeyAdminController extends CommonController
             ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
             ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
             ->field('a.id,b.platformname,a.rank,c.name,c.`priceone`,DATE_FORMAT( a.`createtime`, \'%Y-%m-%d\') AS createtime,d.`websiteurl`')
-            ->where(array('a.userid'=>$userid,'a.keywordid'=>$keywordid,'b.platformname'=>$platformname))->order('createtime DESC,b.id ASC')->limit($offset, $pageSize)->select();
-        $cateCount= M()
+            ->where(array('a.userid' => $userid, 'a.keywordid' => $keywordid, 'b.platformname' => $platformname))->order('createtime DESC,b.id ASC')->limit($offset, $pageSize)->select();
+        $cateCount = M()
             ->table('zzcms_seo_costdetail as a')
             ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
             ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
             ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
             ->field('a.id,b.platformname,a.rank,c.name,c.`priceone`,a.`createtime`,d.`websiteurl`')
-            ->where(array('a.userid'=>$userid,'a.keywordid'=>$keywordid,'b.platformname'=>$platformname))->count();
+            ->where(array('a.userid' => $userid, 'a.keywordid' => $keywordid, 'b.platformname' => $platformname))->count();
 
         $res = new Page($cateCount, $pageSize);
         $pageRes = $res->show();
@@ -282,5 +284,54 @@ class SeoWebKeyAdminController extends CommonController
         $this->assign('listinfo', $listinfo);
         $this->assign('type', '扣费详细记录');
         $this->display();
+    }
+
+    /**
+     * 修改关键词价格
+     */
+    public function edit()
+    {
+        if (IS_POST) {
+            $data = I('post.', '');
+            $id = $data['id'] = intval($data['id']);
+
+            $priceoneold = $data['priceoneold'];
+            $pricetwoold = $data['pricetwoold'];
+            $priceone = $data['baidu1'];
+            $pricetwo = $data['baidu2'];
+
+            if($priceone < $priceoneold || $pricetwo < $pricetwoold){
+                return show_tip(0,"价格不能小于原来价格");
+            }
+
+            $condition = array();
+            $condition['priceone'] = $priceone;
+            $condition['pricetwo'] = $pricetwo;
+            $condition['id'] = $id;
+            if (false !== M('seo_keyword')->save($condition)) {
+
+                return show_tip(1, '修改成功', null, U('ListInfo'));
+            } else {
+                return show_tip(0, '修改失败');
+            }
+        } else {
+            $userid = session('zzcms_adm_userid');
+            $data = I('get.', '');
+            $keyword = $data['keyword'];
+            $platformname = $data['platformname'];
+            $websiteurl = $data['websiteurl'];
+            $keywordid = $data['keywordid'];
+            $priceone = $data['priceone'];
+            $pricetwo = $data['pricetwo'];
+
+            $this->assign('priceone',$priceone);
+            $this->assign('pricetwo',$pricetwo);
+            $this->assign('keyword',$keyword);
+            $this->assign('platformname',$platformname);
+            $this->assign('websiteurl',$websiteurl);
+            $this->assign('keywordid',$keywordid);
+            $this->assign('type', '修改关键词价格');
+            $this->display();
+        }
     }
 }
