@@ -174,9 +174,10 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <input type="hidden" value="{$id}" name="userid">
+                                <!--<input type="hidden" value="{$id}" name="id">-->
+                                <input type="hidden" value="{$userid}" name="useid">
                                 <button class="btn btn-primary" type="button" id="button-add">添加关键字</button>
-                                <button class="btn btn-white" type="button" id="button-cancal">取消返回</button>
+                                <button class="btn btn-white" type="button" id="button-cancal">重置</button>
                             </div>
                         </div>
                     </form>
@@ -283,7 +284,7 @@
         }, "JSON");
     });
     $("#button-cancal").click(function () {
-        window.location.href = '{:U("ListInfo")}'
+        document.getElementById("submit-menu").reset();
     })
 </script>
 </body>
