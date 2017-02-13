@@ -57,6 +57,7 @@
                                 <th>搜索引擎</th>
                                 <th>首页价格</th>
                                 <th>排名</th>
+                                <th>详情</th>
                                 <th>扣费</th>
                                 <th>累计扣费</th>
                                 <!--<th>状态</th>-->
@@ -73,6 +74,7 @@
                                     <td>{$v.platformname}</td>
                                     <td>{$v.priceone}</td>
                                     <td>{$v.rank}</td>
+                                    <td><a href="{:U('listrank',array('keywordid'=>$v['keywordid'],'id'=>$v['id'],'platformname'=>$v['platformname']))}">查看详情</a></td>
                                     <td>{$v.priceone}</td>
                                     <td>{$v.totalprice}</td>
                                     <td>
