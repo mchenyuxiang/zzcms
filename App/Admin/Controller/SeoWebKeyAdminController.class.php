@@ -121,9 +121,9 @@ class SeoWebKeyAdminController extends CommonController
         $baidumobileindex = $resdecode->data[0]->mobileindex;
         $resstaus = $resdecode->state;
         if ($resstaus == 1) {
-            return show_tip(1, '新增成功', $resstaus, U('add', array('webid' => $webid, 'keyword' => $keyword, 'baiduindex' => $baiduindex, 'baidumobileindex' => $baidumobileindex)));
+            return show_tip(1, '查询成功', $resstaus, U('add', array('webid' => $webid, 'keyword' => $keyword, 'baiduindex' => $baiduindex, 'baidumobileindex' => $baidumobileindex)));
         }
-        return show_tip(0, '新增失败', $resstaus);
+        return show_tip(0, '查询失败', $resstaus);
     }
 
     /**
