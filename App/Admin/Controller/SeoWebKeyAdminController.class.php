@@ -91,7 +91,7 @@ class SeoWebKeyAdminController extends CommonController
             $platformidArr = $platformArray[0]['platformid'];
             $arr = explode(",", $platformidArr);
             $countkeyword = 0;
-            $beforesearch = M('seo_keyword')->data(array('name' => $data['keyword'], 'webid' => $webid
+            $beforesearch = M('seo_keyword')->where(array('name' => $data['keyword'], 'webid' => $webid
             , 'userid' => $userid))->count();
             if($beforesearch > 0){
                 return show_tip(0, '该用户已经有关键词，无需重复添加', $beforesearch);
