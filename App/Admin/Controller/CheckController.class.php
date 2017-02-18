@@ -26,9 +26,18 @@ class CheckController extends CommonController {
             }
             $data = I('post.','');
             $checkId = $data['checkProject'];
-            $checksql = "SELECT id,NAME,score,number FROM zzcms_score WHERE FIND_IN_SET(pid, getParList(".$checkId.")) AND pid = 0";
-            $checkTopidRes = M()->query($checksql);
-            $checkTopid = $checkTopidRes[0]['id'];
+            $getParListsql = "SELECT getParList(".$checkId.") AS getParList";
+            $getParListRes = M()->query($getParListsql);
+            $getParList = $getParListRes[0]['getparlist'];
+            $hello = explode(',',$getParList);
+            $checkTopid="";
+            for($i=0;i<count($hello);$i++){
+                $tempArr = M('score')->where(array('id'=>$hello[$i]))->select();
+                if($tempArr[0]['pid'] == 0){
+                    $checkTopid = $tempArr[0]['id'];
+                    break;
+                }
+            }
             $data['checkTopid'] = $checkTopid;
             $checkTimeArr = explode(':',$data['checkTime']);
             $checkTime = $checkTimeArr[0];
@@ -65,12 +74,14 @@ where '".$data['checkDay']."' between startDay and endDay
             $projectNumber = $projectNumRes[0]['cnt'];
             $data['projectNumber'] = $projectNumber;
 
+            $data['createtime']=date('y-m-d h:i:s',time());
             $deductId = M("deduct")->data($data)->add();
             if($deductId){
 //                return show_tip(1,'成功',$deductId,U('checkProject'));
                 return show_tip(1,'成功',$checkTimeArr,U('checkProject'));
             }
             return show_tip(0,'新增失败',$deductId);
+//            $this->display();
         }else{
 
             $time = Array();

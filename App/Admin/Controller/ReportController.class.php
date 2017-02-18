@@ -31,17 +31,13 @@ class ReportController extends CommonController
                 return show_tip(0, '请选择月份');
             }
 
-            $checksql = "select 
-  a.*,
-  b.name as evl 
-from
-  (select 
+            $checksql = "  select 
     a.`checkDay`,
     d.name as employeeName,
     COUNT(a.checkProject) as checknum,
     sum(b.score) as checkscore,
     projectNumber,
-    c.name as scoreName,
+    CONCAT(c.name,'--',b.name) AS scoreName,
     (c.`score` * c.`number`) as total,
     (
       (
@@ -58,11 +54,9 @@ from
       on d.`id` = a.`employeeid` 
   where a.employeeid = ".$_GET['employeeId']." 
     and checkDay like '%".$_GET['month']."%' 
-  group by a.`checkDay`) a 
-  join zzcms_level b 
-where a.finalScore between b.startscore 
-  and b.endscore ";
+  group by a.`id` ";
             $checkTopidRes = M()->query($checksql);
+//            print_r($checksql);
             $this->assign('cate', $checkTopidRes);
             $this->assign('type', '个人明细报表');
             $month = array();
