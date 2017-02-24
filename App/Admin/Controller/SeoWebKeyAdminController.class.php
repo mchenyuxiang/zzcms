@@ -205,8 +205,8 @@ class SeoWebKeyAdminController extends CommonController
             ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
             ->join('LEFT JOIN zzcms_seo_costdetail as a  on a.`keywordid` = c.id')
             ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
-            ->field('a.keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
-            ->where(array('c.userid' => $userid))->group('c.name,platformname')->count();
+            ->field('a.keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitenam')
+            ->where(array('c.userid' => $userid))->count();
 
         $res = new Page($cateCount, $pageSize);
         $pageRes = $res->show();
