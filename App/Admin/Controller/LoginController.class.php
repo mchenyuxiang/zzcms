@@ -60,7 +60,7 @@ class LoginController extends Controller{
             return show_tip(0,'数据库出了问题，请与管理员联系');
         }
 
-        return show_tip(1,'登陆成功',null,U('/index'));
+        return show_tip(1,'登陆成功',null,U('SeoSetting/index',array('id'=>2)));
     }
 
     //退出
