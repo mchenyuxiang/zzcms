@@ -200,14 +200,23 @@ class SeoWebKeyAdminController extends CommonController
             ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
             ->field('a.keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
             ->where(array('c.userid' => $userid))->group('c.name,platformname')->limit($offset, $pageSize)->select();
-        $cateCount = M()
-            ->table('zzcms_seo_keyword as c')
-            ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
-            ->join('LEFT JOIN zzcms_seo_costdetail as a  on a.`keywordid` = c.id')
-            ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
-            ->field('a.keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitenam')
-            ->where(array('c.userid' => $userid))->count();
+        $countsql = "SELECT COUNT(*) as count FROM (SELECT 
+ COUNT(*)
+FROM
+  zzcms_seo_keyword AS c 
+  LEFT JOIN zzcms_seo_platform AS b 
+    ON c.platformid = b.id 
+  LEFT JOIN zzcms_seo_costdetail AS a 
+    ON a.`keywordid` = c.id 
+  LEFT JOIN zzcms_seo_web AS d 
+    ON c.webid = d.id 
+WHERE c.userid = '".$userid."' 
+GROUP BY c.name,
+  platformname ) t";
 
+        $checkCount = M()->query($countsql);
+
+        $cateCount = $checkCount[0]['count'];
         $res = new Page($cateCount, $pageSize);
         $pageRes = $res->show();
         $this->assign('page', $pageRes);
@@ -282,7 +291,7 @@ class SeoWebKeyAdminController extends CommonController
         $pageRes = $res->show();
         $this->assign('page', $pageRes);
         $this->assign('listinfo', $listinfo);
-        $this->assign('type', '扣费详细记录');
+        $this->assign('type', '排名详情');
         $this->display();
     }
 
