@@ -83,9 +83,13 @@ FROM
   ON a.id= e.webid
 WHERE a.`userid`=" . $userid;
         $listinfo = M()->query($sql);
-        $b_sql = "SELECT (balance - SUM(priceone)) AS balance FROM zzcms_seo_costdetail a LEFT JOIN zzcms_admin b ON a.userid=b.id WHERE a.userid = ".$userid;
+        $b_sql = "SELECT balance FROM zzcms_admin WHERE id = ".$userid;
         $balanceArr = M()->query($b_sql);
-        $balance = $balanceArr[0]['balance'];
+        $balanceT = $balanceArr[0]['balance'];
+        $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = ".$userid;
+        $rechargeArr = M()->query($recharge_sql);
+        $recharge = $rechargeArr[0]['cost'];
+        $balance = $balanceT - $recharge;
         $this->assign("listinfo", $listinfo);
         $this->assign("balance", $balance);
         $this->assign("type", "管理网站");
