@@ -76,7 +76,7 @@ FROM
         FROM
           zzcms_seo_web c , zzcms_seo_web d
           WHERE
-          c.id=d.id)
+          c.id=d.id and c.userid=".$userid.")
       )) AS b 
   LEFT JOIN
   zzcms_seo_keyword e
