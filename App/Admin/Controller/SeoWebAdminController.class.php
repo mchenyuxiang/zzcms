@@ -86,22 +86,23 @@ WHERE a.`userid`=" . $userid;
         $b_sql = "SELECT balance,updatetime FROM zzcms_admin WHERE id = ".$userid;
         $balanceArr = M()->query($b_sql);
         $balanceT = $balanceArr[0]['balance'];
-        $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = ".$userid;
-        $rechargeArr = M()->query($recharge_sql);
-        $recharge = $rechargeArr[0]['cost'];
-        $balance = $balanceT - $recharge;
-        $data['balance'] = $balance;
-        $data['id'] = $userid;
         $updatetime = strtotime($balanceArr[0]['updatetime']);
         $timetoday = date("Y-m-d",time());
         $data['updatetime'] = $timetoday;
         $timetodaystr = strtotime($timetoday);
 //        print_r($timetodaystr."--".$updatetime);
         if($updatetime < $timetodaystr){
+            $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = ".$userid;
+            $rechargeArr = M()->query($recharge_sql);
+            $recharge = $rechargeArr[0]['cost'];
+            $balance = $balanceT - $recharge;
+            $data['balance'] = $balance;
+            $data['id'] = $userid;
             M('admin')->save($data);
+            $balanceT = $balance;
         }
         $this->assign("listinfo", $listinfo);
-        $this->assign("balance", $balance);
+        $this->assign("balance", $balanceT);
         $this->assign("type", "管理网站");
         $this->display();
     }

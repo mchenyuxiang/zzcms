@@ -67,11 +67,6 @@ WHERE a.`userid`=" . $v['id'];
             $b_sql = "SELECT balance,updatetime FROM zzcms_admin WHERE id = " . $v['id'];
             $balanceArr = M()->query($b_sql);
             $balanceT = $balanceArr[0]['balance'];
-            $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = " . $v['id'];
-            $rechargeArr = M()->query($recharge_sql);
-            $recharge = $rechargeArr[0]['cost'];
-            $balance = $balanceT - $recharge;
-            $data['balance'] = $balance;
             $data['id'] = $v['id'];
             $updatetime = strtotime($balanceArr[0]['updatetime']);
             $timetoday = date("Y-m-d", time());
@@ -79,10 +74,16 @@ WHERE a.`userid`=" . $v['id'];
             $timetodaystr = strtotime($timetoday);
 //        print_r($timetodaystr."--".$updatetime);
             if ($updatetime < $timetodaystr) {
+                $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = " . $v['id'];
+                $rechargeArr = M()->query($recharge_sql);
+                $recharge = $rechargeArr[0]['cost'];
+                $balance = $balanceT - $recharge;
+                $data['balance'] = $balance;
                 M('admin')->save($data);
+                $balanceT = $balance;
             }
            $listallinfo[$key]=$listinfo;
-            $listallinfo[$key]['balance']=$balance;
+            $listallinfo[$key]['balance']=$balanceT;
         }
         $this->assign("listinfo", $listallinfo);
 //        $this->assign("balance", $balance);
