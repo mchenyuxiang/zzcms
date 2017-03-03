@@ -30,7 +30,7 @@ class SeoWebKeyAdminController extends CommonController
             $webid = $data['webid'];
             $websitearray = M('seo_web')->where(array('id' => $webid))->select();
             $this->assign('websiteurl', $websitearray[0]['websiteurl']);
-//            print_r($baiduindex);
+//            print_r($keyword.'------'.$webid);
 
             $baiduprice = $baiduindex / 6;
             $baidumobileprice = $baidumobileindex / 5;
@@ -164,6 +164,7 @@ class SeoWebKeyAdminController extends CommonController
 
         $webid = $_POST['webid'];
         $keyword = $_POST['keyword'];
+//        dump($keyword);
 
         $key = c402da805c1c46f8a00d1c9f477c6a6f;
         $url = 'http://api.91cha.com/index?key=' . $key . '&kws=' . urlencode($keyword);
