@@ -53,12 +53,14 @@
                             <thead>
                             <tr>
                                 <th>序号</th>
+                                <th>用户名</th>
                                 <th>网站名称</th>
                                 <th>网站域名</th>
                                 <th>关键词数</th>
                                 <th>管理关键词</th>
                                 <th>搜索引擎</th>
                                 <th>余额</th>
+                                <th>总充值</th>
                                 <th>查看扣费详情</th>
                                 <th>创建日期</th>
                                 <!--<th>状态</th>-->
@@ -69,23 +71,27 @@
                             <foreach name='listinfo'  item='v'>
                                 <tr>
                                     <td>{$key+1}</td>
+                                    <td>{$v[0].username}</td>
                                     <td>{$v[0].websitename}</td>
                                     <td>
                                         {$v[0].websiteurl}
                                     </td>
                                     <td>{$v[0].keywordnumber}</td>
-                                    <td><a href="{:U('ListInfo',array('userid'=>$v[0]['id']))}">查看详情</a></td>
+                                    <td><a href="{:U('ListInfo',array('userid'=>$v[0]['userid']))}">查看详情</a></td>
                                     <td>{$v[0].platformname}</td>
                                     <td>{$v.balance}</td>
-                                    <td><a href="{:U('CostDetail',array('userid'=>$v[0]['id']))}">查看详情</a></td>
+                                    <td>{$v[0].recharge}</td>
+                                    <td><a href="{:U('CostDetail',array('userid'=>$v[0]['userid']))}">查看详情</a></td>
                                     <td>{$v[0].createtime}</td>
                                     <td>
-                                        <a href="{:U('edit',array('id' => $v[0]['id']))}"
+                                        <a href="{:U('edit',array('id' => $v[0]['userid']))}"
                                            class="btn btn-primary btn-rounded">修改</a>
-                                        <!--<a href="javascript:void(0)"-->
-                                           <!--attr-message="删除"-->
-                                           <!--class="btn btn-primary btn-rounded" id="zzcms-delete"-->
-                                           <!--attr-id="{$v['id']}">删除网站</a>-->
+                                        <a href="{:U('recharge',array('id' => $v[0]['userid']))}"
+                                           class="btn btn-primary btn-rounded">续费</a>
+                                        <a href="javascript:void(0)"
+                                           attr-message="删除"
+                                           class="btn btn-primary btn-rounded" id="zzcms-delete"
+                                           attr-id="{$v[0]['userid']}">删除</a>
                                     </td>
                                 </tr>
                             </foreach>
