@@ -29,7 +29,7 @@ class SeoWebKeyAdminController extends CommonController
             $keyword = $data['keyword'];
             $webid = $data['webid'];
             $websitearray = M('seo_web')->where(array('id' => $webid))->select();
-            $this->assign('websitearray', $websitearray);
+            $this->assign('websiteurl', $websitearray[0]['websiteurl']);
 //            print_r($baiduindex);
 
             $baiduprice = $baiduindex / 6;
@@ -97,6 +97,10 @@ class SeoWebKeyAdminController extends CommonController
             if ($beforesearch > 0) {
                 return show_tip(0, '该用户已经有关键词，无需重复添加', $beforesearch);
             }
+            $keywordold = $data['keywordold'];
+            if($keywordold != $data['keyword']){
+                return show_tip(0, '添加关键字与查询关键字不同，不能添加', $keywordold);
+            }
             foreach ($arr as $u) {
                 $insertdata = array();
                 $insertdata['name'] = $data['keyword'];
@@ -147,7 +151,8 @@ class SeoWebKeyAdminController extends CommonController
             $userid = session('zzcms_adm_userid');
             $condition['userid'] = $userid;
             $websitearray = M('seo_web')->where($condition)->select();
-            $this->assign('websitearray', $websitearray);
+            $this->assign('websiteurl', $websitearray[0]['websiteurl']);
+            $this->assign('webid',$websitearray[0]['id']);
             $this->assign('userid', $userid);
             $this->assign('type', '添加关键词');
             $this->display();
