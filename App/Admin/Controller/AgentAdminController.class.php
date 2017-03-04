@@ -322,8 +322,6 @@ GROUP BY c.name,
                 return show_tip(0, "修改失败");
             }
         } else {
-
-
             $id = I('id', 0, 'intval');
             $userinfo = M('admin')->find($id);
             $this->assign("username",$userinfo['username']);
@@ -331,5 +329,52 @@ GROUP BY c.name,
             $this->assign("type", "用户续费");
             $this->display();
         }
+    }
+
+    public function KeywordEdit(){
+        if($_POST){
+            $data = I('post.', '');
+            $id = $data['id'] = intval($data['id']);
+
+            $priceoneold = $data['priceoneold'];
+            $pricetwoold = $data['pricetwoold'];
+            $priceone = $data['baidu1'];
+            $pricetwo = $data['baidu2'];
+
+            if($priceone < $priceoneold || $pricetwo < $pricetwoold){
+                return show_tip(0,"价格不能小于原来价格");
+            }
+
+            $condition = array();
+            $condition['priceone'] = $priceone;
+            $condition['pricetwo'] = $pricetwo;
+            $condition['id'] = $id;
+            if (false !== M('seo_keyword')->save($condition)) {
+                return show_tip(1, '修改成功', null, U('UserAdmin'));
+            } else {
+                return show_tip(0, '修改失败');
+            }
+
+        }else{
+            $data = I('get.', '');
+            $keyword = $data['keyword'];
+            $platformname = $data['platformname'];
+            $websiteurl = $data['websiteurl'];
+            $keywordid = $data['keywordid'];
+            $priceone = $data['priceone'];
+            $pricetwo = $data['pricetwo'];
+            $userid = $data['userid'];
+
+            $this->assign('priceone',$priceone);
+            $this->assign('pricetwo',$pricetwo);
+            $this->assign('keyword',$keyword);
+            $this->assign('platformname',$platformname);
+            $this->assign('websiteurl',$websiteurl);
+            $this->assign('keywordid',$keywordid);
+            $this->assign('userid',$userid);
+            $this->assign('type', '修改关键词价格');
+            $this->display();
+        }
+        $this->display();
     }
 }
