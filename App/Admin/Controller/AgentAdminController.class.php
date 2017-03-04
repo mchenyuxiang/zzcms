@@ -322,8 +322,6 @@ GROUP BY c.name,
                 return show_tip(0, "修改失败");
             }
         } else {
-
-
             $id = I('id', 0, 'intval');
             $userinfo = M('admin')->find($id);
             $this->assign("username",$userinfo['username']);
