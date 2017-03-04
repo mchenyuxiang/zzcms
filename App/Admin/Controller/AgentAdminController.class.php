@@ -237,7 +237,7 @@ GROUP BY c.name,
             if ($data['newpassword'] != $data['confirmpassword']) {
                 return show_tip(0, '两次密码不一样请重新输入');
             }
-            if (!isset($_POST['recharge']) || !$_POST['recharge']) {
+            if (!isset($data['balance']) || !$data['balance']) {
                 return show_tip(0, '必须填写充值金额');
             }
             $data['password'] = getMd5Password($data['newpassword']);
