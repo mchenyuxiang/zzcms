@@ -21,6 +21,21 @@ class SeoWebAdminController extends CommonController
     public function add()
     {
         if ($_POST) {
+            //防止重复提交 如果重复提交跳转至相关页面
+            if (!checkToken($_POST['TOKEN'])) {
+//                $this->redirect('index/index');
+                return show_tip(0, '已经成功提交，请刷新页面!');
+            }
+
+            if(!isset($_POST['userid']) || !$_POST['userid']){
+               return show_tip(0,'用户不合法');
+            }else{
+               $userid = $_POST['userid'];
+               $count = M('seo_web')->where("userid=%d",array($userid))->count();
+               if($count > 0){
+                   return show_tip(0,'该用户已经有网站，不能再增加网站,请返回');
+               }
+            }
 
             if (!isset($_POST['websitename']) || !$_POST['websitename']) {
                 return show_tip(0, '网站名称不能为空');
@@ -40,6 +55,7 @@ class SeoWebAdminController extends CommonController
             }
             return show_tip(0, '新增失败', $webId);
         } else {
+            creatToken();
             $userid = session('zzcms_adm_userid');
             $platforminfo = M('seo_platform')->select();
             $this->assign("platform", $platforminfo);

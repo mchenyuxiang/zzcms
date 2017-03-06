@@ -226,6 +226,13 @@ GROUP BY c.name,
     {
         if ($_POST) {
 
+            //防止重复提交 如果重复提交跳转至相关页面
+            if (!checkToken($_POST['TOKEN'])) {
+//                $this->redirect('index/index');
+                return show_tip(0, '已经成功提交，请刷新页面!');
+            }
+
+
             $data = I('post.', '');
             if (!isset($_POST['username']) || !$_POST['username']) {
                 return show_tip(0, '用户名不能为空');
@@ -249,6 +256,7 @@ GROUP BY c.name,
             }
             return show_tip(0, '新增失败', $userid);
         } else {
+            creatToken();
             $this->assign("type", "添加用户");
             $this->display();
         }
