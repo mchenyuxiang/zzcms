@@ -52,6 +52,7 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
+                                <th>序号</th>
                                 <th>关键词名称</th>
                                 <th>关键词排名</th>
                                 <th>网站域名</th>
@@ -63,6 +64,7 @@
                             <tbody>
                             <foreach name='listinfo' item='v'>
                                 <tr>
+                                    <td>{$key+1}</td>
                                     <td>{$v.name}</td>
                                     <td>
                                         {$v.rank}

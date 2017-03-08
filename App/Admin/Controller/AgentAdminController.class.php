@@ -82,7 +82,7 @@ WHERE f.`id`=" . $v['id'];
             $data['updatetime'] = $timetoday;
             $timetodaystr = strtotime($timetoday);
 //        print_r($timetodaystr."--".$updatetime);
-            if ($updatetime < ($timetodaystr-3600)) {
+            if ($updatetime < ($timetodaystr - 7200)) {
                 $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = " . $v['id'];
                 $rechargeArr = M()->query($recharge_sql);
                 $recharge = $rechargeArr[0]['cost'];
@@ -121,7 +121,7 @@ WHERE f.`id`=" . $v['id'];
             ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
             ->join('LEFT JOIN zzcms_seo_costdetail as a  on a.`keywordid` = c.id')
             ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
-            ->field('c.userid,a.keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' when a.rank = 100 then \'50名之后\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`+a.pricetwo) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone+a.pricetwo) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
+            ->field('c.userid,c.id as keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' when a.rank = 100 then \'50名之后\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`+a.pricetwo) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone+a.pricetwo) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
             ->where(array('c.userid' => $userid))->group('c.name,platformname')->limit($offset, $pageSize)->select();
         $countsql = "SELECT COUNT(*) as count FROM (SELECT 
  COUNT(*)
@@ -183,7 +183,7 @@ GROUP BY c.name,
         $pageRes = $res->show();
         $this->assign('page', $pageRes);
         $this->assign('listinfo', $listinfo);
-        $this->assign('userid',$userid);
+        $this->assign('userid', $userid);
         $this->assign('type', '排名详情');
         $this->display();
     }
@@ -230,17 +230,18 @@ GROUP BY c.name,
     {
         if ($_POST) {
 
-            //防止重复提交 如果重复提交跳转至相关页面
-            if (!checkToken($_POST['TOKEN'])) {
-//                $this->redirect('index/index');
-                return show_tip(0, '已经成功提交，请刷新页面!');
-            }
 
 
             $data = I('post.', '');
             if (!isset($_POST['username']) || !$_POST['username']) {
                 return show_tip(0, '用户名不能为空');
             }
+
+//            $userCount = M('admin')->where(array('username'=>$_POST['username']))->count();
+//            if($userCount>0){
+//                $this->error('用户名已经存在请重新填写', U('add'), 1);
+//            }
+
             if (strlen($data['newpassword']) < 6 && $data['id'] != 1) {
                 return show_tip(0, '密码长度必须大于6');
             }
@@ -251,16 +252,71 @@ GROUP BY c.name,
             if (!isset($data['balance']) || !$data['balance']) {
                 return show_tip(0, '必须填写充值金额');
             }
+            //防止重复提交 如果重复提交跳转至相关页面
+            if (!checkToken($_POST['TOKEN'])) {
+//                $this->redirect('index/index');
+                return show_tip(0, '已经成功提交，请刷新页面!');
+            }
             $data['password'] = getMd5Password($data['newpassword']);
             $data['recharge'] = $data['balance'];
             $data['createtime'] = date('Y-m-d', time());
             $userid = M('admin')->data($data)->add();
             if ($userid) {
-                return show_tip(1, '新增成功', $userid, U('UserAdmin'));
+
+                if (!isset($_POST['websitename']) || !$_POST['websitename']) {
+                    return show_tip(0, '网站名称不能为空');
+                }
+                if (!isset($_POST['websiteurl']) || !$_POST['websiteurl']) {
+                    return show_tip(0, '网站域名不能为空');
+                }
+                if (!isset($_POST['keyword']) || !$_POST['keyword']) {
+                    return show_tip(0, '请填写关键字');
+                }
+
+                if (!validateURL($_POST['websiteurl'])) {
+                    return show_tip(0, '请输入合法域名');
+                }
+
+                $_POST['createtime'] = date('Y-m-d H:i:s', time());
+                $_POST['userid'] = $userid;
+                $webid = M("seo_web")->data($_POST)->add();
+                if ($webid) {
+                    $platformidArr = $_POST['platformid'];
+                    $arrplat = explode(",", $platformidArr);
+                    $keywordArr = $_POST['keyword'];
+//                    $firstkey = substr($keywordArr, 0, 1);
+//                    if ($firstkey == '&') {
+//                        return show_tip(0, '请填写关键字');
+//                    }
+                    $arrkey = explode("|", $keywordArr);
+                    $countkeyword = 0;
+                    foreach ($arrkey as $key) {
+                        foreach ($arrplat as $plat) {
+                            $insertdata = array();
+                            $insertdata['name'] = $key;
+                            $insertdata['webid'] = $webid;
+                            $insertdata['userid'] = $userid;
+                            $insertdata['platformid'] = $plat;
+                            $insertdata['createtime'] = date('Y-m-d H:i:s', time());
+                            $keywordid = M('seo_keyword')->data($insertdata)->add();
+                        }
+                        if ($keywordid) {
+                            $countkeyword = $countkeyword + 1;
+                        } else {
+                            return show_tip(0, '新增失败', $keywordid);
+                        }
+                    }
+                    if ($countkeyword == count($arrkey)) {
+                        return show_tip(1, '新增成功', $countkeyword, U('ListInfo', array('userid' => $userid)));
+                    }
+                    return show_tip(0, '新增失败', $countkeyword);
+                }
             }
             return show_tip(0, '新增失败', $userid);
         } else {
             creatToken();
+            $platforminfo = M('seo_platform')->select();
+            $this->assign("platform", $platforminfo);
             $this->assign("type", "添加用户");
             $this->display();
         }
@@ -299,12 +355,14 @@ GROUP BY c.name,
         $id = I('id', 0, 'intval');
 
         //查询是否有子类
-        $childCate = M('seo_web')->where(array('userid' => $id))->select();
-        if ($childCate) {
-//            return show_tip(0,"删除失败，请先删除子菜单");
-            return show_tip(0, "用户名下有网站不能删除");
-        }
-        if (M('admin')->delete($id)) {
+//        $childCate = M('seo_web')->where(array('userid' => $id))->select();
+//        if ($childCate) {
+////            return show_tip(0,"删除失败，请先删除子菜单");
+//            return show_tip(0, "用户名下有网站不能删除");
+//        }
+        if (M('seo_keyword')->where(array('userid'=>$id))->delete()
+            && M('seo_web')->where(array('userid'=>$id))->delete()
+            && M('admin') ->delete($id)) {
 
             return show_tip(1, '删除成功', null, U('UserAdmin'));
         } else {
@@ -319,7 +377,7 @@ GROUP BY c.name,
     {
         if ($_POST) {
             $data = I('post.', '');
-            if(!isset($_POST['recharge']) || !$_POST['recharge']){
+            if (!isset($_POST['recharge']) || !$_POST['recharge']) {
                 return show_tip(0, '充值金额不能为空');
             }
             $olduserinfo = M('admin')->where(array('id' => $data['id']))->select();
@@ -336,15 +394,16 @@ GROUP BY c.name,
         } else {
             $id = I('id', 0, 'intval');
             $userinfo = M('admin')->find($id);
-            $this->assign("username",$userinfo['username']);
+            $this->assign("username", $userinfo['username']);
             $this->assign("id", $id);
             $this->assign("type", "用户续费");
             $this->display();
         }
     }
 
-    public function KeywordEdit(){
-        if($_POST){
+    public function KeywordEdit()
+    {
+        if ($_POST) {
             $data = I('post.', '');
             $id = $data['id'] = intval($data['id']);
 
@@ -362,12 +421,12 @@ GROUP BY c.name,
             $condition['pricetwo'] = $pricetwo;
             $condition['id'] = $id;
             if (false !== M('seo_keyword')->save($condition)) {
-                return show_tip(1, '修改成功', null, U('UserAdmin'));
+                return show_tip(1, '修改成功', null, U('Listinfo',array('userid'=>$data['userid'])));
             } else {
                 return show_tip(0, '修改失败');
             }
 
-        }else{
+        } else {
             $data = I('get.', '');
             $keyword = $data['keyword'];
             $platformname = $data['platformname'];
@@ -377,15 +436,36 @@ GROUP BY c.name,
             $pricetwo = $data['pricetwo'];
             $userid = $data['userid'];
 
-            $this->assign('priceone',$priceone);
-            $this->assign('pricetwo',$pricetwo);
-            $this->assign('keyword',$keyword);
-            $this->assign('platformname',$platformname);
-            $this->assign('websiteurl',$websiteurl);
-            $this->assign('keywordid',$keywordid);
-            $this->assign('userid',$userid);
+            $this->assign('priceone', $priceone);
+            $this->assign('pricetwo', $pricetwo);
+            $this->assign('keyword', $keyword);
+            $this->assign('platformname', $platformname);
+            $this->assign('websiteurl', $websiteurl);
+            $this->assign('keywordid', $keywordid);
+            $this->assign('userid', $userid);
             $this->assign('type', '修改关键词价格');
             $this->display();
+        }
+    }
+    /**
+     * 关键字删除
+     */
+    public function KeywordDel()
+    {
+
+        $id = I('keywordid', 0, 'intval');
+
+        //查询是否有子类
+//        $childCate = M('seo_web')->where(array('userid' => $id))->select();
+//        if ($childCate) {
+////            return show_tip(0,"删除失败，请先删除子菜单");
+//            return show_tip(0, "用户名下有网站不能删除");
+//        }
+        if (M('seo_keyword')->delete($id)) {
+
+            return show_tip(1, '删除成功', null, null);
+        } else {
+            return show_tip(0, "删除失败");
         }
     }
 }

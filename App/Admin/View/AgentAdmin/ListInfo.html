@@ -52,6 +52,7 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
+                                <th>序号</th>
                                 <th>关键词名称</th>
                                 <th>所属网站</th>
                                 <th>搜索引擎</th>
@@ -67,6 +68,7 @@
                             <tbody>
                             <foreach name='listinfo' item='v'>
                                 <tr>
+                                    <td>{$key+1}</td>
                                     <td>{$v.name}</td>
                                     <td>
                                         {$v.websiteurl}
@@ -81,6 +83,10 @@
                                         <input type="hidden" value="{$pricetwo}" name="pricetwo">
                                         <a href="{:U('KeywordEdit',array('userid'=>$v['userid'],'keywordid' => $v['keywordid'],'priceone'=>$v['priceone'],'pricetwo'=>$v['pricetwo'],'platformname'=>$v['platformname'],'keyword'=>$v['name'],'websiteurl'=>$v['websiteurl']))}"
                                            class="btn btn-primary btn-rounded">修改</a>
+                                        <a href="javascript:void(0)"
+                                           attr-message="删除"
+                                           class="btn btn-primary btn-rounded" id="zzcms-delete"
+                                           attr-id="{$v['keywordid']}">删除</a>
                                     </td>
                                 </tr>
                             </foreach>
@@ -110,7 +116,7 @@
         });
     });
     var SCOPE = {
-        'delete_url': '{:U("del")}',
+        'delete_url': '{:U("KeywordDel")}',
 
     };
 </script>
