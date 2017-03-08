@@ -348,14 +348,14 @@ GROUP BY c.name,
             $data = I('post.', '');
             $id = $data['id'] = intval($data['id']);
 
-            $priceoneold = $data['priceoneold'];
-            $pricetwoold = $data['pricetwoold'];
+//            $priceoneold = $data['priceoneold'];
+//            $pricetwoold = $data['pricetwoold'];
             $priceone = $data['baidu1'];
             $pricetwo = $data['baidu2'];
 
-            if($priceone < $priceoneold || $pricetwo < $pricetwoold){
-                return show_tip(0,"价格不能小于原来价格");
-            }
+//            if($priceone < $priceoneold || $pricetwo < $pricetwoold){
+//                return show_tip(0,"价格不能小于原来价格");
+//            }
 
             $condition = array();
             $condition['priceone'] = $priceone;
