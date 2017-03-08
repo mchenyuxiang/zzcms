@@ -68,10 +68,12 @@
                             <div class="col-sm-10">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="baidu1" name="baidu1" value="{$priceone}">
+                                        <input type="text" class="form-control" id="baidu1" name="baidu1"
+                                               value="{$priceone}">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="baidu2" name="baidu2" value="{$pricetwo}">
+                                        <input type="text" class="form-control" id="baidu2" name="baidu2"
+                                               value="{$pricetwo}">
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +88,7 @@
                                 <input type="hidden" value="{$userid}" name="userid">
 
                                 <button class="btn btn-primary" type="button" id="button-add">修改</button>
-                                <button class="btn btn-white" type="button" id="button-cancal">返回</button>
+                                    <a href="{:U('ListInfo',array('userid'=>$userid))}" class="btn btn-primary ">返回</a>
                             </div>
                         </div>
                     </form>
@@ -109,11 +111,11 @@
     });
     $("#button-add").click(function () {
 
-        var webid=$("#webid").val();
+        var webid = $("#webid").val();
 
         var baidu1 = $('input[name = "baidu1"]').val();
 
-        if(baidu1==0){
+        if (baidu1 == 0) {
             dialog.error('价格不正确请联系管理员');
             return;
         }
@@ -149,9 +151,6 @@
             }
         }, "JSON");
     });
-    $("#button-cancal").click(function () {
-        window.location.href = '{:U("UserAdmin")}'
-    })
 </script>
 </body>
 

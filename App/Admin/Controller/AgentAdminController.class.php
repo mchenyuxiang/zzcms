@@ -387,6 +387,5 @@ GROUP BY c.name,
             $this->assign('type', '修改关键词价格');
             $this->display();
         }
-        $this->display();
     }
 }
