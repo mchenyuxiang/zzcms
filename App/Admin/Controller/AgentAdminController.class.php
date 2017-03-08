@@ -183,6 +183,7 @@ GROUP BY c.name,
         $pageRes = $res->show();
         $this->assign('page', $pageRes);
         $this->assign('listinfo', $listinfo);
+        $this->assign('userid',$userid);
         $this->assign('type', '排名详情');
         $this->display();
     }
