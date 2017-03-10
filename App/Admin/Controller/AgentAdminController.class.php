@@ -421,7 +421,7 @@ GROUP BY c.name,
             $condition['pricetwo'] = $pricetwo;
             $condition['id'] = $id;
             if (false !== M('seo_keyword')->save($condition)) {
-                return show_tip(1, '修改成功', null, U('Listinfo',array('userid'=>$data['userid'])));
+                return show_tip(1, '修改成功', null, U('ListInfo',array('userid'=>$data['userid'])));
             } else {
                 return show_tip(0, '修改失败');
             }
