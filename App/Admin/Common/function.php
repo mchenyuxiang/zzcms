@@ -66,11 +66,34 @@ function validateURL($URL)
 {
 //    $pattern_1 = "^(?=^.{3,255}$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$";
 //    if(preg_match($pattern_1, $URL)){
-    if (strstr($URL,'.com') || strstr($URL,'.net') || strstr($URL,'.org')) {
+    if (strstr($URL,'.com') || strstr($URL,'.net') || strstr($URL,'.org') || strstr($URL,'.cn')) {
         return true;
     } else {
         return false;
     }
+}
+
+//创建TOKEN
+function creatToken() {
+    $code = chr(mt_rand(0xB0, 0xF7)) . chr(mt_rand(0xA1, 0xFE)) . chr(mt_rand(0xB0, 0xF7)) . chr(mt_rand(0xA1, 0xFE)) . chr(mt_rand(0xB0, 0xF7)) . chr(mt_rand(0xA1, 0xFE));
+    session('TOKEN', authcode($code));
+}
+
+//判断TOKEN
+function checkToken($token) {
+    if ($token == session('TOKEN')) {
+        session('TOKEN', NULL);
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+/* 加密TOKEN */
+function authcode($str) {
+    $key = "chenyuxiang";
+    $str = substr(md5($str), 8, 10);
+    return md5($key . $str);
 }
 
 ?>

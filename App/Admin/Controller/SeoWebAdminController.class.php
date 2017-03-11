@@ -21,6 +21,21 @@ class SeoWebAdminController extends CommonController
     public function add()
     {
         if ($_POST) {
+            //防止重复提交 如果重复提交跳转至相关页面
+            if (!checkToken($_POST['TOKEN'])) {
+//                $this->redirect('index/index');
+                return show_tip(0, '已经成功提交，请刷新页面!');
+            }
+
+            if(!isset($_POST['userid']) || !$_POST['userid']){
+               return show_tip(0,'用户不合法');
+            }else{
+               $userid = $_POST['userid'];
+               $count = M('seo_web')->where("userid=%d",array($userid))->count();
+               if($count > 0){
+                   return show_tip(0,'该用户已经有网站，不能再增加网站,请返回');
+               }
+            }
 
             if (!isset($_POST['websitename']) || !$_POST['websitename']) {
                 return show_tip(0, '网站名称不能为空');
@@ -40,6 +55,7 @@ class SeoWebAdminController extends CommonController
             }
             return show_tip(0, '新增失败', $webId);
         } else {
+            creatToken();
             $userid = session('zzcms_adm_userid');
             $platforminfo = M('seo_platform')->select();
             $this->assign("platform", $platforminfo);
@@ -76,18 +92,33 @@ FROM
         FROM
           zzcms_seo_web c , zzcms_seo_web d
           WHERE
-          c.id=d.id)
+          c.id=d.id and c.userid=".$userid.")
       )) AS b 
   LEFT JOIN
   zzcms_seo_keyword e
   ON a.id= e.webid
 WHERE a.`userid`=" . $userid;
         $listinfo = M()->query($sql);
-        $b_sql = "SELECT (balance - SUM(priceone)) AS balance FROM zzcms_seo_costdetail a LEFT JOIN zzcms_admin b ON a.userid=b.id WHERE a.userid = ".$userid;
+        $b_sql = "SELECT balance,updatetime FROM zzcms_admin WHERE id = ".$userid;
         $balanceArr = M()->query($b_sql);
-        $balance = $balanceArr[0]['balance'];
+        $balanceT = $balanceArr[0]['balance'];
+        $updatetime = strtotime($balanceArr[0]['updatetime']);
+        $timetoday = date("Y-m-d",time());
+        $data['updatetime'] = $timetoday;
+        $timetodaystr = strtotime($timetoday);
+//        print_r($timetodaystr."--".$updatetime);
+        if($updatetime < $timetodaystr){
+            $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = ".$userid;
+            $rechargeArr = M()->query($recharge_sql);
+            $recharge = $rechargeArr[0]['cost'];
+            $balance = $balanceT - $recharge;
+            $data['balance'] = $balance;
+            $data['id'] = $userid;
+            M('admin')->save($data);
+            $balanceT = $balance;
+        }
         $this->assign("listinfo", $listinfo);
-        $this->assign("balance", $balance);
+        $this->assign("balance", $balanceT);
         $this->assign("type", "管理网站");
         $this->display();
     }

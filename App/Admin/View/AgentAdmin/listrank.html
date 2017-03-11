@@ -45,46 +45,41 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="">
-                            <a href="{:U('add')}" class="btn btn-primary ">新增网站</a>
+                            <a href="{:U('ListInfo',array('userid'=>$userid))}" class="btn btn-primary ">返回</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>网站名称</th>
+                                <th>序号</th>
+                                <th>关键词名称</th>
+                                <th>关键词排名</th>
                                 <th>网站域名</th>
-                                <th>关键词数</th>
                                 <th>搜索引擎</th>
-                                <th>余额</th>
-                                <th>创建日期</th>
-                                <!--<th>状态</th>-->
-                                <th>操作</th>
+                                <th>扣费金额</th>
+                                <th>扣费时间</th>
                             </tr>
                             </thead>
                             <tbody>
                             <foreach name='listinfo' item='v'>
                                 <tr>
-                                    <td>{$v.websitename}</td>
+                                    <td>{$key+1}</td>
+                                    <td>{$v.name}</td>
                                     <td>
-                                        {$v.websiteurl}
+                                        {$v.rank}
                                     </td>
-                                    <td>{$v.keywordnumber}</td>
+                                    <td>{$v.websiteurl}</td>
                                     <td>{$v.platformname}</td>
-                                    <td>{$balance}</td>
+                                    <td>{$v.priceone}</td>
                                     <td>{$v.createtime}</td>
-                                    <td>
-                                        <a href="{:U('edit',array('id' => $v['id']))}"
-                                           class="btn btn-primary btn-rounded">修改</a>
-                                        <!--<a href="javascript:void(0)"-->
-                                           <!--attr-message="删除"-->
-                                           <!--class="btn btn-primary btn-rounded" id="zzcms-delete"-->
-                                           <!--attr-id="{$v['id']}">删除网站</a>-->
-                                    </td>
                                 </tr>
                             </foreach>
                             </tbody>
                         </table>
+                        <div class="text-center">
+                            {$page}
+                        </div>
                     </div>
 
                 </div>
@@ -105,10 +100,6 @@
             'initialState': 'collapsed',
         });
     });
-    var SCOPE = {
-        'delete_url': '{:U("del")}',
-
-    };
 </script>
 </body>
 

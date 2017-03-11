@@ -45,19 +45,22 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="">
-                            <a href="{:U('add')}" class="btn btn-primary ">新增网站</a>
+                            <a href="{:U('UserAdmin')}" class="btn btn-primary ">返回</a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>网站名称</th>
-                                <th>网站域名</th>
-                                <th>关键词数</th>
+                                <th>序号</th>
+                                <th>关键词名称</th>
+                                <th>所属网站</th>
                                 <th>搜索引擎</th>
-                                <th>余额</th>
-                                <th>创建日期</th>
+                                <th>首页价格</th>
+                                <th>排名</th>
+                                <th>详情</th>
+                                <!--<th>扣费</th>-->
+                                <th>累计扣费</th>
                                 <!--<th>状态</th>-->
                                 <th>操作</th>
                             </tr>
@@ -65,26 +68,33 @@
                             <tbody>
                             <foreach name='listinfo' item='v'>
                                 <tr>
-                                    <td>{$v.websitename}</td>
+                                    <td>{$key+1}</td>
+                                    <td>{$v.name}</td>
                                     <td>
                                         {$v.websiteurl}
                                     </td>
-                                    <td>{$v.keywordnumber}</td>
                                     <td>{$v.platformname}</td>
-                                    <td>{$balance}</td>
-                                    <td>{$v.createtime}</td>
+                                    <td>{$v.priceone}</td>
+                                    <td>{$v.rank}</td>
+                                    <td><a href="{:U('listrank',array('userid'=>$v['userid'],'keywordid'=>$v['keywordid'],'id'=>$v['id'],'platformname'=>$v['platformname']))}">查看详情</a></td>
+                                    <!--<td>{$v.priceone}</td>-->
+                                    <td>{$v.totalprice}</td>
                                     <td>
-                                        <a href="{:U('edit',array('id' => $v['id']))}"
+                                        <input type="hidden" value="{$pricetwo}" name="pricetwo">
+                                        <a href="{:U('KeywordEdit',array('userid'=>$v['userid'],'keywordid' => $v['keywordid'],'priceone'=>$v['priceone'],'pricetwo'=>$v['pricetwo'],'platformname'=>$v['platformname'],'keyword'=>$v['name'],'websiteurl'=>$v['websiteurl']))}"
                                            class="btn btn-primary btn-rounded">修改</a>
-                                        <!--<a href="javascript:void(0)"-->
-                                           <!--attr-message="删除"-->
-                                           <!--class="btn btn-primary btn-rounded" id="zzcms-delete"-->
-                                           <!--attr-id="{$v['id']}">删除网站</a>-->
+                                        <a href="javascript:void(0)"
+                                           attr-message="删除"
+                                           class="btn btn-primary btn-rounded" id="zzcms-delete"
+                                           attr-id="{$v['keywordid']}">删除</a>
                                     </td>
                                 </tr>
                             </foreach>
                             </tbody>
                         </table>
+                        <div class="text-center">
+                            {$page}
+                        </div>
                     </div>
 
                 </div>
@@ -106,7 +116,7 @@
         });
     });
     var SCOPE = {
-        'delete_url': '{:U("del")}',
+        'delete_url': '{:U("KeywordDel")}',
 
     };
 </script>

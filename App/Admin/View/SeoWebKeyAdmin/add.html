@@ -32,15 +32,10 @@
                 <div class="ibox-content">
                     <form class="form-horizontal" id="submit-menu">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">请选择站点</label>
+                            <label class="col-sm-2 control-label">站点名称</label>
 
                             <div class="col-sm-10">
-                                <select class="form-control m-b" id="webid" name="webid">
-                                    <option value="0">请选择</option>
-                                    <foreach name="websitearray" item="v">
-                                        <option value="{$v.id}" <if condition="$webid eq $v['id']">selected="selected"</if>>{$v.websiteurl}</option>
-                                    </foreach>
-                                </select>
+                                <p class="form-control-static">{$websiteurl}</p>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -176,6 +171,8 @@
                             <div class="col-sm-4 col-sm-offset-2">
                                 <!--<input type="hidden" value="{$id}" name="id">-->
                                 <input type="hidden" value="{$userid}" name="useid">
+                                <input type="hidden" value="{$webid}" name="webid" id="webid">
+                                <input type="hidden" value="{$keyword}" name="keywordold">
                                 <button class="btn btn-primary" type="button" id="button-add">添加关键字</button>
                                 <button class="btn btn-white" type="button" id="button-cancal">重置</button>
                             </div>
