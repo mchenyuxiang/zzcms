@@ -115,6 +115,7 @@ WHERE f.`id`=" . $v['id'];
         $data = I('get.', '');
         if ($data['userid'] != null) {
             $userid = $data['userid'];
+            session('zzcms_listinfo_userid_admin',$data['userid']);
         }
         $listinfo = M()
             ->table('zzcms_seo_keyword as c')
@@ -354,18 +355,20 @@ GROUP BY c.name,
 
         $id = I('id', 0, 'intval');
 
-        //查询是否有子类
-//        $childCate = M('seo_web')->where(array('userid' => $id))->select();
-//        if ($childCate) {
-////            return show_tip(0,"删除失败，请先删除子菜单");
-//            return show_tip(0, "用户名下有网站不能删除");
-//        }
-        if (M('seo_keyword')->where(array('userid'=>$id))->delete()
+
+        if ((M('seo_keyword')->where(array('userid'=>$id))->delete()
             && M('seo_web')->where(array('userid'=>$id))->delete()
-            && M('admin') ->delete($id)) {
+            && M('admin') ->delete($id))) {
 
             return show_tip(1, '删除成功', null, U('UserAdmin'));
-        } else {
+        } elseif ((M('seo_keyword')->where(array('userid'=>$id))->count()) == 0){
+            if(M('admin') ->delete($id)){
+                return show_tip(1, '删除成功', null, U('UserAdmin'));
+            }else{
+                return show_tip(0, "删除用户失败");
+            }
+
+        }  else{
             return show_tip(0, "删除失败");
         }
     }
@@ -453,17 +456,14 @@ GROUP BY c.name,
     public function KeywordDel()
     {
 
-        $id = I('keywordid', 0, 'intval');
-
-        //查询是否有子类
-//        $childCate = M('seo_web')->where(array('userid' => $id))->select();
-//        if ($childCate) {
-////            return show_tip(0,"删除失败，请先删除子菜单");
-//            return show_tip(0, "用户名下有网站不能删除");
-//        }
+        $data=I('post.','');
+        $id = $data['id'];
+        $userid = session('zzcms_listinfo_userid_admin');
+        
         if (M('seo_keyword')->delete($id)) {
 
-            return show_tip(1, '删除成功', null, null);
+            return show_tip(1, '删除成功', null, U('ListInfo',array('userid'=>$userid)));
+//            return show_tip(1,'删除成功');
         } else {
             return show_tip(0, "删除失败");
         }
