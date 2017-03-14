@@ -31,6 +31,8 @@ class AgentAdminController extends CommonController
         $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
         $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 10;
 
+        session('zzcms_useradmin_page',$page);
+        session('zzcms_useradmin_pagesize',$pageSize);
         $offset = ($page - 1) * $pageSize;
         $userinfo = M('admin')->limit($offset, $pageSize)->select();
         $userInfoCount = M('admin')->count();
