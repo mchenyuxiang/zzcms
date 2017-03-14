@@ -120,10 +120,10 @@ WHERE f.`id`=" . $v['id'];
         $listinfo = M()
             ->table('zzcms_seo_keyword as c')
             ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
-            ->join('LEFT JOIN zzcms_seo_costdetail as a  on a.`keywordid` = c.id')
+            ->join('LEFT JOIN (SELECT * FROM zzcms_seo_costdetail ORDER BY createtime DESC) AS a on a.keywordid = c.id')
             ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
-            ->field('c.userid,c.id as keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' when a.rank = 100 then \'50名之后\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`+a.pricetwo) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone+a.pricetwo) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
-            ->where(array('c.userid' => $userid))->group('c.name,platformname')->limit($offset, $pageSize)->select();
+            ->field('c.userid,c.id as keywordid,b.platformname,CASE WHEN min(a.rank)  IS NULL  THEN \'暂无排名信息\' when min(a.rank) = 100 then \'50名之后\' ELSE min(a.rank) END AS rank,c.name,CASE WHEN SUM(a.`priceone`+a.pricetwo) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone+a.pricetwo) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
+            ->where(array('c.userid' => $userid))->order('a.rank asc')->group('c.name,platformname')->limit($offset, $pageSize)->select();
         $countsql = "SELECT COUNT(*) as count FROM (SELECT 
  COUNT(*)
 FROM
