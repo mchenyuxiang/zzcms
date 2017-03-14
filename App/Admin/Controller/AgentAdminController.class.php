@@ -238,10 +238,10 @@ GROUP BY c.name,
                 return show_tip(0, '用户名不能为空');
             }
 
-//            $userCount = M('admin')->where(array('username'=>$_POST['username']))->count();
-//            if($userCount>0){
-//                $this->error('用户名已经存在请重新填写', U('add'), 1);
-//            }
+            $userCount = M('admin')->where(array('username'=>$_POST['username']))->count();
+            if($userCount>0){
+                return show_tip(0, '用户名已经存在!');
+            }
 
             if (strlen($data['newpassword']) < 6 && $data['id'] != 1) {
                 return show_tip(0, '密码长度必须大于6');
