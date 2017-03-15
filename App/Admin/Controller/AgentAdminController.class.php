@@ -118,8 +118,8 @@ WHERE f.`id`=" . $v['id'];
         if ($data['userid'] != null) {
             $userid = $data['userid'];
             session('zzcms_listinfo_userid_admin',$data['userid']);
-            session('zzcms_useradmin_page',$page);
-            session('zzcms_useradmin_pagesize',$pageSize);
+            session('zzcms_userlistinfo_page',$page);
+            session('zzcms_userlistinfo_pagesize',$pageSize);
         }
         $listinfo = M()
             ->table('zzcms_seo_keyword as c')
