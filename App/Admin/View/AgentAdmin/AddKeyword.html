@@ -30,6 +30,11 @@
                     </h5>
                 </div>
                 <div class="ibox-content">
+                    <div class="row">
+                        <div class="">
+                            <a href="{:U('ListInfo',array('userid'=>$userid,'p'=>$_SESSION['zzcms_userlistinfo_page'],'pageSize'=>$_SESSION['zzcms_userlistinfo_pagesize']))}" class="btn btn-primary ">返回</a>
+                        </div>
+                    </div>
                     <form class="form-horizontal" id="submit-menu">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">站点名称</label>
@@ -46,10 +51,10 @@
                                 <div class="col-sm-3">
                                     <input type="text" class="form-control" name="keyword" value="{$keyword}">
                                 </div>
-                                <div class="col-sm-1">
-                                    <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button" id="button-search"><strong>查询价格</strong>
-                                    </button>
-                                </div>
+                                <!--<div class="col-sm-1">-->
+                                    <!--<button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button" id="button-search"><strong>查询价格</strong>-->
+                                    <!--</button>-->
+                                <!--</div>-->
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -170,7 +175,7 @@
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <!--<input type="hidden" value="{$id}" name="id">-->
-                                <input type="hidden" value="{$userid}" name="useid">
+                                <input type="hidden" value="{$userid}" name="userid">
                                 <input type="hidden" value="{$webid}" name="webid" id="webid">
                                 <input type="hidden" value="{$keyword}" name="keywordold">
                                 <button class="btn btn-primary" type="button" id="button-add">添加关键字</button>
@@ -194,34 +199,6 @@
 <script>
     $(document).ready(function () {
         $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
-    });
-    $("#button-search").click(function () {
-        //获取登录页面中的用户名和密码
-        var keyword = $('input[name = "keyword"]').val();
-        var webid=$("#webid").val();
-
-        if(webid==0){
-            dialog.error('请选择站点');
-            return;
-        }
-
-        if(!keyword){
-            dialog.error('请填写要查询关键词');
-            return;
-        }
-
-        var url = '{:U("seachprice")}';
-        var data = {'keyword':keyword,'webid':webid};
-        // 执行异步请求
-        $.post(url,data,function (result) {
-            if(result.status == 0){
-                return dialog.error(result.message);
-            }
-            if(result.status == 1){
-                return dialog.success('查询成功',result.url);
-            }
-
-        },'JSON');
     });
     $("#button-add").click(function () {
 
@@ -265,7 +242,7 @@
         })
         console.log(postData);
         //将获取到德数据post给服务器
-        url = '{:U("add")}';
+        url = '{:U("AddKeyword")}';
         $.post(url, postData, function (result) {
             if (result.status == 1) {
                 //成功

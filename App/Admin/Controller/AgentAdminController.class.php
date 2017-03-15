@@ -31,8 +31,8 @@ class AgentAdminController extends CommonController
         $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
         $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 10;
 
-        session('zzcms_useradmin_page',$page);
-        session('zzcms_useradmin_pagesize',$pageSize);
+        session('zzcms_useradmin_page', $page);
+        session('zzcms_useradmin_pagesize', $pageSize);
         $offset = ($page - 1) * $pageSize;
         $userinfo = M('admin')->limit($offset, $pageSize)->select();
         $userInfoCount = M('admin')->count();
@@ -85,7 +85,7 @@ WHERE f.`id`=" . $v['id'];
             $timetodaystr = strtotime($timetoday);
 //        print_r($timetodaystr."--".$updatetime);
             if ($updatetime < ($timetodaystr - 7200)) {
-                $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = ". $v['id']." and createtime > ".$timetoday;
+                $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = " . $v['id'] . " and createtime > " . $timetoday;
                 $rechargeArr = M()->query($recharge_sql);
                 $recharge = $rechargeArr[0]['cost'];
                 $balance = $balanceT - $recharge;
@@ -117,9 +117,9 @@ WHERE f.`id`=" . $v['id'];
         $data = I('get.', '');
         if ($data['userid'] != null) {
             $userid = $data['userid'];
-            session('zzcms_listinfo_userid_admin',$data['userid']);
-            session('zzcms_userlistinfo_page',$page);
-            session('zzcms_userlistinfo_pagesize',$pageSize);
+            session('zzcms_listinfo_userid_admin', $data['userid']);
+            session('zzcms_userlistinfo_page', $page);
+            session('zzcms_userlistinfo_pagesize', $pageSize);
         }
         $listinfo = M()
             ->table('zzcms_seo_keyword as c')
@@ -148,6 +148,7 @@ GROUP BY c.name,
         $res = new Page($cateCount, $pageSize);
         $pageRes = $res->show();
         $this->assign('page', $pageRes);
+        $this->assign('userid', $userid);
         $this->assign('listinfo', $listinfo);
         $this->assign('type', '管理关键词');
         $this->display();
@@ -236,14 +237,13 @@ GROUP BY c.name,
         if ($_POST) {
 
 
-
             $data = I('post.', '');
             if (!isset($_POST['username']) || !$_POST['username']) {
                 return show_tip(0, '用户名不能为空');
             }
 
-            $userCount = M('admin')->where(array('username'=>$_POST['username']))->count();
-            if($userCount>0){
+            $userCount = M('admin')->where(array('username' => $_POST['username']))->count();
+            if ($userCount > 0) {
                 return show_tip(0, '用户名已经存在!');
             }
 
@@ -360,19 +360,20 @@ GROUP BY c.name,
         $id = I('id', 0, 'intval');
 
 
-        if ((M('seo_keyword')->where(array('userid'=>$id))->delete()
-            && M('seo_web')->where(array('userid'=>$id))->delete()
-            && M('admin') ->delete($id))) {
+        if ((M('seo_keyword')->where(array('userid' => $id))->delete()
+            && M('seo_web')->where(array('userid' => $id))->delete()
+            && M('admin')->delete($id))
+        ) {
 
             return show_tip(1, '删除成功', null, U('UserAdmin'));
-        } elseif ((M('seo_keyword')->where(array('userid'=>$id))->count()) == 0){
-            if(M('admin') ->delete($id)){
+        } elseif ((M('seo_keyword')->where(array('userid' => $id))->count()) == 0) {
+            if (M('admin')->delete($id)) {
                 return show_tip(1, '删除成功', null, U('UserAdmin'));
-            }else{
+            } else {
                 return show_tip(0, "删除用户失败");
             }
 
-        }  else{
+        } else {
             return show_tip(0, "删除失败");
         }
     }
@@ -453,22 +454,194 @@ GROUP BY c.name,
             $this->display();
         }
     }
+
     /**
      * 关键字删除
      */
     public function KeywordDel()
     {
 
-        $data=I('post.','');
+        $data = I('post.', '');
         $id = $data['id'];
         $userid = session('zzcms_listinfo_userid_admin');
 
         if (M('seo_keyword')->delete($id)) {
 
-            return show_tip(1, '删除成功', null, U('ListInfo',array('userid'=>$userid)));
+            return show_tip(1, '删除成功', null, U('ListInfo', array('userid' => $userid)));
 //            return show_tip(1,'删除成功');
         } else {
             return show_tip(0, "删除失败");
         }
     }
+
+    public function AddKeyword()
+    {
+//        if ($_GET) {
+//            $data = I('get.', '');
+//
+//            $baiduindex = $data['baiduindex'];
+//            $baidumobileindex = $data['baidumobileindex'];
+//            $keyword = $data['keyword'];
+//            $webid = $data['webid'];
+//            $websitearray = M('seo_web')->where(array('id' => $webid))->select();
+//            $this->assign('websiteurl', $websitearray[0]['websiteurl']);
+////            $this->assign('userid',$websitearray[0]['userid']);
+////            print_r($keyword.'------'.$webid);
+//
+//            $baiduprice = $baiduindex / 6;
+//            $baidumobileprice = $baidumobileindex / 5;
+//
+//            if ($baiduprice <= 5) {
+//                $baiduprice = 5;
+//            } elseif ($baiduprice >= 50) {
+//                $baiduprice = 50;
+//            }
+//
+//            if ($baidumobileprice <= 5) {
+//                $baidumobileprice = 5;
+//            } elseif ($baidumobileprice >= 60) {
+//                $baidumobileprice = 60;
+//            }
+//
+//            $sou360 = round($baidumobileprice / 3, 2);
+//            if ($sou360 <= 3) {
+//                $sou360 = 3;
+//            } elseif ($sou360 >= 30) {
+//                $sou360 = 30;
+//            }
+//
+//            $sougou = round($baiduprice / 6, 2);
+//            if ($sougou <= 1.5) {
+//                $sougou = 1.5;
+//            } elseif ($sougou >= 20) {
+//                $sougou = 20;
+//            }
+//
+//            $shenma = round($baiduprice / 7, 2);
+//            if ($shenma <= 1) {
+//                $shenma = 1;
+//            } elseif ($shenma >= 15) {
+//                $shenma = 15;
+//            }
+//            $biying = round($baiduprice / 7, 2);
+//            if ($biying <= 1) {
+//                $biying = 1;
+//            } elseif ($biying >= 15) {
+//                $biying = 15;
+//            }
+//            $this->assign('baiduprice', number_format($baiduprice, 2));
+//            $this->assign('baidumobileprice', number_format($baidumobileprice, 2));
+//            $this->assign('sou360', $sou360);
+//            $this->assign('sougou', $sougou);
+//            $this->assign('google', number_format($baiduprice, 2));
+//            $this->assign('shenma', $shenma);
+//            $this->assign('biying', $biying);
+//            $this->assign('keyword', $keyword);
+//            $this->assign('webid', $webid);
+//            $this->assign('type', '添加关键词');
+//            $this->display();
+//        }
+        if ($_POST) {
+            $data = I('post.', '');
+            $userid = $data['userid'];
+            $webid = $data['webid'];
+            $platformArray = M('seo_web')->where(array('id' => $webid))->select();
+            $platformidArr = $platformArray[0]['platformid'];
+            $arr = explode(",", $platformidArr);
+            $countkeyword = 0;
+            $beforesearch = M('seo_keyword')->where(array('name' => $data['keyword'], 'webid' => $webid
+            , 'userid' => $userid))->count();
+            if ($beforesearch > 0) {
+                return show_tip(0, '该用户已经有关键词，无需重复添加', $beforesearch);
+            }
+            $keywordold = $data['keywordold'];
+//            if($keywordold != $data['keyword']){
+//                return show_tip(0, '添加关键字与查询关键字不同，不能添加', $keywordold);
+//            }
+            foreach ($arr as $u) {
+                $insertdata = array();
+                $insertdata['name'] = $data['keyword'];
+                $insertdata['webid'] = $webid;
+                $insertdata['userid'] = $userid;
+                $insertdata['platformid'] = $u;
+                $insertdata['createtime'] = date('Y-m-d H:i:s', time());
+                if ($u == '1') {
+                    $insertdata['priceone'] = $data['baidu1'];
+                    $insertdata['pricetwo'] = $data['baidu2'];
+                } elseif ($u == '2') {
+                    $insertdata['priceone'] = $data['sou3601'];
+                    $insertdata['pricetwo'] = $data['sou3602'];
+
+                } elseif ($u == '3') {
+                    $insertdata['priceone'] = $data['sougou1'];
+                    $insertdata['pricetwo'] = $data['sougou2'];
+
+                } elseif ($u == '4') {
+                    $insertdata['priceone'] = $data['google1'];
+                    $insertdata['pricetwo'] = $data['google2'];
+
+                } elseif ($u == '5') {
+                    $insertdata['priceone'] = $data['baidumobile1'];
+                    $insertdata['pricetwo'] = $data['baidumobile2'];
+
+                } elseif ($u == '6') {
+                    $insertdata['priceone'] = $data['shenma1'];
+                    $insertdata['pricetwo'] = $data['shenma2'];
+
+                } elseif ($u == '7') {
+                    $insertdata['priceone'] = $data['biying1'];
+                    $insertdata['pricetwo'] = $data['biying2'];
+                }
+                $keywordid = M('seo_keyword')->data($insertdata)->add();
+                if ($keywordid) {
+                    $countkeyword = $countkeyword + 1;
+                } else {
+                    return show_tip(0, '新增失败', $keywordid);
+                }
+            }
+            if ($countkeyword == count($arr)) {
+                return show_tip(1, '新增成功', $countkeyword, U('AddKeyword',array('userid'=>$userid)));
+            }
+            return show_tip(0, '新增失败', $countkeyword);
+
+        } else {
+            $data=I('get.','');
+            $userid = $data['userid'];
+            $websitearray = M('seo_web')->where(array('userid'=>$userid))->select();
+            $this->assign('websiteurl', $websitearray[0]['websiteurl']);
+            $this->assign('webid',$websitearray[0]['id']);
+            $this->assign('userid', $userid);
+            $this->assign('type', '添加关键词');
+            $this->display();
+        }
+    }
+//    public function seachprice()
+//    {
+//
+//        $webid = $_POST['webid'];
+//        $keyword = $_POST['keyword'];
+////        dump($keyword);
+//
+//        $key = c402da805c1c46f8a00d1c9f477c6a6f;
+//        $url = 'http://api.91cha.com/index?key=' . $key . '&kws=' . urlencode($keyword);
+//        $ch = curl_init();
+//        $this_header = array(
+//            "content-type: application/x-www-form-urlencoded; charset=UTF-8"
+//        );
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, $this_header);
+//        curl_setopt($ch, CURLOPT_URL, $url);
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 获取数据返回
+//        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true); // 在启用 CURLOPT_RETURNTRANSFER 时候将获取数据返回
+//        $res = curl_exec($ch);
+//        $resdecode = json_decode($res);
+//
+////        dump($resdecode);
+//        $baiduindex = $resdecode->data[0]->allindex;
+//        $baidumobileindex = $resdecode->data[0]->mobileindex;
+//        $resstaus = $resdecode->state;
+//        if ($resstaus == 1) {
+//            return show_tip(1, '查询成功', $resstaus, U('AddKeyword', array('webid' => $webid, 'keyword' => $keyword, 'baiduindex' => $baiduindex, 'baidumobileindex' => $baidumobileindex)));
+//        }
+//        return show_tip(0, '查询失败', $resstaus);
+//    }
 }
