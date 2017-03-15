@@ -108,7 +108,7 @@ WHERE a.`userid`=" . $userid;
         $timetodaystr = strtotime($timetoday);
 //        print_r($timetodaystr."--".$updatetime);
         if($updatetime < $timetodaystr){
-            $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = ".$userid." and createtime > ".$timetodaystr;
+            $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = ".$userid." and createtime > ".$timetoday;
             $rechargeArr = M()->query($recharge_sql);
             $recharge = $rechargeArr[0]['cost'];
             $balance = $balanceT - $recharge;

@@ -85,7 +85,7 @@ WHERE f.`id`=" . $v['id'];
             $timetodaystr = strtotime($timetoday);
 //        print_r($timetodaystr."--".$updatetime);
             if ($updatetime < ($timetodaystr - 7200)) {
-                $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = ". $v['id']." and createtime > ".$timetodaystr;
+                $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = ". $v['id']." and createtime > ".$timetoday;
                 $rechargeArr = M()->query($recharge_sql);
                 $recharge = $rechargeArr[0]['cost'];
                 $balance = $balanceT - $recharge;
@@ -428,7 +428,6 @@ GROUP BY c.name,
             $condition['pricetwo'] = $pricetwo;
             $condition['id'] = $id;
             if (false !== M('seo_keyword')->save($condition)) {
-                return show_tip(1, '修改成功', null, U('ListInfo',array('userid'=>$data['userid'])));
             } else {
                 return show_tip(0, '修改失败');
             }
