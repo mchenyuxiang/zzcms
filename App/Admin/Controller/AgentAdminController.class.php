@@ -414,6 +414,7 @@ GROUP BY c.name,
         if ($_POST) {
             $data = I('post.', '');
             $id = $data['id'] = intval($data['id']);
+            $userid = session('zzcms_listinfo_userid_admin');
 
 //            $priceoneold = $data['priceoneold'];
 //            $pricetwoold = $data['pricetwoold'];
@@ -429,6 +430,7 @@ GROUP BY c.name,
             $condition['pricetwo'] = $pricetwo;
             $condition['id'] = $id;
             if (false !== M('seo_keyword')->save($condition)) {
+                 return show_tip(1, '修改成功', null, U('ListInfo', array('userid' => $userid)));
             } else {
                 return show_tip(0, '修改失败');
             }
