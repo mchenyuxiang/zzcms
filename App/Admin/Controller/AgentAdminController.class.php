@@ -476,86 +476,25 @@ GROUP BY c.name,
         }
     }
 
+    /**
+     * 管理员添加关键字
+     */
     public function AddKeyword()
     {
-//        if ($_GET) {
-//            $data = I('get.', '');
-//
-//            $baiduindex = $data['baiduindex'];
-//            $baidumobileindex = $data['baidumobileindex'];
-//            $keyword = $data['keyword'];
-//            $webid = $data['webid'];
-//            $websitearray = M('seo_web')->where(array('id' => $webid))->select();
-//            $this->assign('websiteurl', $websitearray[0]['websiteurl']);
-////            $this->assign('userid',$websitearray[0]['userid']);
-////            print_r($keyword.'------'.$webid);
-//
-//            $baiduprice = $baiduindex / 6;
-//            $baidumobileprice = $baidumobileindex / 5;
-//
-//            if ($baiduprice <= 5) {
-//                $baiduprice = 5;
-//            } elseif ($baiduprice >= 50) {
-//                $baiduprice = 50;
-//            }
-//
-//            if ($baidumobileprice <= 5) {
-//                $baidumobileprice = 5;
-//            } elseif ($baidumobileprice >= 60) {
-//                $baidumobileprice = 60;
-//            }
-//
-//            $sou360 = round($baidumobileprice / 3, 2);
-//            if ($sou360 <= 3) {
-//                $sou360 = 3;
-//            } elseif ($sou360 >= 30) {
-//                $sou360 = 30;
-//            }
-//
-//            $sougou = round($baiduprice / 6, 2);
-//            if ($sougou <= 1.5) {
-//                $sougou = 1.5;
-//            } elseif ($sougou >= 20) {
-//                $sougou = 20;
-//            }
-//
-//            $shenma = round($baiduprice / 7, 2);
-//            if ($shenma <= 1) {
-//                $shenma = 1;
-//            } elseif ($shenma >= 15) {
-//                $shenma = 15;
-//            }
-//            $biying = round($baiduprice / 7, 2);
-//            if ($biying <= 1) {
-//                $biying = 1;
-//            } elseif ($biying >= 15) {
-//                $biying = 15;
-//            }
-//            $this->assign('baiduprice', number_format($baiduprice, 2));
-//            $this->assign('baidumobileprice', number_format($baidumobileprice, 2));
-//            $this->assign('sou360', $sou360);
-//            $this->assign('sougou', $sougou);
-//            $this->assign('google', number_format($baiduprice, 2));
-//            $this->assign('shenma', $shenma);
-//            $this->assign('biying', $biying);
-//            $this->assign('keyword', $keyword);
-//            $this->assign('webid', $webid);
-//            $this->assign('type', '添加关键词');
-//            $this->display();
-//        }
         if ($_POST) {
             $data = I('post.', '');
             $userid = $data['userid'];
             $webid = $data['webid'];
-            $platformArray = M('seo_web')->where(array('id' => $webid))->select();
-            $platformidArr = $platformArray[0]['platformid'];
+//            $platformArray = M('seo_web')->where(array('id' => $webid))->select();
+//            $platformidArr = $platformArray[0]['platformid'];
+            $platformidArr = $data['platformid'];
             $arr = explode(",", $platformidArr);
             $countkeyword = 0;
-            $beforesearch = M('seo_keyword')->where(array('name' => $data['keyword'], 'webid' => $webid
-            , 'userid' => $userid))->count();
-            if ($beforesearch > 0) {
-                return show_tip(0, '该用户已经有关键词，无需重复添加', $beforesearch);
-            }
+//            $beforesearch = M('seo_keyword')->where(array('name' => $data['keyword'], 'webid' => $webid
+//            , 'userid' => $userid))->count();
+//            if ($beforesearch > 0) {
+//                return show_tip(0, '该用户已经有关键词，无需重复添加', $beforesearch);
+//            }
             $keywordold = $data['keywordold'];
 //            if($keywordold != $data['keyword']){
 //                return show_tip(0, '添加关键字与查询关键字不同，不能添加', $keywordold);
@@ -567,6 +506,12 @@ GROUP BY c.name,
                 $insertdata['userid'] = $userid;
                 $insertdata['platformid'] = $u;
                 $insertdata['createtime'] = date('Y-m-d H:i:s', time());
+                $beforesearch = M('seo_keyword')->where(array('name' => $data['keyword'], 'webid' => $webid
+                , 'userid' => $userid,'platformid'=> $u))->count();
+                if ($beforesearch > 0) {
+                    $countkeyword = $countkeyword + 1;
+                    continue;
+                }
                 if ($u == '1') {
                     $insertdata['priceone'] = $data['baidu1'];
                     $insertdata['pricetwo'] = $data['baidu2'];
@@ -610,6 +555,8 @@ GROUP BY c.name,
             $data=I('get.','');
             $userid = $data['userid'];
             $websitearray = M('seo_web')->where(array('userid'=>$userid))->select();
+            $platforminfo = M('seo_platform')->select();
+            $this->assign("platform", $platforminfo);
             $this->assign('websiteurl', $websitearray[0]['websiteurl']);
             $this->assign('webid',$websitearray[0]['id']);
             $this->assign('userid', $userid);
