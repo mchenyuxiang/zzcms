@@ -79,20 +79,20 @@ WHERE f.`id`=" . $v['id'];
             $balanceArr = M()->query($b_sql);
             $balanceT = $balanceArr[0]['balance'];
             $data['id'] = $v['id'];
-            $updatetime = strtotime($balanceArr[0]['updatetime']);
+//            $updatetime = strtotime($balanceArr[0]['updatetime']);
             $timetoday = date("Y-m-d", time());
             $data['updatetime'] = $timetoday;
             $timetodaystr = strtotime($timetoday);
 //        print_r($timetodaystr."--".$updatetime);
-            if ($updatetime < ($timetodaystr - 7200)) {
-                $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = " . $v['id'] . " and UNIX_TIMESTAMP(createtime) > " . strtotime($updatetime)."+86400";
-                $rechargeArr = M()->query($recharge_sql);
-                $recharge = $rechargeArr[0]['cost'];
-                $balance = $balanceT - $recharge;
-                $data['balance'] = $balance;
-                M('admin')->save($data);
-                $balanceT = $balance;
-            }
+//            if ($updatetime < ($timetodaystr - 7200)) {
+//                $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = " . $v['id'] . " and UNIX_TIMESTAMP(createtime) > " . strtotime($updatetime)."+86400";
+//                $rechargeArr = M()->query($recharge_sql);
+//                $recharge = $rechargeArr[0]['cost'];
+//                $balance = $balanceT - $recharge;
+//                $data['balance'] = $balance;
+//                M('admin')->save($data);
+//                $balanceT = $balance;
+//            }
             $listallinfo[$key] = $listinfo;
             $listallinfo[$key]['balance'] = $balanceT;
         }
