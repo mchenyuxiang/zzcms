@@ -43,11 +43,11 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <div class="row">
-                        <div class="">
-                            <a href="{:U('add')}" class="btn btn-primary ">新增关键词</a>
-                        </div>
-                    </div>
+                    <!--<div class="row">-->
+                        <!--<div class="">-->
+                            <!--<a href="{:U('add')}" class="btn btn-primary ">新增关键词</a>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -61,7 +61,7 @@
                                 <!--<th>扣费</th>-->
                                 <th>累计扣费</th>
                                 <!--<th>状态</th>-->
-                                <th>操作</th>
+                                <!--<th>操作</th>-->
                             </tr>
                             </thead>
                             <tbody>
@@ -77,11 +77,11 @@
                                     <td><a href="{:U('listrank',array('keywordid'=>$v['keywordid'],'id'=>$v['id'],'platformname'=>$v['platformname']))}">查看详情</a></td>
                                     <!--<td>{$v.priceone}</td>-->
                                     <td>{$v.totalprice}</td>
-                                    <td>
-                                        <input type="hidden" value="{$pricetwo}" name="pricetwo">
-                                        <a href="{:U('edit',array('keywordid' => $v['keywordid'],'priceone'=>$v['priceone'],'pricetwo'=>$v['pricetwo'],'platformname'=>$v['platformname'],'keyword'=>$v['name'],'websiteurl'=>$v['websiteurl']))}"
-                                           class="btn btn-primary btn-rounded">修改</a>
-                                    </td>
+                                    <!--<td>-->
+                                        <!--<input type="hidden" value="{$pricetwo}" name="pricetwo">-->
+                                        <!--<a href="{:U('edit',array('keywordid' => $v['keywordid'],'priceone'=>$v['priceone'],'pricetwo'=>$v['pricetwo'],'platformname'=>$v['platformname'],'keyword'=>$v['name'],'websiteurl'=>$v['websiteurl']))}"-->
+                                           <!--class="btn btn-primary btn-rounded">修改</a>-->
+                                    <!--</td>-->
                                 </tr>
                             </foreach>
                             </tbody>

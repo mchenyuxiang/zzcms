@@ -43,11 +43,11 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <div class="row">
-                        <div class="">
-                            <a href="{:U('add')}" class="btn btn-primary ">新增网站</a>
-                        </div>
-                    </div>
+                    <!--<div class="row">-->
+                        <!--<div class="">-->
+                            <!--<a href="{:U('add')}" class="btn btn-primary ">新增网站</a>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -59,7 +59,7 @@
                                 <th>余额</th>
                                 <th>创建日期</th>
                                 <!--<th>状态</th>-->
-                                <th>操作</th>
+                                <!--<th>操作</th>-->
                             </tr>
                             </thead>
                             <tbody>
@@ -73,14 +73,14 @@
                                     <td>{$v.platformname}</td>
                                     <td>{$balance}</td>
                                     <td>{$v.createtime}</td>
-                                    <td>
-                                        <a href="{:U('edit',array('id' => $v['id']))}"
-                                           class="btn btn-primary btn-rounded">修改</a>
-                                        <!--<a href="javascript:void(0)"-->
-                                           <!--attr-message="删除"-->
-                                           <!--class="btn btn-primary btn-rounded" id="zzcms-delete"-->
-                                           <!--attr-id="{$v['id']}">删除网站</a>-->
-                                    </td>
+                                    <!--<td>-->
+                                        <!--<a href="{:U('edit',array('id' => $v['id']))}"-->
+                                           <!--class="btn btn-primary btn-rounded">修改</a>-->
+                                        <!--&lt;!&ndash;<a href="javascript:void(0)"&ndash;&gt;-->
+                                           <!--&lt;!&ndash;attr-message="删除"&ndash;&gt;-->
+                                           <!--&lt;!&ndash;class="btn btn-primary btn-rounded" id="zzcms-delete"&ndash;&gt;-->
+                                           <!--&lt;!&ndash;attr-id="{$v['id']}">删除网站</a>&ndash;&gt;-->
+                                    <!--</td>-->
                                 </tr>
                             </foreach>
                             </tbody>
