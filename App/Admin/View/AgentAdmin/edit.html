@@ -80,6 +80,24 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索引擎</label>
+
+                            <div class="col-sm-10">
+                                <foreach name="platform" item="v">
+                                    <label class="checkbox-inline i-checks">
+                                        <input name="platformid" type="checkbox" value="{$v.id}"
+                                               style="position: absolute; opacity: 0;"
+                                        <if condition="$v['checked'] eq 'checked'">checked="{$v.checked}</if>
+                                        ">
+                                        <ins class="iCheck-helper"
+                                             style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                        {$v.platformname}
+                                    </label>
+                                </foreach>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <input type="hidden" value="{$data.id}" name="id">
                                 <button class="btn btn-primary" type="button" id="button-add">保存内容</button>
@@ -109,7 +127,19 @@
         postData = {};
 
         $(data).each(function (i) {
-            postData[this.name] = this.value;
+            if (this.name == 'platformid') {
+
+                if (postData['platformid'] == null || postData['platformid'] == 'undefined') {
+
+                    postData[this.name] = this.value;
+                } else {
+
+                    postData[this.name] = postData[this.name] + "," + this.value;
+                }
+            } else {
+
+                postData[this.name] = this.value;
+            }
         })
         console.log(postData);
         //将获取到德数据post给服务器

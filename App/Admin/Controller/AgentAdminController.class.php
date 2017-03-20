@@ -336,15 +336,71 @@ GROUP BY c.name,
                 return show_tip(0, '用户名不能为空');
             }
             if (false !== M('admin')->save($data)) {
-                return show_tip(1, '修改成功', null, U('UserAdmin'));
+                $userweb = M('seo_web')->find(array('userid'=>$data['id']));
+                if($userweb){
+                    $platformidold = $userweb['platformid'];
+                    $keywordsql = "select distinct(name) as keyword from zzcms_seo_keyword where platformid in (".$platformidold.") and userid = ".$data['id'];
+                    $keywordAll = M()->query($keywordsql);
+                    $platformidArr = $data['platformid'];
+                    $delKeysql = "delete from zzcms_seo_keyword where platformid not in (".$platformidArr.") and userid = ".$data['id'];
+                    M()->execute($delKeysql);
+                    $arr = explode(",", $platformidArr);
+                    $arrold = explode(",",$platformidold);
+                    $webidArr = M('seo_web')->where(array('userid'=>$data['id']))->select();
+                    $webid = $webidArr[0]['id'];
+                    foreach($arr as $u){
+                        $flag = 1;
+                        foreach($arrold as $v){
+                           if($u == $v){
+                               $flag = 1;
+                               break;
+                           }
+                            $flag = 0;
+                        }
+                        if($flag == 0){
+                            foreach($keywordAll as $keyword) {
+                                $insertdata = array();
+                                $insertdata['name'] = $keyword['keyword'];
+                                $insertdata['webid'] = $webid;
+                                $insertdata['userid'] = $data['id'];
+                                $insertdata['platformid'] = $u;
+                                $insertdata['createtime'] = date('Y-m-d H:i:s', time());
+                                $insertdata['priceone'] = 10;
+                                $insertdata['pricetwo'] = 5;
+                                M('seo_keyword')->data($insertdata)->add();
+                            }
+                            $flag=1;
+                        }
+                    }
+                    $resultsql = "update zzcms_seo_web set platformid='".$platformidArr."' where userid = ".$data['id'];
+                    M()->execute($resultsql);
+
+                    $page =  session('zzcms_useradmin_page');
+                    $pageSize = session('zzcms_useradmin_pagesize');
+                    return show_tip(1, '修改成功', null, U('UserAdmin',array('page'=>$page,'pageSize'=>$pageSize)));
+                }
             } else {
                 return show_tip(0, '修改失败');
             }
         } else {
             $data = I('get.', '');
             $userinfo = M('admin')->find($data['id']);
-
-
+            $platforminfo = M('seo_platform')->select();
+            $userweb = M('seo_web')->find(array('userid'=>$data['id']));
+            if($userweb){
+                $platformid = $userweb['platformid'];
+                $platformidRes = explode(',', $platformid);
+                foreach($platformidRes as $i=>$platvalue){
+                    foreach($platforminfo as $key=>$value){
+                        if($platforminfo[$key]['id'] == $platformidRes[$i]){
+                            $platforminfo[$key]['checked'] = 'checked';
+                            break;
+                        }
+                    }
+                }
+                $this->assign("platformid", $platformidRes);
+            }
+            $this->assign("platform", $platforminfo);
             $this->assign("data", $userinfo);
             $this->assign("type", "修改用户");
             $this->display();
