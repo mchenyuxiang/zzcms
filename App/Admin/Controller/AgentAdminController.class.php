@@ -34,7 +34,8 @@ class AgentAdminController extends CommonController
         session('zzcms_useradmin_page', $page);
         session('zzcms_useradmin_pagesize', $pageSize);
         $offset = ($page - 1) * $pageSize;
-        $userinfo = M('admin')->limit($offset, $pageSize)->select();
+        $userinfo = M('admin')->order('id asc')->limit($offset, $pageSize)->select();
+//        print_r($userinfo);
         $userInfoCount = M('admin')->count();
         $res = new Page($userInfoCount, $pageSize);
         $listallinfo = array();
@@ -383,12 +384,15 @@ GROUP BY c.name,
                 return show_tip(0, '修改失败');
             }
         } else {
-            $data = I('get.', '');
-            $userinfo = M('admin')->find($data['id']);
+//            $data = I('get.', '');
+            $id = I('id', 0, 'intval');
+            $userinfo = M('admin')->find($id);
+//            print_r($userinfo);
             $platforminfo = M('seo_platform')->select();
-            $userweb = M('seo_web')->find(array('userid'=>$data['id']));
+            $userweb = M('seo_web')->where(array('userid'=>$id))->select();
+//            print_r($userweb);
             if($userweb){
-                $platformid = $userweb['platformid'];
+                $platformid = $userweb[0]['platformid'];
                 $platformidRes = explode(',', $platformid);
                 foreach($platformidRes as $i=>$platvalue){
                     foreach($platforminfo as $key=>$value){
