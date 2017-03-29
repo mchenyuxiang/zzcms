@@ -337,29 +337,29 @@ GROUP BY c.name,
                 return show_tip(0, '用户名不能为空');
             }
             if (false !== M('admin')->save($data)) {
-                $userweb = M('seo_web')->find(array('userid'=>$data['id']));
-                if($userweb){
+                $userweb = M('seo_web')->find(array('userid' => $data['id']));
+                if ($userweb) {
                     $platformidold = $userweb['platformid'];
-                    $keywordsql = "select distinct(name) as keyword from zzcms_seo_keyword where platformid in (".$platformidold.") and userid = ".$data['id'];
+                    $keywordsql = "select distinct(name) as keyword from zzcms_seo_keyword where platformid in (" . $platformidold . ") and userid = " . $data['id'];
                     $keywordAll = M()->query($keywordsql);
                     $platformidArr = $data['platformid'];
-                    $delKeysql = "delete from zzcms_seo_keyword where platformid not in (".$platformidArr.") and userid = ".$data['id'];
+                    $delKeysql = "delete from zzcms_seo_keyword where platformid not in (" . $platformidArr . ") and userid = " . $data['id'];
                     M()->execute($delKeysql);
                     $arr = explode(",", $platformidArr);
-                    $arrold = explode(",",$platformidold);
-                    $webidArr = M('seo_web')->where(array('userid'=>$data['id']))->select();
+                    $arrold = explode(",", $platformidold);
+                    $webidArr = M('seo_web')->where(array('userid' => $data['id']))->select();
                     $webid = $webidArr[0]['id'];
-                    foreach($arr as $u){
+                    foreach ($arr as $u) {
                         $flag = 1;
-                        foreach($arrold as $v){
-                           if($u == $v){
-                               $flag = 1;
-                               break;
-                           }
+                        foreach ($arrold as $v) {
+                            if ($u == $v) {
+                                $flag = 1;
+                                break;
+                            }
                             $flag = 0;
                         }
-                        if($flag == 0){
-                            foreach($keywordAll as $keyword) {
+                        if ($flag == 0) {
+                            foreach ($keywordAll as $keyword) {
                                 $insertdata = array();
                                 $insertdata['name'] = $keyword['keyword'];
                                 $insertdata['webid'] = $webid;
@@ -370,15 +370,15 @@ GROUP BY c.name,
                                 $insertdata['pricetwo'] = 5;
                                 M('seo_keyword')->data($insertdata)->add();
                             }
-                            $flag=1;
+                            $flag = 1;
                         }
                     }
-                    $resultsql = "update zzcms_seo_web set platformid='".$platformidArr."' where userid = ".$data['id'];
+                    $resultsql = "update zzcms_seo_web set platformid='" . $platformidArr . "' where userid = " . $data['id'];
                     M()->execute($resultsql);
 
-                    $page =  session('zzcms_useradmin_page');
+                    $page = session('zzcms_useradmin_page');
                     $pageSize = session('zzcms_useradmin_pagesize');
-                    return show_tip(1, '修改成功', null, U('UserAdmin',array('page'=>$page,'pageSize'=>$pageSize)));
+                    return show_tip(1, '修改成功', null, U('UserAdmin', array('page' => $page, 'pageSize' => $pageSize)));
                 }
             } else {
                 return show_tip(0, '修改失败');
@@ -389,14 +389,14 @@ GROUP BY c.name,
             $userinfo = M('admin')->find($id);
 //            print_r($userinfo);
             $platforminfo = M('seo_platform')->select();
-            $userweb = M('seo_web')->where(array('userid'=>$id))->select();
+            $userweb = M('seo_web')->where(array('userid' => $id))->select();
 //            print_r($userweb);
-            if($userweb){
+            if ($userweb) {
                 $platformid = $userweb[0]['platformid'];
                 $platformidRes = explode(',', $platformid);
-                foreach($platformidRes as $i=>$platvalue){
-                    foreach($platforminfo as $key=>$value){
-                        if($platforminfo[$key]['id'] == $platformidRes[$i]){
+                foreach ($platformidRes as $i => $platvalue) {
+                    foreach ($platforminfo as $key => $value) {
+                        if ($platforminfo[$key]['id'] == $platformidRes[$i]) {
                             $platforminfo[$key]['checked'] = 'checked';
                             break;
                         }
@@ -490,7 +490,7 @@ GROUP BY c.name,
             $condition['pricetwo'] = $pricetwo;
             $condition['id'] = $id;
             if (false !== M('seo_keyword')->save($condition)) {
-                 return show_tip(1, '修改成功', null, U('ListInfo', array('userid' => $userid)));
+                return show_tip(1, '修改成功', null, U('ListInfo', array('userid' => $userid)));
             } else {
                 return show_tip(0, '修改失败');
             }
@@ -567,7 +567,7 @@ GROUP BY c.name,
                 $insertdata['platformid'] = $u;
                 $insertdata['createtime'] = date('Y-m-d H:i:s', time());
                 $beforesearch = M('seo_keyword')->where(array('name' => $data['keyword'], 'webid' => $webid
-                , 'userid' => $userid,'platformid'=> $u))->count();
+                , 'userid' => $userid, 'platformid' => $u))->count();
                 if ($beforesearch > 0) {
                     $countkeyword = $countkeyword + 1;
                     continue;
@@ -607,50 +607,63 @@ GROUP BY c.name,
                 }
             }
             if ($countkeyword == count($arr)) {
-                return show_tip(1, '新增成功', $countkeyword, U('AddKeyword',array('userid'=>$userid)));
+                return show_tip(1, '新增成功', $countkeyword, U('AddKeyword', array('userid' => $userid)));
             }
             return show_tip(0, '新增失败', $countkeyword);
 
         } else {
-            $data=I('get.','');
+            $data = I('get.', '');
             $userid = $data['userid'];
-            $websitearray = M('seo_web')->where(array('userid'=>$userid))->select();
+            $websitearray = M('seo_web')->where(array('userid' => $userid))->select();
             $platforminfo = M('seo_platform')->select();
             $this->assign("platform", $platforminfo);
             $this->assign('websiteurl', $websitearray[0]['websiteurl']);
-            $this->assign('webid',$websitearray[0]['id']);
+            $this->assign('webid', $websitearray[0]['id']);
             $this->assign('userid', $userid);
             $this->assign('type', '添加关键词');
             $this->display();
         }
     }
-//    public function seachprice()
-//    {
-//
-//        $webid = $_POST['webid'];
-//        $keyword = $_POST['keyword'];
-////        dump($keyword);
-//
-//        $key = c402da805c1c46f8a00d1c9f477c6a6f;
-//        $url = 'http://api.91cha.com/index?key=' . $key . '&kws=' . urlencode($keyword);
-//        $ch = curl_init();
-//        $this_header = array(
-//            "content-type: application/x-www-form-urlencoded; charset=UTF-8"
-//        );
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, $this_header);
-//        curl_setopt($ch, CURLOPT_URL, $url);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 获取数据返回
-//        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true); // 在启用 CURLOPT_RETURNTRANSFER 时候将获取数据返回
-//        $res = curl_exec($ch);
-//        $resdecode = json_decode($res);
-//
-////        dump($resdecode);
-//        $baiduindex = $resdecode->data[0]->allindex;
-//        $baidumobileindex = $resdecode->data[0]->mobileindex;
-//        $resstaus = $resdecode->state;
-//        if ($resstaus == 1) {
-//            return show_tip(1, '查询成功', $resstaus, U('AddKeyword', array('webid' => $webid, 'keyword' => $keyword, 'baiduindex' => $baiduindex, 'baidumobileindex' => $baidumobileindex)));
-//        }
-//        return show_tip(0, '查询失败', $resstaus);
-//    }
+
+    /**
+     * 用户关键字下载
+     */
+    public function DownloadKeyword()
+    {
+        $data = I('get.','');
+        $userid = $data['userid'];
+        $listinfo = M()
+            ->table('zzcms_seo_keyword as a')
+            ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
+            ->field('a.id AS keywordid,a.platformid,a.name,b.platformname,a.priceone,a.pricetwo')
+            ->where("a.userid=%d", array($userid))->order('name ASC')->select();
+//先设置好表头和名称
+        $filename = "keyword";
+        $headArr = array("序号", "keywordid", "platformid", "name", "platformname","priceone","pricetwo");
+//下面是从表中查询到的一组二维数组数据$data:
+
+//下面这个必须要和$headArr一一对应起来
+        foreach ($listinfo as $k => $v) {
+            $listinfo[$k] = array(
+                $k + 1,//从1开始
+                $v['keywordid'],
+                $v['platformid'],
+                $v['name'],
+                $v['platformname'],
+                $v['priceone'],
+                $v['pricetwo']
+            );
+        }
+
+//最后执行getExcel方法
+        getExcel($filename, $headArr, $listinfo);
+    }
+
+    /**
+     * 上传修改关键字价格
+     */
+    public function UploadKeyword()
+    {
+
+    }
 }
