@@ -297,12 +297,40 @@ GROUP BY c.name,
                     $arrkey = explode("|", $keywordArr);
                     $countkeyword = 0;
                     foreach ($arrkey as $key) {
+                        $priceresult = seachyunprice($key);
                         foreach ($arrplat as $plat) {
                             $insertdata = array();
                             $insertdata['name'] = $key;
                             $insertdata['webid'] = $webid;
                             $insertdata['userid'] = $userid;
                             $insertdata['platformid'] = $plat;
+                            if ($plat == '1') {
+                                $insertdata['priceone'] = $priceresult->result->baidu1;
+                                $insertdata['pricetwo'] = $priceresult->result->baidu2;
+                            } elseif ($plat == '2') {
+                                $insertdata['priceone'] =$priceresult->result->haosou1;
+                                $insertdata['pricetwo'] = $priceresult->result->haosou2;
+
+                            } elseif ($plat == '3') {
+                                $insertdata['priceone'] = $priceresult->result->sogou1;
+                                $insertdata['pricetwo'] = $priceresult->result->sogou2;
+
+                            } elseif ($plat == '4') {
+                                $insertdata['priceone'] = $priceresult->result->sogou1;
+                                $insertdata['pricetwo'] = $priceresult->result->sogou2;
+
+                            } elseif ($plat == '5') {
+                                $insertdata['priceone'] = $priceresult->result->baidumobile1;
+                                $insertdata['pricetwo'] = $priceresult->result->baidumobile2;
+
+                            } elseif ($plat == '6') {
+                                $insertdata['priceone'] = $priceresult->result->shenma1;
+                                $insertdata['pricetwo'] = $priceresult->result->shenma2;
+
+                            } elseif ($plat == '7') {
+                                $insertdata['priceone'] = $priceresult->result->haosou1;
+                                $insertdata['pricetwo'] = $priceresult->result->haosou2;
+                            }
                             $insertdata['createtime'] = date('Y-m-d H:i:s', time());
                             $keywordid = M('seo_keyword')->data($insertdata)->add();
                         }
@@ -326,6 +354,37 @@ GROUP BY c.name,
             $this->assign("type", "添加用户");
             $this->display();
         }
+    }
+
+    /**
+     * 查询云客关键词价格
+     */
+    public function seachyunprice($keyword)
+    {
+
+
+        dump($keyword);
+        $url = 'http://seo.hnqzwfx.com/channel/singlekeywordquery?word=' . urlencode($keyword);
+        $ch = curl_init();
+        $this_header = array(
+            "content-type: application/x-www-form-urlencoded; charset=UTF-8"
+        );
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this_header);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 获取数据返回
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true); // 在启用 CURLOPT_RETURNTRANSFER 时候将获取数据返回
+        $res = curl_exec($ch);
+        $res = stripslashes($res);
+        $arr = explode("<link", $res);
+        $res = $arr[0];
+        $res = trim($res, '"');
+        $resdecode = json_decode($res);
+//        dump($resdecode);
+//        $resstaus = $resdecode->msg;
+//        if ($resstaus == 'succeed!') {
+//            return $resdecode;
+//        }
+        return $resdecode;
     }
 
     public function edit()
@@ -630,7 +689,7 @@ GROUP BY c.name,
      */
     public function DownloadKeyword()
     {
-        $data = I('get.','');
+        $data = I('get.', '');
         $userid = $data['userid'];
         $listinfo = M()
             ->table('zzcms_seo_keyword as a')
@@ -639,7 +698,7 @@ GROUP BY c.name,
             ->where("a.userid=%d", array($userid))->order('name ASC')->select();
 //先设置好表头和名称
         $filename = "keyword";
-        $headArr = array("序号", "keywordid", "platformid", "name", "platformname","priceone","pricetwo");
+        $headArr = array("序号", "keywordid", "platformid", "name", "platformname", "priceone", "pricetwo");
 //下面是从表中查询到的一组二维数组数据$data:
 
 //下面这个必须要和$headArr一一对应起来
