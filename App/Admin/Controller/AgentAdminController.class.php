@@ -308,7 +308,7 @@ GROUP BY c.name,
                                 $insertdata['priceone'] = $priceresult->result->baidu1;
                                 $insertdata['pricetwo'] = $priceresult->result->baidu2;
                             } elseif ($plat == '2') {
-                                $insertdata['priceone'] =$priceresult->result->haosou1;
+                                $insertdata['priceone'] = $priceresult->result->haosou1;
                                 $insertdata['pricetwo'] = $priceresult->result->haosou2;
 
                             } elseif ($plat == '3') {
@@ -353,6 +353,58 @@ GROUP BY c.name,
             $this->assign("platform", $platforminfo);
             $this->assign("type", "添加用户");
             $this->display();
+        }
+    }
+
+    /**
+     * 一键修改关键字价格使得价格与云客网一致
+     */
+    public function QuicUpdatePrice()
+    {
+
+        if ($_POST) {
+
+            $userid = session('zzcms_listinfo_userid_admin');
+            $keywrodArr = M('seo_keyword')->where(array('userid' => $userid))->select();
+            $keywrodCount = M('seo_keyword')->where(array('userid' => $userid))->count();
+            $keycnt = 0;
+            foreach ($keywrodArr as $item) {
+                $updateData = Array();
+                $updateData['id'] = $item['id'];
+                $priceresult = $this->seachyunprice($item['name']);
+
+                if ($item['platformid'] == '1') {
+                    $updateData['priceone'] = $priceresult->result->baidu1;
+                    $updateData['pricetwo'] = $priceresult->result->baidu2;
+                } elseif ($item['platformid'] == '2') {
+                    $updateData['priceone'] = $priceresult->result->haosou1;
+                    $updateData['pricetwo'] = $priceresult->result->haosou2;
+                } elseif ($item['platformid'] == '3') {
+                    $updateData['priceone'] = $priceresult->result->sogou1;
+                    $updateData['pricetwo'] = $priceresult->result->sogou2;
+                } elseif ($item['platformid'] == '4') {
+                    $updateData['priceone'] = $priceresult->result->sogou1;
+                    $updateData['pricetwo'] = $priceresult->result->sogou2;
+                } elseif ($item['platformid'] == '5') {
+                    $updateData['priceone'] = $priceresult->result->baidumobile1;
+                    $updateData['pricetwo'] = $priceresult->result->baidumobile2;
+                } elseif ($item['platformid'] == '6') {
+                    $updateData['priceone'] = $priceresult->result->shenma1;
+                    $updateData['pricetwo'] = $priceresult->result->shenma2;
+                } elseif ($item['platformid'] == '7') {
+                    $updateData['priceone'] = $priceresult->result->haosou1;
+                    $updateData['pricetwo'] = $priceresult->result->haosou2;
+                }
+                if (false != M('seo_keyword')->save($updateData)) {
+                    $keycnt = $keycnt + 1;
+                }
+
+            }
+            if ($keycnt == $keywrodCount) {
+                return show_tip(1, "修改关键字成功", null, U('ListInfo', array('userid' => $userid)));
+            } else {
+                return show_tip(0, "已同步");
+            }
         }
     }
 

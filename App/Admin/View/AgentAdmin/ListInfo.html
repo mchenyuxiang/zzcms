@@ -48,7 +48,8 @@
                             <a href="{:U('UserAdmin',array('p'=>$_SESSION['zzcms_useradmin_page'],'pageSize'=>$_SESSION['zzcms_useradmin_pagesize']))}" class="btn btn-primary ">返回</a>
                             <a href="{:U('AddKeyword',array('userid'=>$userid))}" class="btn btn-danger ">添加关键字</a>
                             <a href="{:U('DownloadKeyword',array('userid'=>$userid))}" class="btn btn-info ">导出</a>
-                            <a href="{:U('seachyunprice',array('keyword'=>'长沙网站第一'))}" class="btn btn-success ">导入</a>
+                            <button class="btn btn-success" type="button" id="button-update">一键修改关键字价格</button>
+                            <!--<a href="{:U('QuicUpdatePrice',array('userid'=>$userid))}" class="btn btn-success "></a>-->
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -122,6 +123,22 @@
         'delete_url': '{:U("KeywordDel")}',
 
     };
+    $("#button-update").click(function () {
+        postData = {};
+        postData['userid'] = '{:SESSION("zzcms_listinfo_userid_admin")}';
+        console.log(postData);
+        //将获取到德数据post给服务器
+        url = '{:U("QuicUpdatePrice")}';
+        $.post(url, postData, function (result) {
+            if (result.status == 1) {
+                //成功
+                return dialog.success(result.message, result.url);
+            } else if (result.status == 0) {
+                //失败
+                return dialog.error(result.message);
+            }
+        }, "JSON");
+    });
 </script>
 </body>
 
