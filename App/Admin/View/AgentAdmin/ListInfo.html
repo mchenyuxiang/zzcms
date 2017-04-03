@@ -18,11 +18,12 @@
     <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
     <link href="__PUBLIC__/css/style.min.css?v=4.1.0" rel="stylesheet">
     <link href="__PUBLIC__/css/admin.css" rel="stylesheet">
-    <link href="__PUBLIC__/css/plugins/treegrid/jquery.treegrid.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/fakeLoader.css" rel="stylesheet" >
 
 </head>
 
 <body class="gray-bg">
+
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
@@ -30,16 +31,7 @@
                 <div class="ibox-title">
                     <h5>{$type}</h5>
                     <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="table_basic.html#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
 
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -124,6 +116,7 @@
 
     };
     $("#button-update").click(function () {
+        dialog.toconfirm("正在同步，请等待！");
         postData = {};
         postData['userid'] = '{:SESSION("zzcms_listinfo_userid_admin")}';
         console.log(postData);
