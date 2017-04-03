@@ -77,120 +77,6 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">价格</label>
-
-                            <div class="col-sm-10">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label class="col-sm-4 control-label">第一页(元/天)</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="col-sm-4 control-label">第二页(元/天)</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">百度</label>
-
-                            <div class="col-sm-10">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="baidu1" name="baidu1" value="{$baiduprice/1}">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="baidu2" name="baidu2" value="{$baiduprice/2}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">360</label>
-
-                            <div class="col-sm-10">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="sou3601" name="sou3601" value="{$sou360 / 1}">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="sou3602" name="sou3602" value="{$sou360 / 2}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">谷歌</label>
-
-                            <div class="col-sm-10">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="google1" name="google1" value="{$baiduprice/1}">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="google2" name="google2" value="{$baiduprice/2}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">搜狗</label>
-
-                            <div class="col-sm-10">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="sougou1" name="sougou1" value="{$sougou / 1}">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="sougou2" name="sougou2" value="{$sougou / 2}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">手机百度</label>
-
-                            <div class="col-sm-10">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="baidumobile1" name="baidumobile1" value="{$baidumobileprice/1}">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="baidumobile2" name="baidumobile2" value="{$baidumobileprice/2}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">神马</label>
-
-                            <div class="col-sm-10">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="shenma1" name="shenma1" value="{$shenma / 1}">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="shenma2" name="shenma2" value="{$shenma / 2}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">必应</label>
-
-                            <div class="col-sm-10">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="biying1" name="biying1" value="{$biying /1}">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text"  class="form-control" id="biying2" name="biying2" value="{$biying / 2}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <!--<input type="hidden" value="{$id}" name="id">-->
                                 <input type="hidden" value="{$userid}" name="userid">
@@ -223,21 +109,11 @@
         var keyword = $('input[name = "keyword"]').val();
         var webid=$("#webid").val();
 
-        if(webid==0){
-            dialog.error('请选择站点');
-            return;
-        }
 
         if(!keyword){
             dialog.error('请填写要查询关键词');
             return;
         }
-        var baidu1 = $('input[name = "baidu1"]').val();
-        var sou3601 = $('input[name = "sou3601"]').val();
-        var sougou1 = $('input[name = "sougou1"]').val();
-        var google1 = $('input[name = "google1"]').val();
-        var shenma1 = $('input[name = "shenma1"]').val();
-        var biying1 = $('input[name = "biying1"]').val();
 
 
         var data = $("#submit-menu").serializeArray();
