@@ -297,7 +297,7 @@ GROUP BY c.name,
                     $arrkey = explode("|", $keywordArr);
                     $countkeyword = 0;
                     foreach ($arrkey as $key) {
-                        $priceresult = seachyunprice($key);
+                        $priceresult = $this->seachyunprice($key);
                         foreach ($arrplat as $plat) {
                             $insertdata = array();
                             $insertdata['name'] = $key;
@@ -363,7 +363,7 @@ GROUP BY c.name,
     {
 
 
-        dump($keyword);
+//        dump($keyword);
         $url = 'http://seo.hnqzwfx.com/channel/singlekeywordquery?word=' . urlencode($keyword);
         $ch = curl_init();
         $this_header = array(
