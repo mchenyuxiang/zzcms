@@ -215,7 +215,7 @@ GROUP BY c.name,
             ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
             ->join('LEFT JOIN zzcms_seo_costdetail as a on a.`keywordid` = c.id')
             ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
-            ->field('a.id,b.platformname,a.rank,c.name,(a.`priceone`+a.`pricetwo`) as priceone,DATE_FORMAT( a.`createtime`, \'%Y-%m-%d\') AS createtime,d.`websiteurl`')
+            ->field('a.userid,a.id,b.platformname,a.rank,c.name,(a.`priceone`+a.`pricetwo`) as priceone,DATE_FORMAT( a.`createtime`, \'%Y-%m-%d\') AS createtime,d.`websiteurl`')
             ->where("a.userid=%d and (a.priceone+a.pricetwo)!=0", array($userid))->order('createtime DESC,b.id ASC')->limit($offset, $pageSize)->select();
         $cateCount = M()
             ->table('zzcms_seo_keyword as c')
@@ -752,15 +752,16 @@ GROUP BY c.name,
             ->where("a.userid=%d", array($userid))->order('name ASC')->select();
 //先设置好表头和名称
         $filename = "keyword";
-        $headArr = array("序号", "keywordid", "platformid", "name", "platformname", "priceone", "pricetwo");
+//        $headArr = array("序号", "keywordid", "platformid", "name", "platformname", "priceone", "pricetwo");
+        $headArr = array("序号",  "关键词", "平台", "首页价格", "第二页价格");
 //下面是从表中查询到的一组二维数组数据$data:
 
 //下面这个必须要和$headArr一一对应起来
         foreach ($listinfo as $k => $v) {
             $listinfo[$k] = array(
                 $k + 1,//从1开始
-                $v['keywordid'],
-                $v['platformid'],
+//                $v['keywordid'],
+//                $v['platformid'],
                 $v['name'],
                 $v['platformname'],
                 $v['priceone'],
@@ -773,10 +774,40 @@ GROUP BY c.name,
     }
 
     /**
-     * 上传修改关键字价格
+     * 下载扣费记录
      */
-    public function UploadKeyword()
+    public function DownloadCostDetail()
     {
+        $data = I('get.', '');
+        $userid = $data['userid'];
+        $listinfo = M()
+            ->table('zzcms_seo_keyword as c')
+            ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
+            ->join('LEFT JOIN zzcms_seo_costdetail as a on a.`keywordid` = c.id')
+            ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
+            ->field('a.userid,a.id,b.platformname,a.rank,c.name,(a.`priceone`+a.`pricetwo`) as priceone,DATE_FORMAT( a.`createtime`, \'%Y-%m-%d\') AS createtime,d.`websiteurl`')
+            ->where("a.userid=%d and (a.priceone+a.pricetwo)!=0", array($userid))->order('createtime DESC,b.id ASC')->select();
+//先设置好表头和名称
+        $filename = "CostDetail";
+//        $headArr = array("序号", "keywordid", "platformid", "name", "platformname", "priceone", "pricetwo");
+        $headArr = array("序号",  "关键词", "搜索引擎", "网站域名", "扣费金额","扣费时间");
+//下面是从表中查询到的一组二维数组数据$data:
 
+//下面这个必须要和$headArr一一对应起来
+        foreach ($listinfo as $k => $v) {
+            $listinfo[$k] = array(
+                $k + 1,//从1开始
+//                $v['keywordid'],
+//                $v['platformid'],
+                $v['name'],
+                $v['platformname'],
+                $v['websiteurl'],
+                $v['priceone'],
+                $v['createtime']
+            );
+        }
+
+//最后执行getExcel方法
+        getExcel($filename, $headArr, $listinfo);
     }
 }
