@@ -448,7 +448,8 @@ GROUP BY c.name,
                 return show_tip(0, '用户名不能为空');
             }
             if (false !== M('admin')->save($data)) {
-                $userweb = M('seo_web')->find(array('userid' => $data['id']));
+                $userid = $data['id'];
+                $userweb = M('seo_web')->where(array('userid'=>$userid))->find();
                 if ($userweb) {
                     $platformidold = $userweb['platformid'];
                     $keywordsql = "select distinct(name) as keyword from zzcms_seo_keyword where platformid in (" . $platformidold . ") and userid = " . $data['id'];
