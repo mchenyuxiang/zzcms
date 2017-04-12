@@ -211,17 +211,17 @@ GROUP BY c.name,
             $userid = $data['userid'];
         }
         $listinfo = M()
-            ->table('zzcms_seo_keyword as c')
-            ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
-            ->join('LEFT JOIN zzcms_seo_costdetail as a on a.`keywordid` = c.id')
-            ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
+            ->table('zzcms_seo_costdetail as a')
+            ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
+            ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
+            ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
             ->field('a.userid,a.id,b.platformname,a.rank,a.keywordname as name,(a.`priceone`+a.`pricetwo`) as priceone,DATE_FORMAT( a.`createtime`, \'%Y-%m-%d\') AS createtime,d.`websiteurl`')
             ->where("a.userid=%d and (a.priceone+a.pricetwo)!=0", array($userid))->order('createtime DESC,b.id ASC')->limit($offset, $pageSize)->select();
         $cateCount = M()
-            ->table('zzcms_seo_keyword as c')
-            ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
-            ->join('LEFT JOIN zzcms_seo_costdetail as a on a.`keywordid` = c.id')
-            ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
+            ->table('zzcms_seo_costdetail as a')
+            ->join('LEFT JOIN zzcms_seo_platform as b on a.platformid = b.id')
+            ->join('LEFT JOIN zzcms_seo_keyword as c on a.`keywordid` = c.id')
+            ->join('LEFT JOIN zzcms_seo_web as d on a.webid = d.id')
             ->field('a.id,b.platformname,a.rank,c.name,(a.`priceone`+a.`pricetwo`) as priceone,a.`createtime`,d.`websiteurl`')
             ->where("a.userid=%d and (a.priceone+a.pricetwo)!=0", array($userid))->count();
 
