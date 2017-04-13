@@ -110,26 +110,34 @@ WHERE f.`id`=" . $v['id'];
      */
     public function ListInfo()
     {
-        $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
-        $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 20;
 
-        $offset = ($page - 1) * $pageSize;
-        $userid = session('zzcms_adm_userid');
-        $data = I('get.', '');
-        if ($data['userid'] != null) {
-            $userid = $data['userid'];
-            session('zzcms_listinfo_userid_admin', $data['userid']);
-            session('zzcms_userlistinfo_page', $page);
-            session('zzcms_userlistinfo_pagesize', $pageSize);
-        }
-        $listinfo = M()
-            ->table('zzcms_seo_keyword as c')
-            ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
-            ->join('LEFT JOIN (SELECT * FROM zzcms_seo_costdetail ORDER BY createtime DESC) AS a on a.keywordid = c.id')
-            ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
-            ->field('c.userid,c.id as keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' when a.rank = 100 then \'50名之后\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`+a.pricetwo) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone+a.pricetwo) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
-            ->where(array('c.userid' => $userid))->order('c.name DESC,a.rank asc')->group('c.name,platformname')->limit($offset, $pageSize)->select();
-        $countsql = "SELECT COUNT(*) as count FROM (SELECT 
+            $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
+            $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 20;
+
+            $offset = ($page - 1) * $pageSize;
+            $userid = session('zzcms_adm_userid');
+            $data = I('get.', '');
+            if ($data['userid'] != null) {
+                $userid = $data['userid'];
+                session('zzcms_listinfo_userid_admin', $data['userid']);
+                session('zzcms_userlistinfo_page', $page);
+                session('zzcms_userlistinfo_pagesize', $pageSize);
+            }
+            if($data['platformid'] == null) {
+                $condition = array('c.userid' => $userid);
+                $cntsql = " c.userid = '" . $userid . "' ";
+            }else{
+                $condition = array('c.userid' => $userid,'c.platformid' => $data['platformid']);
+                $cntsql = " c.userid = '" . $userid . "' and c.platformid = '".$data['platformid']."' ";
+            }
+            $listinfo = M()
+                ->table('zzcms_seo_keyword as c')
+                ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
+                ->join('LEFT JOIN (SELECT * FROM zzcms_seo_costdetail ORDER BY createtime DESC) AS a on a.keywordid = c.id')
+                ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
+                ->field('c.userid,c.id as keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' when a.rank = 100 then \'50名之后\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`+a.pricetwo) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone+a.pricetwo) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
+                ->where($condition)->order('c.name DESC,a.rank asc')->group('c.name,platformname')->limit($offset, $pageSize)->select();
+            $countsql = "SELECT COUNT(*) as count FROM (SELECT 
  COUNT(*)
 FROM
   zzcms_seo_keyword AS c 
@@ -139,20 +147,20 @@ FROM
     ON a.`keywordid` = c.id 
   LEFT JOIN zzcms_seo_web AS d 
     ON c.webid = d.id 
-WHERE c.userid = '" . $userid . "' 
+WHERE " . $cntsql . " 
 GROUP BY c.name,
   platformname ) t";
 
-        $checkCount = M()->query($countsql);
+            $checkCount = M()->query($countsql);
 
-        $cateCount = $checkCount[0]['count'];
-        $res = new Page($cateCount, $pageSize);
-        $pageRes = $res->show();
-        $this->assign('page', $pageRes);
-        $this->assign('userid', $userid);
-        $this->assign('listinfo', $listinfo);
-        $this->assign('type', '管理关键词');
-        $this->display();
+            $cateCount = $checkCount[0]['count'];
+            $res = new Page($cateCount, $pageSize);
+            $pageRes = $res->show();
+            $this->assign('page', $pageRes);
+            $this->assign('userid', $userid);
+            $this->assign('listinfo', $listinfo);
+            $this->assign('type', '管理关键词');
+            $this->display();
     }
 
     /**
