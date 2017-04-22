@@ -83,22 +83,10 @@ WHERE f.`id`=" . $v['id'];
 //            $updatetime = strtotime($balanceArr[0]['updatetime']);
             $timetoday = date("Y-m-d", time());
             $data['updatetime'] = $timetoday;
-            $timetodaystr = strtotime($timetoday);
-//        print_r($timetodaystr."--".$updatetime);
-//            if ($updatetime < ($timetodaystr - 7200)) {
-//                $recharge_sql = "SELECT SUM(priceone+pricetwo) AS cost FROM zzcms_seo_costdetail WHERE userid = " . $v['id'] . " and UNIX_TIMESTAMP(createtime) > " . strtotime($updatetime)."+86400";
-//                $rechargeArr = M()->query($recharge_sql);
-//                $recharge = $rechargeArr[0]['cost'];
-//                $balance = $balanceT - $recharge;
-//                $data['balance'] = $balance;
-//                M('admin')->save($data);
-//                $balanceT = $balance;
-//            }
             $listallinfo[$key] = $listinfo;
             $listallinfo[$key]['balance'] = $balanceT;
         }
         $this->assign("listinfo", $listallinfo);
-//        $this->assign("balance", $balance);
         $pageRes = $res->show();
         $this->assign('page', $pageRes);
         $this->assign("type", "用户管理");
@@ -111,33 +99,33 @@ WHERE f.`id`=" . $v['id'];
     public function ListInfo()
     {
 
-            $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
-            $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 20;
+        $page = $_REQUEST['p'] ? $_REQUEST['p'] : 1;
+        $pageSize = $_REQUEST['pageSize'] ? $_REQUEST['pageSize'] : 20;
 
-            $offset = ($page - 1) * $pageSize;
-            $userid = session('zzcms_adm_userid');
-            $data = I('get.', '');
-            if ($data['userid'] != null) {
-                $userid = $data['userid'];
-                session('zzcms_listinfo_userid_admin', $data['userid']);
-                session('zzcms_userlistinfo_page', $page);
-                session('zzcms_userlistinfo_pagesize', $pageSize);
-            }
-            if($data['platformid'] == null) {
-                $condition = array('c.userid' => $userid);
-                $cntsql = " c.userid = '" . $userid . "' ";
-            }else{
-                $condition = array('c.userid' => $userid,'c.platformid' => $data['platformid']);
-                $cntsql = " c.userid = '" . $userid . "' and c.platformid = '".$data['platformid']."' ";
-            }
-            $listinfo = M()
-                ->table('zzcms_seo_keyword as c')
-                ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
-                ->join('LEFT JOIN (SELECT * FROM zzcms_seo_costdetail ORDER BY createtime DESC) AS a on a.keywordid = c.id')
-                ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
-                ->field('c.userid,c.id as keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' when a.rank = 100 then \'50名之后\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`+a.pricetwo) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone+a.pricetwo) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
-                ->where($condition)->order('c.name DESC,a.rank asc')->group('c.name,platformname')->limit($offset, $pageSize)->select();
-            $countsql = "SELECT COUNT(*) as count FROM (SELECT 
+        $offset = ($page - 1) * $pageSize;
+        $userid = session('zzcms_adm_userid');
+        $data = I('get.', '');
+        if ($data['userid'] != null) {
+            $userid = $data['userid'];
+            session('zzcms_listinfo_userid_admin', $data['userid']);
+            session('zzcms_userlistinfo_page', $page);
+            session('zzcms_userlistinfo_pagesize', $pageSize);
+        }
+        if ($data['platformid'] == null) {
+            $condition = array('c.userid' => $userid);
+            $cntsql = " c.userid = '" . $userid . "' ";
+        } else {
+            $condition = array('c.userid' => $userid, 'c.platformid' => $data['platformid']);
+            $cntsql = " c.userid = '" . $userid . "' and c.platformid = '" . $data['platformid'] . "' ";
+        }
+        $listinfo = M()
+            ->table('zzcms_seo_keyword as c')
+            ->join('LEFT JOIN zzcms_seo_platform as b on c.platformid = b.id')
+            ->join('LEFT JOIN (SELECT * FROM zzcms_seo_costdetail ORDER BY createtime DESC) AS a on a.keywordid = c.id')
+            ->join('LEFT JOIN zzcms_seo_web as d on c.webid = d.id')
+            ->field('c.userid,c.id as keywordid,b.platformname,CASE WHEN a.rank  IS NULL  THEN \'暂无排名信息\' when a.rank = 100 then \'50名之后\' ELSE a.rank END AS rank,c.name,CASE WHEN SUM(a.`priceone`+a.pricetwo) IS NULL THEN \'暂无更新\' ELSE SUM(a.priceone+a.pricetwo) END AS totalprice,d.`websiteurl` ,c.priceone,c.pricetwo,d.websitename')
+            ->where($condition)->order('c.name DESC,a.rank asc')->group('c.name,platformname')->limit($offset, $pageSize)->select();
+        $countsql = "SELECT COUNT(*) as count FROM (SELECT 
  COUNT(*)
 FROM
   zzcms_seo_keyword AS c 
@@ -151,16 +139,16 @@ WHERE " . $cntsql . "
 GROUP BY c.name,
   platformname ) t";
 
-            $checkCount = M()->query($countsql);
+        $checkCount = M()->query($countsql);
 
-            $cateCount = $checkCount[0]['count'];
-            $res = new Page($cateCount, $pageSize);
-            $pageRes = $res->show();
-            $this->assign('page', $pageRes);
-            $this->assign('userid', $userid);
-            $this->assign('listinfo', $listinfo);
-            $this->assign('type', '管理关键词');
-            $this->display();
+        $cateCount = $checkCount[0]['count'];
+        $res = new Page($cateCount, $pageSize);
+        $pageRes = $res->show();
+        $this->assign('page', $pageRes);
+        $this->assign('userid', $userid);
+        $this->assign('listinfo', $listinfo);
+        $this->assign('type', '管理关键词');
+        $this->display();
     }
 
     /**
@@ -457,7 +445,7 @@ GROUP BY c.name,
             }
             if (false !== M('admin')->save($data)) {
                 $userid = $data['id'];
-                $userweb = M('seo_web')->where(array('userid'=>$userid))->find();
+                $userweb = M('seo_web')->where(array('userid' => $userid))->find();
                 if ($userweb) {
                     $platformidold = $userweb['platformid'];
                     $keywordsql = "select distinct(name) as keyword from zzcms_seo_keyword where platformid in (" . $platformidold . ") and userid = " . $data['id'];
@@ -762,7 +750,7 @@ GROUP BY c.name,
 //先设置好表头和名称
         $filename = "keyword";
 //        $headArr = array("序号", "keywordid", "platformid", "name", "platformname", "priceone", "pricetwo");
-        $headArr = array("序号",  "关键词", "平台", "首页价格", "第二页价格");
+        $headArr = array("序号", "关键词", "平台", "首页价格", "第二页价格");
 //下面是从表中查询到的一组二维数组数据$data:
 
 //下面这个必须要和$headArr一一对应起来
@@ -799,7 +787,7 @@ GROUP BY c.name,
 //先设置好表头和名称
         $filename = "CostDetail";
 //        $headArr = array("序号", "keywordid", "platformid", "name", "platformname", "priceone", "pricetwo");
-        $headArr = array("序号",  "关键词", "搜索引擎", "网站域名", "扣费金额","扣费时间");
+        $headArr = array("序号", "关键词", "搜索引擎", "网站域名", "扣费金额", "扣费时间");
 //下面是从表中查询到的一组二维数组数据$data:
 
 //下面这个必须要和$headArr一一对应起来
@@ -818,5 +806,77 @@ GROUP BY c.name,
 
 //最后执行getExcel方法
         getExcel($filename, $headArr, $listinfo);
+    }
+
+
+    public function SearchByName()
+    {
+
+        if (IS_POST) {
+            $searchName = $_POST['searchname'];
+            $searchSql = "select count(*) as count from zzcms_admin a left join zzcms_seo_web b on a.id=b.userid where (a.companyname like '%".$searchName."%' or b.websitename like '%".$searchName."%') order by a.id asc";
+            $userinfo = M()->query($searchSql);
+            if($userinfo[0]['count'] == 0){
+                return show_tip(0, '没有搜索到此用户');
+            }else{
+                return show_tip(1, '搜索成功', null, U('SearchByName', array('searchName' => $searchName, 'type' => '搜索结果')));
+            }
+
+        } else {
+            $searchName = $_GET['searchName'];
+            $searchSql = "select a.id,a.username,a.companyname,a.balance,a.recharge,a.updatetime from zzcms_admin a left join zzcms_seo_web b on a.id=b.userid where (a.companyname like '%".$searchName."%' or b.websitename like '%".$searchName."%') order by a.id asc";
+            $userinfo = M()->query($searchSql);
+//            $userinfo = M('admin')->where(array('companyname'=>array('like',"'%".$searchName."%'")))->order('id asc')->select();
+//        print_r($userinfo);
+            $listallinfo = array();
+            foreach ($userinfo as $key => $v) {
+                $sql = "SELECT 
+  a.id,
+  f.id as userid,
+  f.recharge,
+  f.username,
+  websitename,
+  websiteurl,
+  platformname,
+  DATE_FORMAT(a.createtime,'%Y-%m-%d') as createtime,
+  COUNT(DISTINCT(e.name)) AS keywordnumber
+FROM
+  zzcms_seo_web AS a 
+  JOIN 
+    (SELECT 
+      GROUP_CONCAT(platformname) AS platformname 
+    FROM
+      zzcms_seo_platform 
+    WHERE FIND_IN_SET(
+        id,
+        (SELECT 
+          c.platformid 
+        FROM
+          zzcms_seo_web c , zzcms_seo_web d
+          WHERE
+          c.id=d.id and c.userid=" . $v['id'] . ")
+      )) AS b 
+  LEFT JOIN
+  zzcms_seo_keyword e
+  ON a.id= e.webid
+  LEFT JOIN
+  zzcms_admin f
+  on a.userid = f.id
+WHERE f.`id`=" . $v['id'];
+                $listinfo = M()->query($sql);
+                $b_sql = "SELECT balance,updatetime FROM zzcms_admin WHERE id = " . $v['id'];
+                $balanceArr = M()->query($b_sql);
+                $balanceT = $balanceArr[0]['balance'];
+                $data['id'] = $v['id'];
+//            $updatetime = strtotime($balanceArr[0]['updatetime']);
+                $timetoday = date("Y-m-d", time());
+                $data['updatetime'] = $timetoday;
+                $listallinfo[$key] = $listinfo;
+                $listallinfo[$key]['balance'] = $balanceT;
+            }
+        $this->assign("listinfo", $listallinfo);
+        $this->assign("type", "搜索结果");
+        $this->display();
+        }
     }
 }
