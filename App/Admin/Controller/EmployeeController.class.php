@@ -110,10 +110,23 @@ class EmployeeController extends CommonController
             if($_POST['officeId'] == 0){
                 return show_tip(0,'请选择职位');
             }
+            if($_POST['username'] != null){
+                $userCount = M('admin')->where(array('username' => $_POST['username']))->count();
+                if ($userCount > 0) {
+                    return show_tip(0, '用户名已经存在!');
+                }
+                $data['username'] = $_POST['username'];
+                $data['password'] = getMd5Password($_POST['password']);
+                $userid = M('admin')->data($data)->add();
+                if($userid){
+                    $postdata = I('post.','');
+                    $postdata['userId'] = $userid;
 
-            $menuId = M("employee")->data($_POST)->add();
-            if ($menuId) {
-                return show_tip(1, '新增成功', $menuId, U('employeeList'));
+                    $menuId = M("employee")->data($postdata)->add();
+                    if ($menuId) {
+                        return show_tip(1, '新增成功', $menuId, U('employeeList'));
+                    }
+                }
             }
             return show_tip(0, '新增失败', $menuId);
 
