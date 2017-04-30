@@ -74,6 +74,7 @@ where '".$data['checkDay']."' between startDay and endDay
             $projectNumber = $projectNumRes[0]['cnt'];
             $data['projectNumber'] = $projectNumber;
 
+            $data['adminId'] = session('zzcms_adm_userid');
             $data['createtime']=date('y-m-d h:i:s',time());
             $deductId = M("deduct")->data($data)->add();
             if($deductId){
