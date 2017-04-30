@@ -167,6 +167,93 @@ class ScoreController extends CommonController
             return show_tip(0, '修改失败');
         }
     }
+
+    public function subTime(){
+        $cate = M()
+            ->table('zzcms_score_subtime as a')
+            ->join('LEFT JOIN zzcms_score as b on a.scoreid = b.id')
+            ->field('a.id,a.scoreid,a.submittime,b.name')->select();
+        $this->assign('cate',$cate);
+        $this->assign('type','报表提交时间');
+        $this->show();
+    }
+
+
+    public function addTime(){
+        if($_POST){
+            if($_POST['scoreid'] == 0){
+                return show_tip(0,'请选择报表后再提交');
+            }
+            if (!isset($_POST['submittime']) || !$_POST['submittime']) {
+                return show_tip(0, '时间不能为空');
+            }
+
+            $submitId = M("score_subtime")->data($_POST)->add();
+            if ($submitId) {
+                return show_tip(1, '新增成功', $submitId, U('subTime'));
+            }
+            return show_tip(0, '新增失败', $submitId);
+
+        }else{
+            $scoreName = M('score')->where(array('pid'=>0))->select();
+            $this->assign('cate', $scoreName);
+            $time = Array();
+            for ($a = 8; $a <= 24; $a++) {
+                $time[$a]['time'] = $a . ':00';
+            }
+            $this->assign('time', $time);
+            $this->assign("type", "增加提交时间");
+            $this->display();
+
+        }
+    }
+
+
+    public function delTime(){
+        $data = I('post.','');
+        $id = $data['id'];
+        if(M('score_subtime')->delete($id)){
+            return show_tip(1,'删除成功',null,U('subTime'));
+        }else{
+            return show_tip(0,'删除失败');
+        }
+    }
+
+    public function editTime(){
+        if($_POST){
+            $data = I('post.','');
+            if($_POST['scoreid'] == 0){
+                return show_tip(0,'请选择报表后再提交');
+            }
+            if (!isset($_POST['submittime']) || !$_POST['submittime']) {
+                return show_tip(0, '时间不能为空');
+            }
+
+            if(false !== M('score_subtime') -> save($_POST)){
+
+                return show_tip(1, '修改成功', null , U('subTime'));
+            }
+            return show_tip(0, '修改失败', null);
+
+        }else{
+            $id = I('id', 0, 'intval');
+            $scoreName = M('score')->where(array('pid'=>0))->select();
+            $this->assign('cate', $scoreName);
+            $time = Array();
+            for ($a = 8; $a <= 24; $a++) {
+                $time[$a]['time'] = $a . ':00';
+            }
+            $data = M('score_subtime')->find($id);
+            if (!$data) {
+                $this->error("记录不存在");
+            }
+            $this->assign('data',$data);
+            $this->assign('time', $time);
+            $this->assign("type", "修改提交时间");
+            $this->display();
+
+        }
+    }
 }
 
 ?>
