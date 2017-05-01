@@ -170,6 +170,66 @@ where a.finalScore between b.startscore
             $this->display();
         }
     }
+
+    public function ShopDetail(){
+        $data = I('get.','');
+
+        $userid = session('zzcms_adm_userid');
+
+        $departmentName = M('department')->where(array('isshop'=>'1'))->select();
+        $departmentId = $data['departmentId'];
+        $checkStartDay = $data['checkStartDay'];
+        $checkEndDay = $data['checkEndDay'];
+        if(is_null($checkStartDay) && is_null($data['departmentId'])){
+            $checkStartDay = date('Y-m-d');
+            $checkEndDay = date('Y-m-d');
+            $employeeDemartId = M('employee')->where(array('userId'=>$userid))->select();
+            $departmentId = $employeeDemartId[0]['departmentid'];
+        }
+        $dayDiff1 = diffBetweenTwoDays($checkStartDay,$checkEndDay);
+        $dayDiff = $dayDiff1 + 1;
+        $date = Array();
+        for($i=0;$i<$dayDiff;$i++){
+            $date[$i] = date('m/d',strtotime($checkStartDay) + $i * 86400);
+        }
+
+        $startTime = date("Y-m-d");
+
+        $saveFood=M('score')->where(array('pid'=>'28'))->order(array('id'=>'desc'))->select();
+        $saveFoodCnt = M('score')->where(array('pid'=>'28'))->count();
+        for($i=0;$i<$saveFoodCnt;$i++){
+            for($j=0;$j<$dayDiff;$j++){
+                $scoreInfo[$i][$j] = '-';
+            }
+            $saveFood[$i]['info'] = $scoreInfo[$i];
+        }
+
+        $scoreSql = "SELECT a.id,a.checkDay,a.checkTime,a.checkProject,a.thumb,b.`departmentId`,c.`id` AS scoreid
+,c.`name`,sum(c.`score`) as score FROM zzcms_deduct a 
+LEFT JOIN zzcms_employee b ON a.`adminId`=b.id 
+LEFT JOIN zzcms_score c ON a.`checkProject`=c.`id` 
+where c.pid != 0 and b.departmentId=".$departmentId." and a.checkDay >='".$checkStartDay."' and a.checkDay <='".$checkEndDay."' group by a.checkDay,a.checkTime,a.checkProject";
+
+        $scoreRes = M()->query($scoreSql);
+
+        foreach ($saveFood as $key => $v){
+            foreach($scoreRes as $k => $va){
+                $day = diffBetweenTwoDays($scoreRes[$k]['checkday'],$checkStartDay);
+                if($scoreRes[$k]['checkday'] == $checkEndDay){
+                    $day = $day + 1;
+                }
+                if($saveFood[$key]['id'] == $scoreRes[$k]['scoreid']){
+                    $saveFood[$key]['info'][$day] = $scoreRes[$k]['score'];
+                }
+            }
+        }
+
+        $this->assign('startTime',$startTime);
+        $this->assign('date',$date);
+        $this->assign('departmentName',$departmentName);
+        $this->assign('cate',$saveFood);
+        $this->display();
+    }
 }
 
 ?>
