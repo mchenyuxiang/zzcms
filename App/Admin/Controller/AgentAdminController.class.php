@@ -301,31 +301,31 @@ GROUP BY c.name,
                             $insertdata['userid'] = $userid;
                             $insertdata['platformid'] = $plat;
                             if ($plat == '1') {
-                                $insertdata['priceone'] = $priceresult->baidu1;
-                                $insertdata['pricetwo'] = $priceresult->baidu2;
+                                $insertdata['priceone'] = $priceresult['baidu1'];
+                                $insertdata['pricetwo'] = $priceresult['baidu2'];
                             } elseif ($plat == '2') {
-                                $insertdata['priceone'] = $priceresult->haosou1;
-                                $insertdata['pricetwo'] = $priceresult->haosou2;
+                                $insertdata['priceone'] = $priceresult['haosou1'];
+                                $insertdata['pricetwo'] = $priceresult['haosou2'];
 
                             } elseif ($plat == '3') {
-                                $insertdata['priceone'] = $priceresult->sogou1;
-                                $insertdata['pricetwo'] = $priceresult->sogou2;
+                                $insertdata['priceone'] = $priceresult['sogou1'];
+                                $insertdata['pricetwo'] = $priceresult['sogou2'];
 
                             } elseif ($plat == '4') {
-                                $insertdata['priceone'] = $priceresult->sogou1;
-                                $insertdata['pricetwo'] = $priceresult->sogou2;
+                                $insertdata['priceone'] = $priceresult['sogou1'];
+                                $insertdata['pricetwo'] = $priceresult['sogou2'];
 
                             } elseif ($plat == '5') {
-                                $insertdata['priceone'] = $priceresult->baidumobile1;
-                                $insertdata['pricetwo'] = $priceresult->baidumobile2;
+                                $insertdata['priceone'] = $priceresult['baidumobile1'];
+                                $insertdata['pricetwo'] = $priceresult['baidumobile2'];
 
                             } elseif ($plat == '6') {
-                                $insertdata['priceone'] = $priceresult->shenma1;
-                                $insertdata['pricetwo'] = $priceresult->shenma2;
+                                $insertdata['priceone'] = $priceresult['shenma1'];
+                                $insertdata['pricetwo'] = $priceresult['shenma2'];
 
                             } elseif ($plat == '7') {
-                                $insertdata['priceone'] = $priceresult->haosou1;
-                                $insertdata['pricetwo'] = $priceresult->haosou2;
+                                $insertdata['priceone'] = $priceresult['haosou1'];
+                                $insertdata['pricetwo'] = $priceresult['haosou2'];
                             }
                             $insertdata['createtime'] = date('Y-m-d H:i:s', time());
                             $keywordid = M('seo_keyword')->data($insertdata)->add();
@@ -370,26 +370,26 @@ GROUP BY c.name,
                 $priceresult = $this->seachzhanprice($item['name']);
 
                 if ($item['platformid'] == '1') {
-                    $updateData['priceone'] = $priceresult->result->baidu1;
-                    $updateData['pricetwo'] = $priceresult->result->baidu2;
+                    $updateData['priceone'] = $priceresult['baidu1'];
+                    $updateData['pricetwo'] = $priceresult['baidu2'];
                 } elseif ($item['platformid'] == '2') {
-                    $updateData['priceone'] = $priceresult->result->haosou1;
-                    $updateData['pricetwo'] = $priceresult->result->haosou2;
+                    $updateData['priceone'] = $priceresult['haosou1'];
+                    $updateData['pricetwo'] = $priceresult['haosou2'];
                 } elseif ($item['platformid'] == '3') {
-                    $updateData['priceone'] = $priceresult->result->sogou1;
-                    $updateData['pricetwo'] = $priceresult->result->sogou2;
+                    $updateData['priceone'] = $priceresult['sogou1'];
+                    $updateData['pricetwo'] = $priceresult['sogou2'];
                 } elseif ($item['platformid'] == '4') {
-                    $updateData['priceone'] = $priceresult->result->sogou1;
-                    $updateData['pricetwo'] = $priceresult->result->sogou2;
+                    $updateData['priceone'] = $priceresult['sogou1'];
+                    $updateData['pricetwo'] = $priceresult['sogou2'];
                 } elseif ($item['platformid'] == '5') {
-                    $updateData['priceone'] = $priceresult->result->baidumobile1;
-                    $updateData['pricetwo'] = $priceresult->result->baidumobile2;
+                    $updateData['priceone'] = $priceresult['baidumobile1'];
+                    $updateData['pricetwo'] = $priceresult['baidumobile2'];
                 } elseif ($item['platformid'] == '6') {
-                    $updateData['priceone'] = $priceresult->result->shenma1;
-                    $updateData['pricetwo'] = $priceresult->result->shenma2;
+                    $updateData['priceone'] = $priceresult['shenma1'];
+                    $updateData['pricetwo'] = $priceresult['shenma2'];
                 } elseif ($item['platformid'] == '7') {
-                    $updateData['priceone'] = $priceresult->result->haosou1;
-                    $updateData['pricetwo'] = $priceresult->result->haosou2;
+                    $updateData['priceone'] = $priceresult['haosou1'];
+                    $updateData['pricetwo'] = $priceresult['haosou2'];
                 }
                 if (false != M('seo_keyword')->save($updateData)) {
                     $keycnt = $keycnt + 1;
@@ -461,7 +461,17 @@ GROUP BY c.name,
 //        $arr = explode("<link", $res);
 //        $res = $arr[0];
 //        $res = trim($res, '"');
-        $resdecode = json_decode($userReg);
+        $resdecode = json_decode($userReg,True);
+        $resdecode['baidu1'] = (float)$resdecode['baidu1']*1.5;
+        $resdecode['baidu2'] = (float)$resdecode['baidu2']*1.5;
+        $resdecode['haosou1'] =  (float)$resdecode['haosou1']*1.5;
+        $resdecode['haosou2'] = (float)$resdecode['haosou2']*1.5;
+        $resdecode['sogou1'] = (float)$resdecode['sogou1']*1.5;
+        $resdecode['sogou2'] = (float)$resdecode['sogou2']*1.5;
+        $resdecode['baidumobile1'] = (float)$resdecode['baidumobile1']*1.5;
+        $resdecode['baidumobile2'] = (float)$resdecode['baidumobile2']*1.5;
+        $resdecode['shenma1'] = (float)$resdecode['shenma1']*1.5;
+        $resdecode['shenma2'] = (float)$resdecode['shenma2']*1.5;
 //        dump($resdecode);
 //        $resstaus = $resdecode->msg;
 //        if ($resstaus == 'succeed!') {
@@ -702,7 +712,7 @@ GROUP BY c.name,
 //            if($keywordold != $data['keyword']){
 //                return show_tip(0, '添加关键字与查询关键字不同，不能添加', $keywordold);
 //            }
-            $priceresult = $this->seachyunprice($data['keyword']);
+            $priceresult = $this->seachzhanprice($data['keyword']);
             foreach ($arr as $u) {
                 $insertdata = array();
                 $insertdata['name'] = $data['keyword'];
@@ -717,31 +727,31 @@ GROUP BY c.name,
                     continue;
                 }
                 if ($u == '1') {
-                    $insertdata['priceone'] = $priceresult->result->baidu1;
-                    $insertdata['pricetwo'] = $priceresult->result->baidu2;
+                    $insertdata['priceone'] = $priceresult['baidu1'];
+                    $insertdata['pricetwo'] = $priceresult['baidu2'];
                 } elseif ($u == '2') {
-                    $insertdata['priceone'] = $priceresult->result->haosou1;
-                    $insertdata['pricetwo'] = $priceresult->result->haosou2;
+                    $insertdata['priceone'] = $priceresult['haosou1'];
+                    $insertdata['pricetwo'] = $priceresult['haosou2'];
 
                 } elseif ($u == '3') {
-                    $insertdata['priceone'] = $priceresult->result->sogou1;
-                    $insertdata['pricetwo'] = $priceresult->result->sogou2;
+                    $insertdata['priceone'] = $priceresult['sogou1'];
+                    $insertdata['pricetwo'] = $priceresult['sogou2'];
 
                 } elseif ($u == '4') {
-                    $insertdata['priceone'] = $priceresult->result->sogou1;
-                    $insertdata['pricetwo'] = $priceresult->result->sogou2;
+                    $insertdata['priceone'] = $priceresult['sogou1'];
+                    $insertdata['pricetwo'] = $priceresult['sogou2'];
 
                 } elseif ($u == '5') {
-                    $insertdata['priceone'] = $priceresult->result->baidumobile1;
-                    $insertdata['pricetwo'] = $priceresult->result->baidumobile2;
+                    $insertdata['priceone'] = $priceresult['baidumobile1'];
+                    $insertdata['pricetwo'] = $priceresult['baidumobile2'];
 
                 } elseif ($u == '6') {
-                    $insertdata['priceone'] = $priceresult->result->shenma1;
-                    $insertdata['pricetwo'] = $priceresult->result->shenma2;
+                    $insertdata['priceone'] = $priceresult['shenma1'];
+                    $insertdata['pricetwo'] = $priceresult['shenma2'];
 
                 } elseif ($u == '7') {
-                    $insertdata['priceone'] = $priceresult->result->haosou1;
-                    $insertdata['pricetwo'] = $priceresult->result->haosou2;
+                    $insertdata['priceone'] = $priceresult['haosou1'];
+                    $insertdata['pricetwo'] = $priceresult['haosou2'];
                 }
 
                 $keywordid = M('seo_keyword')->data($insertdata)->add();

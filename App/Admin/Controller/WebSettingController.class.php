@@ -52,11 +52,11 @@ class WebSettingController extends Controller {
             foreach ($arr as $key) {
                 $priceresult = $this->seachzhanprice($key);
                 $listinfo[$cnt]['keyword'] = $key;
-                $listinfo[$cnt]['baidu1'] = $priceresult->baidu1;
-                $listinfo[$cnt]['baidumobile1'] = $priceresult->baidumobile1;
-                $listinfo[$cnt]['sogou1'] = $priceresult->sogou1;
-                $listinfo[$cnt]['haosou1'] = $priceresult->haosou1;
-                $listinfo[$cnt]['shenma1'] = $priceresult->shenma1;
+                $listinfo[$cnt]['baidu1'] = $priceresult['baidu1'];
+                $listinfo[$cnt]['baidumobile1'] = $priceresult['baidumobile1'];
+                $listinfo[$cnt]['sogou1'] = $priceresult['sogou1'];
+                $listinfo[$cnt]['haosou1'] = $priceresult['haosou1'];
+                $listinfo[$cnt]['shenma1'] = $priceresult['shenma1'];
                 $cnt = $cnt + 1;
             }
             $listinfo = json_encode($listinfo, JSON_UNESCAPED_UNICODE);
@@ -95,7 +95,17 @@ class WebSettingController extends Controller {
 //        $arr = explode("<link", $res);
 //        $res = $arr[0];
 //        $res = trim($res, '"');
-        $resdecode = json_decode($userReg);
+        $resdecode = json_decode($userReg,True);
+        $resdecode['baidu1'] = (float)$resdecode['baidu1']*1.5;
+        $resdecode['baidu2'] = (float)$resdecode['baidu2']*1.5;
+        $resdecode['haosou1'] =  (float)$resdecode['haosou1']*1.5;
+        $resdecode['haosou2'] = (float)$resdecode['haosou2']*1.5;
+        $resdecode['sogou1'] = (float)$resdecode['sogou1']*1.5;
+        $resdecode['sogou2'] = (float)$resdecode['sogou2']*1.5;
+        $resdecode['baidumobile1'] = (float)$resdecode['baidumobile1']*1.5;
+        $resdecode['baidumobile2'] = (float)$resdecode['baidumobile2']*1.5;
+        $resdecode['shenma1'] = (float)$resdecode['shenma1']*1.5;
+        $resdecode['shenma2'] = (float)$resdecode['shenma2']*1.5;
 //        dump($resdecode);
 //        $resstaus = $resdecode->msg;
 //        if ($resstaus == 'succeed!') {
