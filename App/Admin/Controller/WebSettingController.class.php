@@ -59,7 +59,7 @@ class WebSettingController extends Controller {
                 $listinfo[$cnt]['shenma1'] = $priceresult->shenma1;
                 $cnt = $cnt + 1;
             }
-            $listinfo = json_encode($listinfo);
+            $listinfo = json_encode($listinfo, JSON_UNESCAPED_UNICODE);
             return show_tip(1, '搜索成功', null, U('KeySearch', array('listinfo' => $listinfo)));
         }else{
             $listinfoget = $_GET['listinfo'];
