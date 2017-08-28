@@ -66,7 +66,7 @@ function validateURL($URL)
 {
 //    $pattern_1 = "^(?=^.{3,255}$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$";
 //    if(preg_match($pattern_1, $URL)){
-    if (strstr($URL, '.com') || strstr($URL, '.net') || strstr($URL, '.org') || strstr($URL, '.cn') || strstr($URL, '.tv')) {
+    if (strstr($URL, '.com') || strstr($URL, '.net') || strstr($URL, '.org') || strstr($URL, '.cn') || strstr($URL, '.tv') || strstr($URL,'.cc')) {
         return true;
     } else {
         return false;
