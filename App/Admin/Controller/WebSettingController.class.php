@@ -49,9 +49,8 @@ class WebSettingController extends Controller {
             $arr = explode("|", $keyWordArr);
             $listinfo = array();
             $cnt = 0;
-            $serverPrice = new AgentAdminController();
             foreach ($arr as $key) {
-                $priceresult = $serverPrice->seachzhanprice($key);
+                $priceresult = $this->seachzhanprice($key);
                 $listinfo[$cnt]['keyword'] = $key;
                 $listinfo[$cnt]['baidu1'] = $priceresult['baidu1'];
                 $listinfo[$cnt]['baidumobile1'] = $priceresult['baidumobile1'];
@@ -68,6 +67,54 @@ class WebSettingController extends Controller {
             $this->assign('listinfo',$listinfo);
             $this->display();
         }
+    }
+
+    /**
+     * 查询站腾关键词价格
+     */
+    public function seachzhanprice($keyword)
+    {
+//        dump($keyword);
+        $url='www.baidu.com';
+        $id = '4c9a02ee5e4041f4';
+        $m=md5(md5(md5(md5($keyword))).mb_strlen($keyword,'UTF8').$id.$keyword.$url);
+        $apiurl = 'http://seo.zhantengwang.com/searchDesc.do?keyword='.urlencode($keyword).'&url='.$url.'&id='.$id.'&m='.$m.'&_'.time();
+//        $post_data = array("keyword" => $keyword,"time" => date("Y-m-d"));
+        $ch = curl_init();
+//        $this_header = array(
+//            "content-type: application/x-www-form-urlencoded; charset=UTF-8"
+//        );
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, $this_header);
+        curl_setopt($ch, CURLOPT_URL, $apiurl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 获取数据返回
+//        curl_setopt($ch, CURLOPT_POST, 1);
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+//        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true); // 在启用 CURLOPT_RETURNTRANSFER 时候将获取数据返回
+        $res = curl_exec($ch);
+        $userReg = substr($res, 5,-2);
+//        $res = stripslashes($res);
+//        $arr = explode("<link", $res);
+//        $res = $arr[0];
+//        $res = trim($res, '"');
+        $resdecode = json_decode($userReg,True);
+        $resT = json_decode($resdecode['Susan'],TRUE);
+        $resF = array();
+        $resF['baidu1'] = (float)ceil($resT['baidu1'])*1.5;
+        $resF['baidu2'] = (float)ceil($resT['baidu2'])*1.5;
+        $resF['haosou1'] =  (float)ceil($resT['haosou1'])*1.5;
+        $resF['haosou2'] = (float)ceil($resT['haosou2'])*1.5;
+        $resF['sogou1'] = (float)ceil($resT['sogou1'])*1.5;
+        $resF['sogou2'] = (float)ceil($resT['sogou2'])*1.5;
+        $resF['baidumobile1'] = (float)ceil($resT['baidumobile1'])*1.5;
+        $resF['baidumobile2'] = (float)ceil($resT['baidumobile2'])*1.5;
+        $resF['shenma1'] = (float)ceil($resT['shenma1'])*1.5;
+        $resF['shenma2'] = (float)ceil($resT['shenma2'])*1.5;
+//        dump($resdecode);
+//        $resstaus = $resdecode->msg;
+//        if ($resstaus == 'succeed!') {
+//            return $resdecode;
+//        }
+        return $resF;
     }
 }
 ?>

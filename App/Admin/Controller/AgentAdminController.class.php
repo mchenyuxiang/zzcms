@@ -364,10 +364,11 @@ GROUP BY c.name,
             $keywrodArr = M('seo_keyword')->where(array('userid' => $userid))->select();
             $keywrodCount = M('seo_keyword')->where(array('userid' => $userid))->count();
             $keycnt = 0;
+            $selectPrice = new WebSettingController();
             foreach ($keywrodArr as $item) {
                 $updateData = Array();
                 $updateData['id'] = $item['id'];
-                $priceresult = $this->seachzhanprice($item['name']);
+                $priceresult = $selectPrice->seachzhanprice($item['name']);
 
                 if ($item['platformid'] == '1') {
                     $updateData['priceone'] = $priceresult['baidu1'];
