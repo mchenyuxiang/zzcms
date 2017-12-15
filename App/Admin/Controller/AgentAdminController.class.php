@@ -445,7 +445,7 @@ GROUP BY c.name,
         $url='www.baidu.com';
         $id = '4c9a02ee5e4041f4';
         $m=md5(md5(md5(md5($keyword))).mb_strlen($keyword,'UTF8').$id.$keyword.$url);
-        $apiurl = 'http://seo.zhantengwang.com/searchDesc.do?keyword='.urlencode($keyword).'&url='.$url.'&id='.$id.'&m='.$m.'&_'.time();
+        $apiurl = 'http://120.5.53.69:999/searchDesc.do?keyword='.urlencode($keyword).'&url='.$url.'&id='.$id.'&m='.$m.'&_'.time();
 //        $post_data = array("keyword" => $keyword,"time" => date("Y-m-d"));
         $ch = curl_init();
 //        $this_header = array(
@@ -464,7 +464,8 @@ GROUP BY c.name,
 //        $res = $arr[0];
 //        $res = trim($res, '"');
         $resdecode = json_decode($userReg,True);
-        $resT = json_decode($resdecode['Susan'],TRUE);
+//        $resT = json_decode($resdecode['Susan'],TRUE);
+        $resT = $resdecode['Susan'];
         $resF = array();
         $resF['baidu1'] = (float)ceil($resT['baidu1'])*1.5;
         $resF['baidu2'] = (float)ceil($resT['baidu2'])*1.5;
