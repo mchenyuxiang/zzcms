@@ -192,5 +192,51 @@ function diffBetweenTwoDays ($day1, $day2)
 }
 
 
+function countPrice($min,$average,$searchNums,$discount)
+{
+
+
+    $result=(6+ceil($average / 50)*1.5+floor($searchNums / 1000000)*0.5)*$discount;
+    $result=$min>$result?$min:$result;
+    return $result;
+
+}
+
+function keyWordPrice($keyWord,$platform)
+{
+    $result=wget($keyWord);
+    if($platform==1)
+    {
+        return sprintf("%.2f", countPrice(6,$result->average,$result->searchNums,1));
+    }
+    else if($platform==2)
+    {
+        return sprintf("%.2f", countPrice(3,$result->average,$result->searchNums,1/3));
+    }
+    else if($platform==3)
+    {
+        return sprintf("%.2f", countPrice(3,$result->average,$result->searchNums,1/3));
+    }
+    else if($platform==4)
+    {
+        return sprintf("%.2f", countPrice(4,$result->average,$result->searchNums,1.2/3));
+    }
+    else if($platform==5)
+    {
+        return sprintf("%.2f", countPrice(7.5,$result->average,$result->searchNums,1.2));
+    }
+    else if($platform==6)
+    {
+        return sprintf("%.2f", countPrice(4,$result->average,$result->searchNums,1.2/3));
+    }
+    else if($platform==7)
+    {
+        return sprintf("%.2f", countPrice(4,$result->average,$result->searchNums,1.2/3));
+    }
+
+
+}
+
+
 ?>
 
