@@ -50,13 +50,18 @@ class WebSettingController extends Controller {
             $listinfo = array();
             $cnt = 0;
             foreach ($arr as $key) {
-                $priceresult = $this->seachzhanprice($key);
+//                $priceresult = $this->seachzhanprice($key);
                 $listinfo[$cnt]['keyword'] = $key;
-                $listinfo[$cnt]['baidu1'] = $priceresult['baidu1'];
-                $listinfo[$cnt]['baidumobile1'] = $priceresult['baidumobile1'];
-                $listinfo[$cnt]['sogou1'] = $priceresult['sogou1'];
-                $listinfo[$cnt]['haosou1'] = $priceresult['haosou1'];
-                $listinfo[$cnt]['shenma1'] = $priceresult['shenma1'];
+//                $listinfo[$cnt]['baidu1'] = $priceresult['baidu1'];
+                $listinfo[$cnt]['baidu1'] = keyWordPrice($key,1);
+//                $listinfo[$cnt]['baidumobile1'] = $priceresult['baidumobile1'];
+                $listinfo[$cnt]['baidumobile1'] = keyWordPrice($key,5);
+//                $listinfo[$cnt]['sogou1'] = $priceresult['sogou1'];
+                $listinfo[$cnt]['sogou1'] = keyWordPrice($key,3);
+//                $listinfo[$cnt]['haosou1'] = $priceresult['haosou1'];
+                $listinfo[$cnt]['haosou1'] = keyWordPrice($key,2);
+//                $listinfo[$cnt]['shenma1'] = $priceresult['shenma1'];
+                $listinfo[$cnt]['shenma1'] = keyWordPrice($key,6);
                 $cnt = $cnt + 1;
             }
             $listinfo = json_encode($listinfo, JSON_UNESCAPED_UNICODE);

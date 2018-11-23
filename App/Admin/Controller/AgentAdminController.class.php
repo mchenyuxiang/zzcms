@@ -293,7 +293,7 @@ GROUP BY c.name,
                     $arrkey = explode("|", $keywordArr);
                     $countkeyword = 0;
                     foreach ($arrkey as $key) {
-                        $priceresult = $this->seachzhanprice($key);
+//                        $priceresult = $this->seachzhanprice($key);
                         foreach ($arrplat as $plat) {
                             $insertdata = array();
                             $insertdata['name'] = $key;
@@ -301,31 +301,35 @@ GROUP BY c.name,
                             $insertdata['userid'] = $userid;
                             $insertdata['platformid'] = $plat;
                             if ($plat == '1') {
-                                $insertdata['priceone'] = $priceresult['baidu1'];
-                                $insertdata['pricetwo'] = $priceresult['baidu2'];
+//                                $insertdata['priceone'] = $priceresult['baidu1'];
+                                $insertdata['priceone'] = keyWordPrice($key,1);
+                                $insertdata['pricetwo'] = 0;
+//                                $insertdata['pricetwo'] = $priceresult['baidu2'];
                             } elseif ($plat == '2') {
-                                $insertdata['priceone'] = $priceresult['haosou1'];
-                                $insertdata['pricetwo'] = $priceresult['haosou2'];
+//                                $insertdata['priceone'] = $priceresult['haosou1'];
+                                $insertdata['priceone'] = keyWordPrice($key,2);
+                                $insertdata['pricetwo'] = 0;
+//                                $insertdata['pricetwo'] = $priceresult['haosou2'];
 
                             } elseif ($plat == '3') {
-                                $insertdata['priceone'] = $priceresult['sogou1'];
-                                $insertdata['pricetwo'] = $priceresult['sogou2'];
+                                $insertdata['priceone'] = keyWordPrice($key,3);
+                                $insertdata['pricetwo'] = 0;
 
                             } elseif ($plat == '4') {
-                                $insertdata['priceone'] = $priceresult['sogou1'];
-                                $insertdata['pricetwo'] = $priceresult['sogou2'];
+                                $insertdata['priceone'] = keyWordPrice($key,4);
+                                $insertdata['pricetwo'] = 0;
 
                             } elseif ($plat == '5') {
-                                $insertdata['priceone'] = $priceresult['baidumobile1'];
-                                $insertdata['pricetwo'] = $priceresult['baidumobile2'];
+                                $insertdata['priceone'] = keyWordPrice($key,5);
+                                $insertdata['pricetwo'] = 0;
 
                             } elseif ($plat == '6') {
-                                $insertdata['priceone'] = $priceresult['shenma1'];
-                                $insertdata['pricetwo'] = $priceresult['shenma2'];
+                                $insertdata['priceone'] = keyWordPrice($key,6);
+                                $insertdata['pricetwo'] = 0;
 
                             } elseif ($plat == '7') {
-                                $insertdata['priceone'] = $priceresult['haosou1'];
-                                $insertdata['pricetwo'] = $priceresult['haosou2'];
+                                $insertdata['priceone'] = keyWordPrice($key,7);
+                                $insertdata['pricetwo'] = 0;
                             }
                             $insertdata['createtime'] = date('Y-m-d H:i:s', time());
                             $keywordid = M('seo_keyword')->data($insertdata)->add();
@@ -368,29 +372,43 @@ GROUP BY c.name,
             foreach ($keywrodArr as $item) {
                 $updateData = Array();
                 $updateData['id'] = $item['id'];
-                $priceresult = $selectPrice->seachzhanprice($item['name']);
+//                $priceresult = $selectPrice->seachzhanprice($item['name']);
 
                 if ($item['platformid'] == '1') {
-                    $updateData['priceone'] = $priceresult['baidu1'];
-                    $updateData['pricetwo'] = $priceresult['baidu2'];
+//                    $updateData['priceone'] = $priceresult['baidu1'];
+                    $updateData['priceone'] = keyWordPrice($item['name'],1);
+//                    $updateData['pricetwo'] = $priceresult['baidu2'];
+                    $updateData['pricetwo'] = 0;
                 } elseif ($item['platformid'] == '2') {
-                    $updateData['priceone'] = $priceresult['haosou1'];
-                    $updateData['pricetwo'] = $priceresult['haosou2'];
+//                    $updateData['priceone'] = $priceresult['haosou1'];
+                    $updateData['priceone'] = keyWordPrice($item['name'],2);
+                    $updateData['pricetwo'] = 0;
+//                    $updateData['pricetwo'] = $priceresult['haosou2'];
                 } elseif ($item['platformid'] == '3') {
-                    $updateData['priceone'] = $priceresult['sogou1'];
-                    $updateData['pricetwo'] = $priceresult['sogou2'];
+//                    $updateData['priceone'] = $priceresult['sogou1'];
+                    $updateData['priceone'] = keyWordPrice($item['name'],3);
+                    $updateData['pricetwo'] = 0;
+//                    $updateData['pricetwo'] = $priceresult['sogou2'];
                 } elseif ($item['platformid'] == '4') {
-                    $updateData['priceone'] = $priceresult['sogou1'];
-                    $updateData['pricetwo'] = $priceresult['sogou2'];
+//                    $updateData['priceone'] = $priceresult['sogou1'];
+                    $updateData['priceone'] = keyWordPrice($item['name'],4);
+                    $updateData['pricetwo'] = 0;
+//                    $updateData['pricetwo'] = $priceresult['sogou2'];
                 } elseif ($item['platformid'] == '5') {
-                    $updateData['priceone'] = $priceresult['baidumobile1'];
-                    $updateData['pricetwo'] = $priceresult['baidumobile2'];
+//                    $updateData['priceone'] = $priceresult['baidumobile1'];
+                    $updateData['priceone'] = keyWordPrice($item['name'],5);
+                    $updateData['pricetwo'] = 0;
+//                    $updateData['pricetwo'] = $priceresult['baidumobile2'];
                 } elseif ($item['platformid'] == '6') {
-                    $updateData['priceone'] = $priceresult['shenma1'];
-                    $updateData['pricetwo'] = $priceresult['shenma2'];
+//                    $updateData['priceone'] = $priceresult['shenma1'];
+                    $updateData['priceone'] = keyWordPrice($item['name'],6);
+                    $updateData['pricetwo'] = 0;
+//                    $updateData['pricetwo'] = $priceresult['shenma2'];
                 } elseif ($item['platformid'] == '7') {
-                    $updateData['priceone'] = $priceresult['haosou1'];
-                    $updateData['pricetwo'] = $priceresult['haosou2'];
+//                    $updateData['priceone'] = $priceresult['haosou1'];
+                    $updateData['priceone'] = keyWordPrice($item['name'],7);
+                    $updateData['pricetwo'] = 0;
+//                    $updateData['pricetwo'] = $priceresult['haosou2'];
                 }
                 if (false != M('seo_keyword')->save($updateData)) {
                     $keycnt = $keycnt + 1;

@@ -66,7 +66,7 @@ function validateURL($URL)
 {
 //    $pattern_1 = "^(?=^.{3,255}$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$";
 //    if(preg_match($pattern_1, $URL)){
-    if (strstr($URL, '.com') || strstr($URL, '.net') || strstr($URL, '.org') || strstr($URL, '.cn') || strstr($URL, '.tv') || strstr($URL,'.cc')|| strstr($URL,'.io')) {
+    if (strstr($URL, '.com') || strstr($URL, '.net') || strstr($URL, '.org') || strstr($URL, '.cn') || strstr($URL, '.tv') || strstr($URL,'.cc')|| strstr($URL,'.io') || strstr($URL,'.me')) {
         return true;
     } else {
         return false;
@@ -189,6 +189,46 @@ function diffBetweenTwoDays ($day1, $day2)
         $second1 = $tmp;
     }
     return ($second1 - $second2) / 86400;
+}
+
+function wget($keyWord)
+{
+    try {
+        $infos= curl($keyWord);
+        if(!$infos)
+        {
+            $infos->keyWord = $keyWord;
+            $infos->average = 0;
+            $infos->searchNums = 0;
+        }
+        else if( $infos->code!=1)
+        {
+            $infos->keyWord = $keyWord;
+            $infos->average = 0;
+            $infos->searchNums = 0;
+        }
+        else
+        {
+            $infos->keyWord = $keyWord;
+        }
+
+    } catch (\Exception $e) {
+        $infos = new stdClass();
+        $infos->keyWord = $keyWord;
+        $infos->average = 0;
+        $infos->searchNums = 0;
+    }
+    return $infos;
+
+}
+
+
+function curl($keyWord)
+{
+    $url="http://115.159.62.144:3000/getzs?keyword=". urlencode($keyWord);
+    $Info = file_get_contents($url);
+    $infos = json_decode($Info );
+    return $infos;
 }
 
 
